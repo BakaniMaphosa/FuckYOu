@@ -1,0 +1,218 @@
+/* Reset browser defaults */
+.resizable-node {
+    position: relative;
+    display: inline-block; /* Critical for size to work */
+    border: 2px solid #333 !important; /* Added !important to test */
+    background-color: #fff !important;
+    width: 400px;
+    height: 200px;
+    box-sizing: border-box;
+    vertical-align: middle;
+}
+
+.content {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.resizable-node:hover .SectionTools{
+    display: flex;
+    flex-direction: row;
+    gap: 1vh;
+
+}
+
+.SectionTools{
+    position: absolute; /* Change from relative */
+    bottom: 0;          /* Sticks to the bottom */
+    right: 0;
+    z-index: 2;
+    width: 10vh;;
+    display: none;
+
+}
+
+.CustimiseLayout{
+    width: auto;
+    border-radius: 10%;
+    transition: transform 2s ease ;
+}
+
+.CustimiseLayout:hover{
+    background-color: rgb(5, 255, 230);
+}
+
+.ChooseSectionType{
+    width: auto;
+    border-radius: 100%;
+    transition: transform 2s ease ;
+
+}
+
+.ChooseSectionType:hover{
+    background-color: rgb(5, 255, 230);
+    box-shadow: 0px 0px 5px 2px rgb(5, 255, 230);
+}
+
+
+#ContentArea {
+    flex: 1;
+    height: 100%;
+
+    border: 4px solid black;
+    
+    font-size: 26px;
+    font-family: "IBM Plex Serif", serif;
+    font-weight: 300;
+    font-style: bold;
+
+    /* padding: 16px; */
+    outline: none;
+
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    line-height: 1.5;   /* ≈ 45px */
+    letter-spacing: -0.01em; /* subtle tightening */
+
+    font-size: 22px;
+    line-height: 1.45;
+    letter-spacing: -0.005em;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    text-align: left;       /* horizontal text alignment */
+}
+
+/* wrapper sits inline in text flow */
+.resizable-wrapper {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+  height: auto; /* JS will override initially */
+}
+
+/* IMPORTANT: don't kill pointer events here */
+.resizable-wrapper img {
+  display: block;
+  height: auto;
+  max-width: 100%;
+  user-select: none;
+}
+
+/* handle must be on top and clickable */
+.resize-handle {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  right: -6px;
+  bottom: -6px;
+  border-radius: 2px;
+  cursor: nwse-resize;
+  background: #1e90ff;
+  z-index: 10;
+}
+
+.context-menu {
+  position: absolute;
+  background: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  min-width: 180px;
+  font-size: 14px;
+  z-index: 1000;
+}
+
+/* base menu items */
+.menu-item {
+  padding: 8px 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  position: relative;
+}
+
+.menu-item:hover {
+  background: #f2f2f2;
+}
+
+/* arrow indicator */
+.has-submenu::after {
+  content: "▶";
+  position: absolute;
+  right: 10px;
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+/* SUBMENU */
+ .submenu {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  margin-left: 0.5px;
+
+  background: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  min-width: 160px;
+
+  opacity: 0;
+  transform: scaleY(0.95);
+  transform-origin: left center;
+  pointer-events: none;
+
+  transition:
+  opacity 120ms ease,
+  transform 120ms ease;
+} 
+
+
+
+/* submenu items */
+.submenu-item {
+  padding: 8px 14px;
+}
+
+.submenu-item:hover {
+  background: #f0f0f0;
+}
+
+/* SHOW submenu on hover */
+.has-submenu:hover .submenu {
+  opacity: 1;
+  transform: scaleY(1);
+  pointer-events: auto;
+}
+
+.submenu-section {
+  padding: 6px 14px 4px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #777;
+  cursor: default;
+  user-select: none;
+}
+
+.submenu-divider {
+  height: 1px;
+  background: #e6e6e6;
+  margin: 6px 0;
+}
+
+/* ensure labels never highlight on hover */
+.submenu-section:hover {
+  background: none;
+}
+
+/* If the body contains the ContentBox, dim the editor */
+body:has(#ContentBox) #ContentArea {
+    filter: blur(2px);
+    pointer-events: none;
+    user-select: none;
+}
