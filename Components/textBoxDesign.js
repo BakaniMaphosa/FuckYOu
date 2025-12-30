@@ -2,6 +2,26 @@
  * Logic to insert and manage resizable nodes within a contentEditable editor
  */
 import { getContentInfo } from "/Components/chooseContentType.js";
+import { createGraph } from "/Components/Graphs/graphs.js";
+
+
+// Updated to accept the actual element OR an ID
+async function loadComponent(target, file) {
+    try {
+        const res = await fetch(file);
+        if (!res.ok) throw new Error(`Failed to load ${file}`);
+        const html = await res.text();
+        
+        // If 'target' is a string, find by ID. If it's an element, use it directly.
+        const targetElement = (typeof target === 'string') ? document.getElementById(target) : target;
+        
+        if (targetElement) {
+            targetElement.innerHTML = html;
+        }
+    } catch (err) {
+        console.error(err);
+    }
+}
 
 // Global tracking for the selected node to enable deletion
 let selectedNode = null;
@@ -149,11 +169,17 @@ export function setupDivInsertion({
         zIndex: "2"
     });
 
-    wrapper.addEventListener("mousedown", (e) => {
+  wrapper.addEventListener("mousedown", (e) => {
       e.stopPropagation(); 
       deselectAll();
       selectedNode = wrapper;
       wrapper.style.outline = "2px solid #ff007a"; 
+
+       const contentArea = wrapper.querySelector('.content');
+
+    
+      createGraph(wrapper,'bar')
+      
     });
 
     const contentDiv = document.createElement("div");
