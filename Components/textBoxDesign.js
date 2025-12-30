@@ -241,6 +241,8 @@ export function setupDivInsertion({
 }
 
 export function setupEditorContextMenu(editor, contextMenu) {
+  if (contextMenu) contextMenu.style.display = "none";
+
   window.addEventListener("contextmenu", (e) => {
     if (editor.contains(e.target) || e.target.closest('.resizable-node')) {
       e.preventDefault();

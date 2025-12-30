@@ -1,6 +1,6 @@
 /**
  * chooseContentType.js
- * Original logic to handle the choice menu and info page overlay
+ * Logic to handle the choice menu, info page overlay, and auto-close
  */
 
 async function loadComponent(targetElement, file) {
@@ -20,8 +20,24 @@ export function getContentInfo() {
     const contentList = document.getElementById('ContentType-List');
     const contentBox = document.getElementById('ContentBox');
 
-    if (!contentList) return;
+    if (!contentList || !contentBox) return;
 
+    // --- NEW: CLOSE ON CLICK OUTSIDE ---
+    const closeMenu = (e) => {
+        // If the click is NOT inside the contentBox, remove the menu
+        if (!contentBox.contains(e.target)) {
+            contentBox.remove();
+            // Remove this listener so it doesn't keep running in the background
+            document.removeEventListener('mousedown', closeMenu);
+        }
+    };
+
+    // Use a small timeout so the click that OPENS the menu doesn't immediately CLOSE it
+    setTimeout(() => {
+        document.addEventListener('mousedown', closeMenu);
+    }, 10);
+
+    // --- EXISTING LISTENER ---
     contentList.addEventListener('click', async (event) => {
         const listItem = event.target.closest('.ContentType');
         if (!listItem) return;
@@ -43,7 +59,6 @@ export function getContentInfo() {
             floatingDiv.className = 'floating-node';
             contentBox.appendChild(floatingDiv);
 
-            // Fetch the detailed info page
             const loaded = await loadComponent(floatingDiv, "/Components/contentType.html");
 
             if (loaded) {
@@ -62,12 +77,6 @@ export function getContentInfo() {
             return; 
         }
 
-        // --- SELECTION LOGIC ---
-        // On the 25th, this just logged the selection to the console
-        // because we hadn't built the injection bridge yet.
         console.log(`User selected: ${specificTitle}`);
-        
-        // This is where you likely had a placeholder for future logic
-        // Example: handleSelection(specificTitle);
     });
 }
