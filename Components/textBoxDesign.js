@@ -175,11 +175,6 @@ export function setupDivInsertion({
       selectedNode = wrapper;
       wrapper.style.outline = "2px solid #ff007a"; 
 
-       const contentArea = wrapper.querySelector('.content');
-
-    
-      createGraph(wrapper,'bar')
-      
     });
 
     const contentDiv = document.createElement("div");

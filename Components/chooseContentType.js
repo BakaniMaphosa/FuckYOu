@@ -3,6 +3,10 @@
  * Logic to handle the choice menu, info page overlay, and auto-close
  */
 
+import { getSelectedNode } from "/Components/textBoxDesign.js";
+import { createGraph } from "/Components/Graphs/graphs.js";
+
+
 async function loadComponent(targetElement, file) {
     try {
         const res = await fetch(file);
@@ -78,5 +82,12 @@ export function getContentInfo() {
         }
 
         console.log(`User selected: ${specificTitle}`);
+
+        switch(specificTitle){
+            case "Graph":
+                let selectedNode = getSelectedNode();
+                createGraph(selectedNode,'bar')
+        }
+
     });
 }
