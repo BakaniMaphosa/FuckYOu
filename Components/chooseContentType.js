@@ -5,6 +5,8 @@
 
 import { getSelectedNode } from "/Components/textBoxDesign.js";
 import { createGraph } from "/Components/Graphs/graphs.js";
+import { createImageContent } from "/Components/ImagesLogic/images.js";
+import { createTextContent } from "/Components/TextContent/TextContents.js";
 
 
 async function loadComponent(targetElement, file) {
@@ -82,11 +84,28 @@ export function getContentInfo() {
         }
 
         console.log(`User selected: ${specificTitle}`);
-
+        let selectedNode = getSelectedNode();
         switch(specificTitle){
+
+            case "Title Header":
+                createTextContent(selectedNode, 'header')
+                break
+
+            case "Text Box":
+                createTextContent(selectedNode)
+                break
+
             case "Graph":
-                let selectedNode = getSelectedNode();
-                createGraph(selectedNode,'bar')
+                
+                createGraph(selectedNode,'line')
+                break
+
+            case 'Image':
+                 createImageContent(selectedNode, '/Components/imgs/OIP.jpeg')
+                 break
+
+
+            
         }
 
     });
