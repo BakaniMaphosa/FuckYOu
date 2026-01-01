@@ -4,7 +4,6 @@
 import { getContentInfo } from "/Components/chooseContentType.js";
 import { createGraph } from "/Components/Graphs/graphs.js";
 
-
 // Updated to accept the actual element OR an ID
 async function loadComponent(target, file) {
     try {
@@ -12,7 +11,6 @@ async function loadComponent(target, file) {
         if (!res.ok) throw new Error(`Failed to load ${file}`);
         const html = await res.text();
         
-        // If 'target' is a string, find by ID. If it's an element, use it directly.
         const targetElement = (typeof target === 'string') ? document.getElementById(target) : target;
         
         if (targetElement) {
@@ -23,10 +21,8 @@ async function loadComponent(target, file) {
     }
 }
 
-// Global tracking for the selected node to enable deletion
 let selectedNode = null;
 
-// This is the bridge you need for your other files to talk to this one
 export function getSelectedNode() {
   return selectedNode;
 }
@@ -37,8 +33,6 @@ export function setupDivInsertion({
   content = "New Box",
   getClickPos 
 }) {
-  let savedRange = null;
-
   if (editor) {
     editor.innerHTML = editor.innerHTML.trim();
   }
@@ -46,6 +40,7 @@ export function setupDivInsertion({
   // --- DELETE LOGIC ---
   window.addEventListener("keydown", (e) => {
     if ((e.key === "Delete" || e.key === "Backspace") && selectedNode) {
+      // Don't delete the whole box if we are actually typing inside it
       if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA" || e.target.isContentEditable) {
         return;
       }
@@ -54,7 +49,6 @@ export function setupDivInsertion({
     }
   });
 
-  // Deselect when clicking the editor background
   editor.addEventListener("mousedown", (e) => {
     if (e.target === editor) {
       deselectAll();
@@ -93,10 +87,8 @@ export function setupDivInsertion({
       const html = await res.text();
       menuContainer.innerHTML = html;
 
-      // Initialize chooseContentType.js logic
       getContentInfo();
 
-      // --- DRAGGING LOGIC FOR MENU ---
       let isDragging = false;
       let startX, startY, initialMouseX, initialMouseY;
 
@@ -140,7 +132,6 @@ export function setupDivInsertion({
     }
   }
 
-  // Handle Context Menu
   contextMenu.addEventListener("click", (e) => {
     const target = e.target.closest("[data-action]");
     if (!target) return;
@@ -154,7 +145,6 @@ export function setupDivInsertion({
     }
   });
 
-  // --- INSERT BOX LOGIC ---
   function insertDiv(boxText, pos) {
     const wrapper = document.createElement("div");
     wrapper.className = "resizable-node";
@@ -169,18 +159,31 @@ export function setupDivInsertion({
         zIndex: "2"
     });
 
-  wrapper.addEventListener("mousedown", (e) => {
-    
+    wrapper.addEventListener("mousedown", (e) => {
+      // Allow single click to select the box, but NOT edit the text
+      if (e.target.isContentEditable) return; 
+
       e.stopPropagation(); 
       deselectAll();
       selectedNode = wrapper;
       wrapper.style.outline = "2px solid #ff007a"; 
-
     });
 
     const contentDiv = document.createElement("div");
     contentDiv.className = "content";
     contentDiv.textContent = boxText;
+    
+    // --- DOUBLE CLICK TO EDIT LOGIC ---
+    contentDiv.contentEditable = "false"; // Locked by default
+
+    contentDiv.addEventListener("dblclick", () => {
+      contentDiv.contentEditable = "true";
+      contentDiv.focus();
+    });
+
+    contentDiv.addEventListener("blur", () => {
+      contentDiv.contentEditable = "false"; // Lock it again when user clicks away
+    });
 
     const sectionTools = document.createElement("div");
     sectionTools.className = "SectionTools";
@@ -192,13 +195,14 @@ export function setupDivInsertion({
 
     sectionTools.querySelector('.ContentType').onclick = (e) => {
       e.stopPropagation();
-      selectedNode = wrapper; // Ensure this box is selected when opening menu
+      selectedNode = wrapper; 
       loadChooseMenu();
     };
 
     const right = createHandle("right", "e-resize", "top:0; right:0; width:8px; height:100%;");
     const bottom = createHandle("bottom", "s-resize", "bottom:0; left:0; width:100%; height:8px;");
-    const corner = createHandle("corner", "se-resize", "bottom:0; right:0; width:15px; height:15px; z-index:3;");
+    
+const corner = createHandle("corner", "se-resize", "bottom:0; right:0; width:15px; height:15px; z-index:10;");
 
     wrapper.append(contentDiv, sectionTools, right, bottom, corner);
     editor.appendChild(wrapper);
@@ -246,9 +250,13 @@ export function setupDivInsertion({
       window.addEventListener("pointermove", handleMove);
       window.addEventListener("pointerup", stopInteraction);
     };
-
+corner
     node.addEventListener("pointerdown", (e) => {
+      // If we are currently editing text, don't allow dragging
+      if (e.target.isContentEditable) return;
+
       if (e.target.classList.contains('handle') || e.target.closest('.SectionTools')) return;
+      
       const rect = node.getBoundingClientRect();
       offsetX = e.clientX - rect.left;
       offsetY = e.clientY - rect.top;
@@ -277,4 +285,3 @@ export function setupEditorContextMenu(editor, contextMenu) {
     if (!contextMenu.contains(e.target)) contextMenu.style.display = "none";
   });
 }
-

@@ -1,49 +1,71 @@
 export function createTextContent(box, type = 'body') {
-    // 1. Find the actual content area inside the box
     const contentArea = box.querySelector('.content');
-    
-    // 2. Clear ONLY the content area (not the whole box!)
     contentArea.innerHTML = ""; 
+    contentArea.style.position = "relative";
 
-    // 3. Create the text element
+    // 1. Create the Text Element
     const textElement = document.createElement('div');
-    textElement.contentEditable = "true";
+    textElement.contentEditable = "false"; 
     textElement.className = `content-text ${type}-style`;
     
-    // 4. Set the text
-   
-    if(type==='header'){
+    // Style logic (keeping your exact styles)
+    if(type === 'header'){
         textElement.innerText = 'New Header';
-
-        textElement.style.fontSize = "22px";
-        textElement.style.fontWeight = "800";       // Extra bold
-        textElement.style.color = "#1a1a1a";        // Near black for contrast
-        textElement.style.lineHeight = "1.2";
-        textElement.style.letterSpacing = "-0.5px"; // Tighter letters look modern
-        textElement.style.borderBottom = "2px solid #ff007a"; // Your pink theme
-        textElement.style.paddingBottom = "4px";
-        textElement.style.marginBottom = "10px";
-           //header style goes here
-    }else{
-            textElement.innerText = 'Ready when you are... ';
-            //simple text style goes here
-
-        textElement.style.flex = "1";
-        textElement.style.height = "100%";
-        // textElement.style.border = "4px solid black";
-        textElement.style.fontFamily = '"IBM Plex Serif", serif';
-        textElement.style.fontWeight = "300";
-        textElement.style.fontSize = "22px";
-        textElement.style.lineHeight = "1.45";
-        textElement.style.letterSpacing = "-0.005em";
-        textElement.style.overflowY = "auto";
+        Object.assign(textElement.style, {
+            fontSize: "22px", fontWeight: "800", color: "#1a1a1a",
+            lineHeight: "1.2", letterSpacing: "-0.5px",
+            borderBottom: "2px solid #ff007a", paddingBottom: "4px", marginBottom: "10px",
+            outline: "none"
+        });
+    } else {
+        textElement.innerText = 'Ready when you are... ';
+        Object.assign(textElement.style, {
+            flex: "1", height: "100%", fontFamily: '"IBM Plex Serif", serif',
+            fontWeight: "300", fontSize: "22px", lineHeight: "1.45",
+            letterSpacing: "-0.005em", overflowY: "auto"
+        });
     }
 
-    
-    // 5. Put the text inside the content area
+    // 2. Create the Shield
+    // 2. Create the Shield (Inset to allow handle access)
+    const shield = document.createElement('div');
+    shield.className = "drag-shield";
+    Object.assign(shield.style, {
+        position: 'absolute', 
+        top: '2%', 
+        left: '2%', 
+        width: '96%', 
+        height: '96%',
+        zIndex: '1', // Lower than handles, but higher than text
+        pointerEvents: 'auto'
+    });
+
+    // 3. Double Click Logic (The Switch)
+    shield.addEventListener('dblclick', (e) => {
+        e.stopPropagation();
+        console.log("Entering Edit Mode");
+        
+        shield.remove(); // Get the blue div out of the way
+        textElement.contentEditable = "true";
+        textElement.focus();
+        
+        // Move caret to the end of text
+        const range = document.createRange();
+        const sel = window.getSelection();
+        range.selectNodeContents(textElement);
+        range.collapse(false);
+        sel.removeAllRanges();
+        sel.addRange(range);
+    });
+
+    // 4. Blur Logic (The Lock)
+    textElement.addEventListener('blur', () => {
+        console.log("Exiting Edit Mode");
+        textElement.contentEditable = "false";
+        contentArea.appendChild(shield); // Put the blue div back on top
+    });
+
+    // 5. Final Assembly
     contentArea.appendChild(textElement);
-
-    textElement.focus();
-    document.execCommand('selectAll', false, null);
-
+    contentArea.appendChild(shield);
 }
