@@ -26,15 +26,20 @@ export function getContentInfo() {
     const contentList = document.getElementById('ContentType-List');
     const contentBox = document.getElementById('ContentBox');
 
+function removeChooseContentBox(){
+             contentBox.remove();
+             document.removeEventListener('mousedown', closeMenu);
+                
+        }
+
+
     if (!contentList || !contentBox) return;
 
     // --- NEW: CLOSE ON CLICK OUTSIDE ---
     const closeMenu = (e) => {
         // If the click is NOT inside the contentBox, remove the menu
         if (!contentBox.contains(e.target)) {
-            contentBox.remove();
-            // Remove this listener so it doesn't keep running in the background
-            document.removeEventListener('mousedown', closeMenu);
+            removeChooseContentBox()
         }
     };
 
@@ -83,25 +88,31 @@ export function getContentInfo() {
             return; 
         }
 
+        
+
         console.log(`User selected: ${specificTitle}`);
         let selectedNode = getSelectedNode();
         switch(specificTitle){
 
             case "Title Header":
-                createTextContent(selectedNode, 'header')
+                createTextContent(selectedNode, 'header') 
+                removeChooseContentBox()
                 break
 
             case "Text Box":
                 createTextContent(selectedNode)
+                removeChooseContentBox()
                 break
 
             case "Graph":
                 
                 createGraph(selectedNode,'line')
+                removeChooseContentBox()
                 break
 
             case 'Image':
                  createImageContent(selectedNode, '/Components/imgs/OIP.jpeg')
+                 removeChooseContentBox()
                  break
 
 

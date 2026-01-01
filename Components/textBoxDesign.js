@@ -170,6 +170,7 @@ export function setupDivInsertion({
     });
 
   wrapper.addEventListener("mousedown", (e) => {
+    
       e.stopPropagation(); 
       deselectAll();
       selectedNode = wrapper;
