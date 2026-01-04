@@ -1,6 +1,5 @@
 // ============================================
-// REFACTORED: textBoxDesign.js
-// Combines seamless flow with your section system
+// FIXED FINAL VERSION: textBoxDesign.js
 // ============================================
 
 import { getContentInfo } from "/Components/chooseContentType.js";
@@ -28,6 +27,133 @@ async function loadComponent(target, file) {
 }
 
 // ============================================
+// TEXT BLOCK INPUT HANDLER
+// ============================================
+function handleTextInput(e) {
+  const block = e.currentTarget;
+  
+  if (!block) {
+    console.error("❌ No block in handleTextInput");
+    return;
+  }
+  
+  const html = block.innerHTML;
+  const text = block.innerText;
+  
+  console.log("📝 Input detected");
+  console.log("Last 30 chars:", text.slice(-30).replace(/\n/g, '\\n'));
+  
+  // FIXED: Trim trailing whitespace before matching
+  const trimmedText = text.trimEnd();
+  
+  // Match: Double newlines + character at END of TRIMMED text
+  const textMatch = trimmedText.match(/(\n{2,})([^\s\n])$/);
+  
+  // Match: Double <div><br></div> + character (Chrome/modern browsers)
+  const divMatch = html.match(/<div><br><\/div><div><br><\/div><div>(.)<\/div>(\s|&nbsp;)*$/i);
+  
+  // Match: Double <br> + character
+  const brMatch = html.match(/(<br\s*\/?>){2,}\s*([^<\s])(?![^<]*>)/i);
+  
+  const match = textMatch || divMatch || brMatch;
+  
+  if (match) {
+    console.log("✅ MATCH FOUND!");
+    
+    let triggerChar;
+    let topContent;
+    
+    if (divMatch) {
+      triggerChar = divMatch[1];
+      const splitPoint = html.lastIndexOf('<div><br></div><div><br></div>');
+      topContent = html.slice(0, splitPoint);
+      console.log("Using DIV pattern");
+    } else if (brMatch) {
+      triggerChar = brMatch[2];
+      const splitPoint = html.lastIndexOf(brMatch[0]);
+      topContent = html.slice(0, splitPoint);
+      console.log("Using BR pattern");
+    } else {
+      const newlines = textMatch[1];
+      triggerChar = textMatch[2];
+      const splitIndex = trimmedText.lastIndexOf(newlines);
+      topContent = trimmedText.slice(0, splitIndex).trimEnd();
+      console.log("Using text pattern");
+    }
+    
+    console.log("Trigger char:", triggerChar);
+    
+    const style = window.getComputedStyle(block);
+    const lineHeight = parseFloat(style.lineHeight) || 28;
+    const capturedHeight = Math.max(150, lineHeight * 3);
+
+    // Create drop zone
+    const newZone = document.createElement('div');
+    newZone.className = 'drop-zone';
+    newZone.style.height = `${capturedHeight}px`;
+    
+    // Create new text block
+    const newTextBlock = document.createElement('div');
+    newTextBlock.className = 'text-block';
+    newTextBlock.contentEditable = 'true';
+    newTextBlock.innerText = triggerChar;
+    
+    // CRITICAL: Attach listeners immediately
+    attachListeners(newTextBlock);
+
+    // Update current block
+    if (divMatch || brMatch) {
+      block.innerHTML = topContent;
+    } else {
+      block.innerText = topContent;
+    }
+    
+    // Insert
+    block.after(newZone);
+    newZone.after(newTextBlock);
+
+    console.log("✨ Drop zone created!");
+    
+    // Focus new block
+    setTimeout(() => {
+      newTextBlock.focus();
+      
+      // Move cursor to end
+      const range = document.createRange();
+      const sel = window.getSelection();
+      const textNode = newTextBlock.firstChild;
+      
+      if (textNode && textNode.nodeType === Node.TEXT_NODE) {
+        range.setStart(textNode, textNode.length);
+        range.collapse(true);
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+    }, 50);
+  }
+}
+
+// ============================================
+// ATTACH LISTENERS (Clean and Simple)
+// ============================================
+function attachListeners(block) {
+  // Input event
+  block.addEventListener('input', handleTextInput);
+  
+  // Keyup for Enter detection
+  block.addEventListener('keyup', function(e) {
+    if (e.key === 'Enter') {
+      console.log("⏎ Enter pressed");
+      setTimeout(() => {
+        handleTextInput({ currentTarget: block });
+      }, 50);
+    }
+  });
+  
+  console.log("✅ Listeners attached");
+}
+
+// ============================================
 // DROP ZONE HEIGHT MANAGER
 // ============================================
 function updateDropZoneHeight(zone) {
@@ -39,7 +165,7 @@ function updateDropZoneHeight(zone) {
     if (bottom > maxBottom) maxBottom = bottom;
   });
   const currentHeight = parseFloat(zone.style.height) || zone.offsetHeight;
-  const targetHeight = maxBottom + 20; // padding
+  const targetHeight = maxBottom + 20;
   if (targetHeight > currentHeight) zone.style.height = targetHeight + "px";
 }
 
@@ -95,13 +221,12 @@ function resolveProportionalOverflow(parent) {
 }
 
 // ============================================
-// DRAGGABLE LOGIC FOR INTERACTIVE BOXES
+// DRAGGABLE LOGIC
 // ============================================
 function makeDraggable(box) {
   let isDragging = false, startX, startY;
   
   box.addEventListener('mousedown', (e) => {
-    // Ignore resize handle area
     const rect = box.getBoundingClientRect();
     if (e.clientX > rect.right - 20 && e.clientY > rect.bottom - 20) return;
     
@@ -114,7 +239,6 @@ function makeDraggable(box) {
     startY = e.clientY - (rect.top - pRect.top);
     box.style.zIndex = "1000";
     
-    // Highlight selected
     deselectAll();
     selectedNode = box;
     box.style.outline = "2px solid #ff007a";
@@ -145,7 +269,7 @@ function makeDraggable(box) {
 }
 
 // ============================================
-// DESELECT ALL BOXES
+// DESELECT ALL
 // ============================================
 function deselectAll() {
   if (selectedNode) {
@@ -155,60 +279,7 @@ function deselectAll() {
 }
 
 // ============================================
-// TEXT BLOCK INPUT HANDLER (Creates Drop Zones)
-// ============================================
-function handleTextInput(e) {
-  const block = e.currentTarget;
-  const text = block.innerText;
-  const match = text.match(/(\n{2,})([^\s])$/);
-
-  if (match) {
-    const newlines = match[1];
-    const triggerChar = match[2];
-    
-    const style = window.getComputedStyle(block);
-    const lineHeight = parseFloat(style.lineHeight);
-    const totalPadding = 24;
-    const lineCount = Math.max(1, newlines.length - 1);
-    const capturedHeight = ((lineCount * lineHeight) + totalPadding) / 2;
-    
-    const topText = text.slice(0, text.lastIndexOf(newlines)).trim();
-
-    // Create new drop zone
-    const newZone = document.createElement('div');
-    newZone.className = 'drop-zone';
-    newZone.style.height = `${capturedHeight}px`;
-    
-    // Create new text block
-    const newTextBlock = document.createElement('div');
-    newTextBlock.className = 'text-block';
-    newTextBlock.contentEditable = 'true';
-    newTextBlock.innerText = triggerChar;
-    newTextBlock.addEventListener('input', handleTextInput);
-
-    block.innerText = topText;
-    block.after(newZone);
-    newZone.after(newTextBlock);
-
-    // Observe for responsive behavior
-    const wallObserver = getWallObserver();
-    wallObserver.observe(newZone);
-    
-    newTextBlock.focus();
-    
-    const range = document.createRange();
-    const sel = window.getSelection();
-    if (newTextBlock.childNodes[0]) {
-      range.setStart(newTextBlock.childNodes[0], 1);
-      range.collapse(true);
-      sel.removeAllRanges();
-      sel.addRange(range);
-    }
-  }
-}
-
-// ============================================
-// RESIZE OBSERVER (Responsive Magic)
+// RESIZE OBSERVER
 // ============================================
 let wallObserver = null;
 
@@ -230,7 +301,7 @@ function getWallObserver() {
 }
 
 // ============================================
-// INSERT INTERACTIVE BOX INTO DROP ZONE
+// INSERT INTERACTIVE BOX
 // ============================================
 function insertInteractiveBox(targetZone, contentType = 'section') {
   const box = document.createElement('div');
@@ -250,7 +321,6 @@ function insertInteractiveBox(targetZone, contentType = 'section') {
   box.dataset.homeX = "10";
   box.dataset.homeY = "10";
   
-  // Create content area
   const contentDiv = document.createElement('div');
   contentDiv.className = 'content';
   contentDiv.style.cssText = `
@@ -260,7 +330,6 @@ function insertInteractiveBox(targetZone, contentType = 'section') {
     box-sizing: border-box;
   `;
   
-  // Add section tools
   const sectionTools = document.createElement('div');
   sectionTools.className = 'SectionTools';
   sectionTools.style.cssText = `
@@ -288,7 +357,6 @@ function insertInteractiveBox(targetZone, contentType = 'section') {
   box.appendChild(sectionTools);
   targetZone.appendChild(box);
   
-  // Make it draggable and observable
   makeDraggable(box);
   getWallObserver().observe(box);
   updateDropZoneHeight(targetZone);
@@ -297,7 +365,7 @@ function insertInteractiveBox(targetZone, contentType = 'section') {
 }
 
 // ============================================
-// LOAD CHOOSE MENU (Your Content Selector)
+// LOAD CHOOSE MENU
 // ============================================
 async function loadChooseMenu() {
   try {
@@ -320,7 +388,6 @@ async function loadChooseMenu() {
     await loadComponent(menuContainer, "/Components/chooseContentType.html");
     getContentInfo();
 
-    // Draggable menu
     let isDragging = false, startX, startY, initialMouseX, initialMouseY;
     
     menuContainer.addEventListener("mousedown", (e) => {
@@ -372,7 +439,6 @@ export function setupEditorContextMenu(editor, contextMenu) {
     if (editor.contains(e.target)) {
       e.preventDefault();
       
-      // Find the nearest drop-zone
       let target = e.target;
       while (target && !target.classList.contains('drop-zone')) {
         target = target.parentElement;
@@ -396,7 +462,6 @@ export function setupEditorContextMenu(editor, contextMenu) {
     }
   });
 
-  // Handle context menu actions
   contextMenu.addEventListener("click", (e) => {
     const target = e.target.closest("[data-action]");
     if (!target) return;
@@ -414,49 +479,72 @@ export function setupEditorContextMenu(editor, contextMenu) {
 // MAIN SETUP FUNCTION
 // ============================================
 export function setupDivInsertion({ editor, contextMenu }) {
-  if (!editor) return;
+  if (!editor) {
+    console.error("❌ Editor not found!");
+    return;
+  }
   
-  // Initialize text blocks
+  console.log("🚀 Setting up editor...");
+  
+  // Attach listeners to all text blocks
   const textBlocks = editor.querySelectorAll('.text-block');
+  console.log(`Found ${textBlocks.length} text blocks`);
+  
   textBlocks.forEach(block => {
-    block.addEventListener('input', handleTextInput);
+    attachListeners(block);
   });
   
   // Initialize drop zones
   const dropZones = editor.querySelectorAll('.drop-zone');
   const observer = getWallObserver();
   
+  console.log(`Found ${dropZones.length} drop zones`);
+  
   dropZones.forEach(zone => {
     observer.observe(zone);
     
-    // Make existing boxes draggable
     zone.querySelectorAll('.interactive-box').forEach(box => {
       makeDraggable(box);
       observer.observe(box);
+      
+      const addButton = box.querySelector('.ContentType');
+      if (addButton) {
+        addButton.addEventListener('click', (e) => {
+          e.stopPropagation();
+          selectedNode = box;
+          loadChooseMenu();
+        });
+      }
     });
   });
   
-  // Observe the editor itself
   observer.observe(editor);
   
-  // Setup context menu
   setupEditorContextMenu(editor, contextMenu);
   
-  // Delete key handler
-  window.addEventListener("keydown", (e) => {
+  // Delete handler
+  const deleteHandler = (e) => {
     if ((e.key === "Delete" || e.key === "Backspace") && selectedNode) {
-      if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA" || e.target.isContentEditable) {
+      if (e.target.tagName === "INPUT" || 
+          e.target.tagName === "TEXTAREA" || 
+          e.target.isContentEditable) {
         return;
       }
+      e.preventDefault();
       selectedNode.remove();
       selectedNode = null;
     }
-  });
+  };
   
-  // Deselect on editor click
+  window.removeEventListener("keydown", deleteHandler);
+  window.addEventListener("keydown", deleteHandler);
+  
   editor.addEventListener("mousedown", (e) => {
     if (e.target === editor || e.target.classList.contains('text-block')) {
       deselectAll();
     }
   });
+  
+  console.log("✅ Setup complete!");
+  console.log("📋 Try: Type text → Press Enter TWICE → Type a letter");
 }
