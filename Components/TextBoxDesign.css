@@ -113,6 +113,12 @@
   overflow: auto;
   font-family: "IBM Plex Serif", serif;
   font-size: 16px;
+  
+  /* TEXT WRAPPING FIX */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
 /* ============================================

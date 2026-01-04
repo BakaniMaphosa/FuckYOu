@@ -31,102 +31,68 @@ async function loadComponent(target, file) {
 // ============================================
 function handleTextInput(e) {
   const block = e.currentTarget;
+  if (!block) return;
   
-  if (!block) {
-    console.error("❌ No block in handleTextInput");
-    return;
-  }
-  
-  const html = block.innerHTML;
   const text = block.innerText;
+  const trimmedText = text.replace(/\s+$/, '');
   
-  console.log("📝 Input detected");
-  console.log("Last 30 chars:", text.slice(-30).replace(/\n/g, '\\n'));
+  console.log("📝 Input:", trimmedText.slice(-50).replace(/\n/g, '\\n'));
   
-  // Match: Double newlines + character at END of text
-  const textMatch = text.match(/(\n{2,})([^\s\n])$/);
-  
-  // Match: Double <div><br></div> + character (Chrome/modern browsers)
-  const divMatch = html.match(/<div><br><\/div><div><br><\/div><div>(.)<\/div>$/i);
-  
-  // Match: Double <br> + character
-  const brMatch = html.match(/(<br\s*\/?>){2,}\s*([^<\s])(?![^<]*>)/i);
-  
-  const match = textMatch || divMatch || brMatch;
-  
-  if (match) {
-    console.log("✅ MATCH FOUND!");
+  // Check if we end with newlines followed by a character
+  if (/\n{2,}[^\s\n]$/.test(trimmedText)) {
+    // Count newlines from the end backwards
+    let newlineCount = 0;
+    let charFound = false;
     
-    let triggerChar;
-    let topContent;
-    
-    if (divMatch) {
-      triggerChar = divMatch[1];
-      const splitPoint = html.lastIndexOf('<div><br></div><div><br></div>');
-      topContent = html.slice(0, splitPoint);
-      console.log("Using DIV pattern");
-    } else if (brMatch) {
-      triggerChar = brMatch[2];
-      const splitPoint = html.lastIndexOf(brMatch[0]);
-      topContent = html.slice(0, splitPoint);
-      console.log("Using BR pattern");
-    } else {
-      const newlines = textMatch[1];
-      triggerChar = textMatch[2];
-      const splitIndex = text.lastIndexOf(newlines);
-      topContent = text.slice(0, splitIndex).trimEnd();
-      console.log("Using text pattern");
-    }
-    
-    console.log("Trigger char:", triggerChar);
-    
-    const style = window.getComputedStyle(block);
-    const lineHeight = parseFloat(style.lineHeight) || 28;
-    const capturedHeight = Math.max(150, lineHeight * 3);
-
-    // Create drop zone
-    const newZone = document.createElement('div');
-    newZone.className = 'drop-zone';
-    newZone.style.height = `${capturedHeight}px`;
-    
-    // Create new text block
-    const newTextBlock = document.createElement('div');
-    newTextBlock.className = 'text-block';
-    newTextBlock.contentEditable = 'true';
-    newTextBlock.innerText = triggerChar;
-    
-    // CRITICAL: Attach listeners immediately
-    attachListeners(newTextBlock);
-
-    // Update current block
-    if (divMatch || brMatch) {
-      block.innerHTML = topContent;
-    } else {
-      block.innerText = topContent;
-    }
-    
-    // Insert
-    block.after(newZone);
-    newZone.after(newTextBlock);
-
-    console.log("✨ Drop zone created!");
-    
-    // Focus new block
-    setTimeout(() => {
-      newTextBlock.focus();
-      
-      // Move cursor to end
-      const range = document.createRange();
-      const sel = window.getSelection();
-      const textNode = newTextBlock.firstChild;
-      
-      if (textNode && textNode.nodeType === Node.TEXT_NODE) {
-        range.setStart(textNode, textNode.length);
-        range.collapse(true);
-        sel.removeAllRanges();
-        sel.addRange(range);
+    for (let i = trimmedText.length - 1; i >= 0; i--) {
+      if (!charFound && trimmedText[i] !== '\n') {
+        charFound = true; // Found the trigger char
+        continue;
       }
-    }, 50);
+      if (charFound && trimmedText[i] === '\n') {
+        newlineCount++;
+      } else if (charFound) {
+        break; // Hit non-newline, stop counting
+      }
+    }
+    
+    if (newlineCount >= 2) {
+      const triggerChar = trimmedText[trimmedText.length - 1];
+      const topContent = trimmedText.slice(0, -(newlineCount + 1));
+      
+      console.log("✅ Found", newlineCount, "newlines, char:", triggerChar);
+      
+      const lineHeight = parseFloat(window.getComputedStyle(block).lineHeight) || 28;
+      const height = Math.max(100, newlineCount * lineHeight) /2;
+      
+      const newZone = document.createElement('div');
+      newZone.className = 'drop-zone';
+      newZone.style.height = height + 'px';
+      
+      const newTextBlock = document.createElement('div');
+      newTextBlock.className = 'text-block';
+      newTextBlock.contentEditable = 'true';
+      newTextBlock.innerText = triggerChar;
+      attachListeners(newTextBlock);
+      
+      block.innerText = topContent;
+      block.after(newZone);
+      newZone.after(newTextBlock);
+      
+      console.log("✨ Created", height + "px drop zone");
+      
+      setTimeout(() => {
+        newTextBlock.focus();
+        const range = document.createRange();
+        const sel = window.getSelection();
+        if (newTextBlock.firstChild) {
+          range.setStart(newTextBlock.firstChild, 1);
+          range.collapse(true);
+          sel.removeAllRanges();
+          sel.addRange(range);
+        }
+      }, 50);
+    }
   }
 }
 

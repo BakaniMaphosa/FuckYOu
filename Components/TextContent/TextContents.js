@@ -22,7 +22,7 @@ export function createTextContent(box, type = 'body') {
         Object.assign(textElement.style, {
             flex: "1", height: "100%", fontFamily: '"IBM Plex Serif", serif',
             fontWeight: "300", fontSize: "22px", lineHeight: "1.45",
-            letterSpacing: "-0.005em", overflowY: "auto"
+            letterSpacing: "-0.005em", overflowY: "auto" 
         });
     }
 
