@@ -1,0 +1,75 @@
+:root {
+  --pink: #ff007a;
+}
+
+* {
+  font-family: "IBM Plex Serif", serif;
+  box-sizing: border-box;
+  /* REMOVED font-weight: 100 from here */
+}
+
+
+#container {
+   height: 97vh;
+   width: 99vw;
+   display: flex;
+   flex-direction: row;
+   gap: 0.5vh;
+}
+
+#TextBox {
+    flex: 1;
+    height: 100%;
+    border: 4px solid black;
+    background: white;
+    padding: 20px;
+    outline: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
+    
+    /* UNIFIED FONT SETTINGS */
+    font-family: "IBM Plex Serif", serif;
+    font-size: 18px;        /* Match TextBoxDesign.css */
+    font-weight: 300;       /* Match TextBoxDesign.css */
+    line-height: 1.6;       /* Match TextBoxDesign.css */
+    letter-spacing: -0.005em;
+}
+
+#TextBox p {
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+}
+
+#AIdivider {
+    width: 5px;
+    cursor: col-resize;
+    background: #888;
+}
+
+#AIbox {
+    width: 520px;
+    min-width: 320px;
+    max-width: 600px;
+    height: 100%;
+    border: 4px solid black;
+}
+
+/* Custom Scrollbars */
+#TextBox::-webkit-scrollbar {
+  width: 12px;
+}
+
+#TextBox::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-left: 2px solid black;
+}
+
+#TextBox::-webkit-scrollbar-thumb {
+  background: black;
+  border: 2px solid #f0f0f0;
+}
+
+#TextBox::-webkit-scrollbar-thumb:hover {
+  background: var(--pink);
+}

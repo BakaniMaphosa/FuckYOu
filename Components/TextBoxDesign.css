@@ -181,6 +181,7 @@
   white-space: nowrap;
   position: relative;
   border-bottom: 1px solid #eee;
+  color: black; /* Default color */
 }
 
 .menu-item:last-child {
@@ -190,6 +191,11 @@
 .menu-item:hover {
   background: var(--pink);
   color: white;
+}
+
+/* FIXED: Override white color for submenu */
+.menu-item:hover .submenu {
+  color: black; /* Reset submenu to black */
 }
 
 .has-submenu::after {
@@ -220,10 +226,12 @@
 .submenu-item {
   padding: 8px 14px;
   border-bottom: 1px solid #eee;
+  color: black; /* FIXED: Always black */
 }
 
 .submenu-item:hover {
   background: #f0f0f0;
+  color: black; /* FIXED: Stay black on hover */
 }
 
 .has-submenu:hover .submenu {
