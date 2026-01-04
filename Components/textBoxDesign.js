@@ -43,14 +43,11 @@ function handleTextInput(e) {
   console.log("📝 Input detected");
   console.log("Last 30 chars:", text.slice(-30).replace(/\n/g, '\\n'));
   
-  // FIXED: Trim trailing whitespace before matching
-  const trimmedText = text.trimEnd();
-  
-  // Match: Double newlines + character at END of TRIMMED text
-  const textMatch = trimmedText.match(/(\n{2,})([^\s\n])$/);
+  // Match: Double newlines + character at END of text
+  const textMatch = text.match(/(\n{2,})([^\s\n])$/);
   
   // Match: Double <div><br></div> + character (Chrome/modern browsers)
-  const divMatch = html.match(/<div><br><\/div><div><br><\/div><div>(.)<\/div>(\s|&nbsp;)*$/i);
+  const divMatch = html.match(/<div><br><\/div><div><br><\/div><div>(.)<\/div>$/i);
   
   // Match: Double <br> + character
   const brMatch = html.match(/(<br\s*\/?>){2,}\s*([^<\s])(?![^<]*>)/i);
@@ -76,8 +73,8 @@ function handleTextInput(e) {
     } else {
       const newlines = textMatch[1];
       triggerChar = textMatch[2];
-      const splitIndex = trimmedText.lastIndexOf(newlines);
-      topContent = trimmedText.slice(0, splitIndex).trimEnd();
+      const splitIndex = text.lastIndexOf(newlines);
+      topContent = text.slice(0, splitIndex).trimEnd();
       console.log("Using text pattern");
     }
     
@@ -227,7 +224,22 @@ function makeDraggable(box) {
   let isDragging = false, startX, startY;
   
   box.addEventListener('mousedown', (e) => {
+    // ONLY block drag if clicking on contenteditable content INSIDE this specific box
+    const clickedContent = e.target.closest('.interactive-box .content');
+    if (clickedContent && clickedContent.parentElement === box) {
+      // Check if the content is actually editable
+      if (e.target.isContentEditable || e.target.closest('[contenteditable="true"]')) {
+        return; // Allow text selection inside the box
+      }
+    }
+    
+    // DON'T drag if clicking on buttons
+    if (e.target.closest('button')) {
+      return;
+    }
+    
     const rect = box.getBoundingClientRect();
+    // DON'T drag if clicking resize handle
     if (e.clientX > rect.right - 20 && e.clientY > rect.bottom - 20) return;
     
     isDragging = true;
@@ -243,8 +255,10 @@ function makeDraggable(box) {
     selectedNode = box;
     box.style.outline = "2px solid #ff007a";
     
+    // ONLY prevent default/stop propagation when we're actually starting a drag
     e.preventDefault();
-  });
+    e.stopPropagation();
+  }, true); // Use capture phase so we can intercept before other handlers
   
   document.addEventListener('mousemove', (e) => {
     if (!isDragging) return;
