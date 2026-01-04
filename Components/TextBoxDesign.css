@@ -1,188 +1,225 @@
-/* Reset browser defaults */
-.resizable-node {
-    position: relative;
-    display: inline-block; /* Critical for size to work */
-    border: 2px solid #333 !important; /* Added !important to test */
-    background-color: #fff !important;
-    width: 400px;
-    height: 200px;
-    box-sizing: border-box;
-    vertical-align: middle;
-    overflow: hidden;
+/* ============================================
+   REFACTORED: TextBoxDesign.css
+   Seamless responsive flow + section system
+   ============================================ */
+
+:root {
+  --pink: #ff007a;
+  --orange: #e67e22;
 }
 
-.content {
-  flex-grow: 1;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    box-sizing: border-box;
-}
-
-.resizable-node:hover .SectionTools{
-    display: flex;
-    flex-direction: row;
-    gap: 1vh;
-
-}
-
-.SectionTools{
-    position: absolute; /* Change from relative */
-    bottom: 0;          /* Sticks to the bottom */
-    right: 0;
-    z-index: 2;
-    width: 10vh;;
-    display: none;
-
-}
-
-.CustimiseLayout{
-    width: auto;
-    border-radius: 10%;
-    transition: transform 2s ease ;
-}
-
-.CustimiseLayout:hover{
-    background-color: rgb(5, 255, 230);
-}
-
-.ChooseSectionType{
-    width: auto;
-    border-radius: 100%;
-    transition: transform 2s ease ;
-
-}
-
-.ChooseSectionType:hover{
-    background-color: rgb(5, 255, 230);
-    box-shadow: 0px 0px 5px 2px rgb(5, 255, 230);
-}
-
-
+/* ============================================
+   MAIN CONTENT AREA (Replaces old editor)
+   ============================================ */
 #ContentArea {
-    flex: 1;
-    height: 100%;
-
-    border: 4px solid black;
-    
-    font-size: 26px;
-    font-family: "IBM Plex Serif", serif;
-    font-weight: 300;
-    font-style: bold;
-
-    /* padding: 16px; */
-    outline: none;
-
-    white-space: pre-wrap;
-    overflow-wrap: break-word;
-    word-break: break-word;
-    line-height: 1.5;   /* ≈ 45px */
-    letter-spacing: -0.01em; /* subtle tightening */
-
-    font-size: 22px;
-    line-height: 1.45;
-    letter-spacing: -0.005em;
-
-    overflow-y: auto;
-    overflow-x: hidden;
-
-    text-align: left;       /* horizontal text alignment */
-}
-
-/* wrapper sits inline in text flow */
-.resizable-wrapper {
-  position: relative;
-  display: inline-block;
-  max-width: 100%;
-  height: auto; /* JS will override initially */
-}
-
-/* IMPORTANT: don't kill pointer events here */
-.resizable-wrapper img {
-  display: block;
-  height: auto;
-  max-width: 100%;
-  user-select: none;
-}
-
-/* handle must be on top and clickable */
-.resize-handle {
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  right: -6px;
-  bottom: -6px;
-  border-radius: 2px;
-  cursor: nwse-resize;
-  background: #1e90ff;
-  z-index: 10;
-}
-
-.context-menu {
-  position: absolute;
+  width: 80%;
+  max-width: 1000px;
+  min-height: 800px;
+  border: 4px solid black;
   background: white;
-  border: 1px solid #ccc;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  padding: 20px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  resize: both;
+  position: relative;
+  box-shadow: 15px 15px 0px rgba(0,0,0,0.1);
+  font-family: "IBM Plex Serif", serif;
+  margin: 0 auto;
+}
+
+/* ============================================
+   TEXT BLOCKS (Seamless, No Borders)
+   ============================================ */
+.text-block {
+  box-sizing: border-box;
+  font-size: 18px;
+  line-height: 1.6;
+  border: none;           /* Seamless */
+  outline: none;
+  background: transparent; /* Seamless */
+  margin-bottom: 0px;
+  min-height: 1.6em;
+  white-space: pre-wrap;
+  width: 100%;
+  font-family: "IBM Plex Serif", serif;
+  font-weight: 300;
+  letter-spacing: -0.005em;
+}
+
+.text-block:focus {
+  background: rgba(0, 0, 0, 0.01); /* Subtle focus hint */
+}
+
+/* ============================================
+   DROP ZONES (Invisible Containers)
+   ============================================ */
+.drop-zone {
+  width: 100%;
+  background: transparent;  /* Seamless */
+  border: none;            /* Seamless */
+  position: relative;
+  transition: background 0.2s;
+  overflow: visible;       /* Allow boxes to be dragged */
+  min-height: 50px;
+}
+
+/* Optional: Show drop zones on hover for debugging */
+.drop-zone:hover {
+  background: rgba(255, 0, 122, 0.03);
+}
+
+/* ============================================
+   INTERACTIVE BOXES (Your Sections)
+   ============================================ */
+.interactive-box {
+  min-width: 200px;
+  min-height: 100px;
+  width: 300px;
+  height: 150px;
+  background: white;
+  color: black;
+  border: 2px solid black;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  cursor: grab;
+  z-index: 10;
+  position: absolute;
+  touch-action: none;
+  resize: both;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  transition: outline 0.2s;
+}
+
+.interactive-box:hover {
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
+/* When selected */
+.interactive-box[style*="outline"] {
+  box-shadow: 0 0 0 2px #ff007a;
+}
+
+/* ============================================
+   CONTENT AREA INSIDE BOXES
+   ============================================ */
+.interactive-box .content {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  overflow: auto;
+  font-family: "IBM Plex Serif", serif;
+  font-size: 16px;
+}
+
+/* ============================================
+   SECTION TOOLS (Bottom-right buttons)
+   ============================================ */
+.SectionTools {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  z-index: 100;
+  display: flex;
+  gap: 8px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.interactive-box:hover .SectionTools {
+  opacity: 1;
+}
+
+.SectionTools button {
+  background: var(--pink);
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 11px;
+  text-transform: uppercase;
+  transition: all 0.2s;
+}
+
+.SectionTools button:hover {
+  background: #d9006a;
+  transform: translateY(-2px);
+}
+
+.SectionTools button:active {
+  transform: translateY(0);
+}
+
+/* ============================================
+   CUSTOM CONTEXT MENU
+   ============================================ */
+.context-menu {
+  position: fixed;
+  background: white;
+  border: 2px solid black;
+  box-shadow: 8px 8px 0px rgba(0,0,0,0.15);
   min-width: 180px;
   font-size: 14px;
-  z-index: 1000;
+  z-index: 10000;
+  font-family: system-ui, sans-serif;
 }
 
-/* base menu items */
 .menu-item {
-  padding: 8px 14px;
+  padding: 10px 14px;
   cursor: pointer;
   white-space: nowrap;
   position: relative;
+  border-bottom: 1px solid #eee;
+}
+
+.menu-item:last-child {
+  border-bottom: none;
 }
 
 .menu-item:hover {
-  background: #f2f2f2;
+  background: var(--pink);
+  color: white;
 }
 
-/* arrow indicator */
 .has-submenu::after {
   content: "▶";
   position: absolute;
   right: 10px;
-  font-size: 12px;
+  font-size: 10px;
   opacity: 0.6;
 }
 
 /* SUBMENU */
- .submenu {
+.submenu {
   position: absolute;
   top: 0;
   left: 100%;
-  margin-left: 0.5px;
-
+  margin-left: 2px;
   background: white;
-  border: 1px solid #ccc;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  border: 2px solid black;
+  box-shadow: 8px 8px 0px rgba(0,0,0,0.15);
   min-width: 160px;
-
   opacity: 0;
   transform: scaleY(0.95);
   transform-origin: left center;
   pointer-events: none;
+  transition: opacity 120ms ease, transform 120ms ease;
+}
 
-  transition:
-  opacity 120ms ease,
-  transform 120ms ease;
-} 
-
-
-
-/* submenu items */
 .submenu-item {
   padding: 8px 14px;
+  border-bottom: 1px solid #eee;
 }
 
 .submenu-item:hover {
   background: #f0f0f0;
 }
 
-/* SHOW submenu on hover */
 .has-submenu:hover .submenu {
   opacity: 1;
   transform: scaleY(1);
@@ -191,7 +228,7 @@
 
 .submenu-section {
   padding: 6px 14px 4px;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -206,15 +243,66 @@
   margin: 6px 0;
 }
 
-/* ensure labels never highlight on hover */
-.submenu-section:hover {
-  background: none;
+/* ============================================
+   FLOATING MENU (Content Selector)
+   ============================================ */
+.floating-node {
+  position: fixed;
+  z-index: 10000;
+  background: #f5f5f3;
+  border: 2px solid black;
+  border-radius: 12px;
+  box-shadow: 15px 15px 0px rgba(0,0,0,0.2);
 }
 
-/* If the body contains the ContentBox, dim the editor */
-body:has(#ContentBox) #ContentArea {
-    filter: blur(2px);
-    pointer-events: none;
-    user-select: none;
+/* ============================================
+   RESPONSIVE BEHAVIOR
+   ============================================ */
+@media (max-width: 768px) {
+  #ContentArea {
+    width: 95%;
+    padding: 12px;
+  }
+  
+  .text-block {
+    font-size: 16px;
+  }
+  
+  .interactive-box {
+    min-width: 150px;
+    width: 250px;
+  }
 }
 
+/* ============================================
+   CUSTOM SCROLLBARS
+   ============================================ */
+#ContentArea::-webkit-scrollbar {
+  width: 12px;
+}
+
+#ContentArea::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-left: 2px solid black;
+}
+
+#ContentArea::-webkit-scrollbar-thumb {
+  background: black;
+  border: 2px solid #f0f0f0;
+}
+
+#ContentArea::-webkit-scrollbar-thumb:hover {
+  background: var(--pink);
+}
+
+/* ============================================
+   UTILITY: Prevent text selection during drag
+   ============================================ */
+body.dragging {
+  user-select: none;
+  cursor: grabbing !important;
+}
+
+body.dragging * {
+  cursor: grabbing !important;
+}
