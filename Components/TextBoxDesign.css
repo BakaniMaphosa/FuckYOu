@@ -55,15 +55,18 @@
    ============================================ */
 .drop-zone {
   width: 100%;
-  background: transparent;  /* Seamless */
-  border: none;            /* Seamless */
+  background: transparent;
+  border: none;
   position: relative;
-  transition: background 0.2s;
-  overflow: visible;       /* Allow boxes to be dragged */
   min-height: 50px;
-
-  resize: both; 
+  max-width: 100%;
+  box-sizing: border-box;
+  display: block;
+  
+  /* CRITICAL: These 3 lines enable resize */
   overflow: auto;
+  resize: vertical;
+  scrollbar-width: thin;
 }
 
 /* Optional: Show drop zones on hover for debugging */
@@ -100,7 +103,9 @@
 }
 
 /* When selected */
-.interactive-box[style*="outline"] {
+/* When selected - USE CLASS INSTEAD */
+.interactive-box.selected {
+  outline: 2px solid #ff007a;
   box-shadow: 0 0 0 2px #ff007a;
 }
 
@@ -184,7 +189,6 @@
   white-space: nowrap;
   position: relative;
   border-bottom: 1px solid #eee;
-  color: black; /* Default color */
 }
 
 .menu-item:last-child {
@@ -194,11 +198,6 @@
 .menu-item:hover {
   background: var(--pink);
   color: white;
-}
-
-/* FIXED: Override white color for submenu */
-.menu-item:hover .submenu {
-  color: black; /* Reset submenu to black */
 }
 
 .has-submenu::after {
@@ -226,15 +225,20 @@
   transition: opacity 120ms ease, transform 120ms ease;
 }
 
+/* FIXED: Override white color for submenu */
+.menu-item:hover .submenu {
+  color: black; /* Reset submenu to black */
+}
+
 .submenu-item {
   padding: 8px 14px;
   border-bottom: 1px solid #eee;
-  color: black; /* FIXED: Always black */
+  color: black !important; /* ADDED: Force black with !important */
 }
 
 .submenu-item:hover {
   background: #f0f0f0;
-  color: black; /* FIXED: Stay black on hover */
+  color: black !important; /* ADDED: Force black even on hover */
 }
 
 .has-submenu:hover .submenu {
@@ -323,4 +327,3 @@ body.dragging {
 body.dragging * {
   cursor: grabbing !important;
 }
-

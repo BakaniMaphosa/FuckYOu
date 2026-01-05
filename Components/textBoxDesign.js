@@ -219,13 +219,16 @@ function makeDraggable(box) {
     
     deselectAll();
     selectedNode = box;
-    box.style.outline = "2px solid #ff007a";
+    box.classList.add('selected');
     
     // ONLY prevent default/stop propagation when we're actually starting a drag
     e.preventDefault();
     e.stopPropagation();
   }, true); // Use capture phase so we can intercept before other handlers
   
+
+
+
   document.addEventListener('mousemove', (e) => {
     if (!isDragging) return;
     const safe = checkCollision(box, e.clientX - startX, e.clientY - startY, box.parentElement);
@@ -253,7 +256,7 @@ function makeDraggable(box) {
 // ============================================
 function deselectAll() {
   if (selectedNode) {
-    selectedNode.style.outline = "none";
+    selectedNode.classList.remove('selected');
     selectedNode = null;
   }
 }
@@ -519,12 +522,23 @@ export function setupDivInsertion({ editor, contextMenu }) {
   window.removeEventListener("keydown", deleteHandler);
   window.addEventListener("keydown", deleteHandler);
   
-  editor.addEventListener("mousedown", (e) => {
-    if (e.target === editor || e.target.classList.contains('text-block')) {
-      deselectAll();
-    }
-  });
+  // Better deselection - click anywhere outside selected box
+document.addEventListener("mousedown", (e) => {
+  // Don't deselect if clicking inside the floating menu
+  if (e.target.closest('.floating-node')) return;
   
+  // Don't deselect if clicking inside context menu
+  if (e.target.closest('.context-menu')) return;
+  
+  // If clicking outside any interactive box, deselect
+  if (!e.target.closest('.interactive-box')) {
+    deselectAll();
+  }
+  // If clicking a different box, deselect (the drag handler will select the new one)
+  else if (selectedNode && e.target.closest('.interactive-box') !== selectedNode) {
+    deselectAll();
+  }
+}, true);
   console.log("✅ Setup complete!");
   console.log("📋 Try: Type text → Press Enter TWICE → Type a letter");
 }

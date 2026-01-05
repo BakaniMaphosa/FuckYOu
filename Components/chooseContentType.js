@@ -130,7 +130,7 @@ export function getContentInfo() {
                 break;
 
             case "Graph":
-                createGraph(selectedNode, 'line');
+                createGraph(selectedNode, 'bar');
                 removeChooseContentBox();
                 break;
 
