@@ -61,6 +61,9 @@
   transition: background 0.2s;
   overflow: visible;       /* Allow boxes to be dragged */
   min-height: 50px;
+
+  resize: both; 
+  overflow: auto;
 }
 
 /* Optional: Show drop zones on hover for debugging */
@@ -320,3 +323,4 @@ body.dragging {
 body.dragging * {
   cursor: grabbing !important;
 }
+
