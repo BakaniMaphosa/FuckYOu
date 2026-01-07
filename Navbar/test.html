@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toolbar Navbar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bone: #F9F8F0;
+            --eggshell: #F4F1EA;
+            --nimbus: #FFFFFF;
+            --ink: #1A1A1A;
+            --gold: #C5A059;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #d1d1d1;
+            padding: 50px;
+        }
+
+        /* TOOLBAR */
+        .toolbar {
+            width: 100%;
+            background: var(--bone);
+            border: 2px solid #D1CDC4;
+            padding: 20px 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .tools-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 12px;
+            scrollbar-width: none;
+            cursor: grab;
+            padding: 10px 0;
+        }
+
+        .tools-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tools-container:active {
+            cursor: grabbing;
+        }
+
+        /* TOOL CARDS */
+        .tool {
+            flex: 0 0 auto;
+            background: white;
+            border: 1px solid #D1CDC4;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-height: 45px;
+        }
+
+        .tool:hover {
+            border-color: var(--gold);
+            background: var(--eggshell);
+            transform: translateY(-2px);
+        }
+
+        .tool-icon {
+            color: var(--gold);
+            font-size: 16px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .tool-name {
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--ink);
+            white-space: nowrap;
+        }
+
+        .tool-action {
+            margin-left: 8px;
+            padding-left: 12px;
+            border-left: 1px solid #D1CDC4;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* COLOR PICKER */
+        .color-preview {
+            width: 28px;
+            height: 28px;
+            border: 2px solid #D1CDC4;
+            border-radius: 4px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .color-preview input[type="color"] {
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            top: -25%;
+            left: -25%;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* NUMBER INPUT */
+        .num-control {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .num-btn {
+            width: 24px;
+            height: 24px;
+            border: 1px solid #D1CDC4;
+            background: white;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--ink);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+        }
+
+        .num-btn:hover {
+            background: var(--eggshell);
+            border-color: var(--gold);
+        }
+
+        .num-input {
+            width: 45px;
+            height: 28px;
+            border: 1px solid #D1CDC4;
+            text-align: center;
+            font-size: 13px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            outline: none;
+        }
+
+        .num-input:focus {
+            border-color: var(--gold);
+        }
+
+        /* THREE WAY SLIDER */
+        .align-slider {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .align-btn {
+            padding: 4px 10px;
+            background: white;
+            border: 1px solid #D1CDC4;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 500;
+            color: #666;
+            transition: 0.2s;
+        }
+
+        .align-btn:hover {
+            background: var(--eggshell);
+        }
+
+        .align-btn.active {
+            background: var(--ink);
+            color: white;
+            border-color: var(--ink);
+        }
+
+        /* DIVIDER BETWEEN SECTIONS */
+        .section-divider {
+            width: 2px;
+            height: 45px;
+            background: #D1CDC4;
+            margin: 0 8px;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="toolbar">
+        <div class="tools-container" id="toolsContainer">
+            
+            <!-- TEXT FORMATTING SECTION -->
+            <div class="tool">
+                <i class="fa-solid fa-bold tool-icon"></i>
+                <span class="tool-name">Bold</span>
+            </div>
+
+            <div class="tool">
+                <i class="fa-solid fa-italic tool-icon"></i>
+                <span class="tool-name">Italic</span>
+            </div>
+
+            <div class="tool">
+                <i class="fa-solid fa-underline tool-icon"></i>
+                <span class="tool-name">Underline</span>
+            </div>
+
+            <div class="tool">
+                <i class="fa-solid fa-highlighter tool-icon"></i>
+                <span class="tool-name">Highlight</span>
+                <div class="tool-action">
+                    <div class="color-preview">
+                        <input type="color" value="#ffff00">
+                    </div>
+                </div>
+            </div>
+
+            <div class="tool">
+                <i class="fa-solid fa-text-height tool-icon"></i>
+                <span class="tool-name">Font Size</span>
+                <div class="tool-action">
+                    <div class="num-control">
+                        <button class="num-btn">−</button>
+                        <input type="number" class="num-input" value="17" min="1" max="200">
+                        <button class="num-btn">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tool">
+                <i class="fa-solid fa-font tool-icon"></i>
+                <span class="tool-name">Font Family</span>
+            </div>
+
+            <div class="section-divider"></div>
+
+            <!-- COLOR & HEADERS SECTION -->
+            <div class="tool">
+                <i class="fa-solid fa-palette tool-icon"></i>
+                <span class="tool-name">Foreground</span>
+                <div class="tool-action">
+                    <div class="color-preview">
+                        <input type="color" value="#000000">
+                    </div>
+                </div>
+            </div>
+
+            <div class="tool">
+                <i class="fa-solid fa-heading tool-icon"></i>
+                <span class="tool-name">Header</span>
+                <div class="tool-action">
+                    <div class="num-control">
+                        <button class="num-btn">−</button>
+                        <input type="number" class="num-input" value="1" min="1" max="6">
+                        <button class="num-btn">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tool">
+                <i class="fa-solid fa-list-check tool-icon"></i>
+                <span class="tool-name">Checkbox List</span>
+            </div>
+
+            <div class="tool">
+                <i class="fa-solid fa-list-ol tool-icon"></i>
+                <span class="tool-name">Numbered List</span>
+            </div>
+
+            <div class="tool">
+                <i class="fa-solid fa-align-left tool-icon"></i>
+                <span class="tool-name">Align Text</span>
+                <div class="tool-action">
+                    <div class="align-slider">
+                        <button class="align-btn active">L</button>
+                        <button class="align-btn">C</button>
+                        <button class="align-btn">R</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tool">
+                <i class="fa-solid fa-minus tool-icon"></i>
+                <span class="tool-name">Block Divider</span>
+            </div>
+
+            <div class="section-divider"></div>
+
+            <!-- INSERT SECTION -->
+            <div class="tool">
+                <i class="fa-solid fa-image tool-icon"></i>
+                <span class="tool-name">Insert Image</span>
+            </div>
+
+            <div class="tool">
+                <i class="fa-solid fa-table tool-icon"></i>
+                <span class="tool-name">Insert Table</span>
+            </div>
+
+            <div class="tool">
+                <i class="fa-solid fa-chart-line tool-icon"></i>
+                <span class="tool-name">Insert Graph</span>
+            </div>
+
+            <div class="tool">
+                <i class="fa-solid fa-link tool-icon"></i>
+                <span class="tool-name">Insert Link</span>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // DRAG TO SCROLL
+        const container = document.getElementById('toolsContainer');
+        let isDragging = false;
+        let startX, scrollLeft;
+
+        container.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startX = e.pageX - container.offsetLeft;
+            scrollLeft = container.scrollLeft;
+            e.preventDefault();
+        });
+
+        container.addEventListener('mouseleave', () => {
+            isDragging = false;
+        });
+
+        container.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+
+        container.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            e.preventDefault();
+            const x = e.pageX - container.offsetLeft;
+            const walk = (x - startX) * 2;
+            container.scrollLeft = scrollLeft - walk;
+        });
+
+        // NUMBER CONTROLS
+        document.querySelectorAll('.num-control').forEach(control => {
+            const input = control.querySelector('.num-input');
+            const decrease = control.querySelectorAll('.num-btn')[0];
+            const increase = control.querySelectorAll('.num-btn')[1];
+
+            decrease.addEventListener('click', () => {
+                input.value = Math.max(parseInt(input.min), parseInt(input.value) - 1);
+            });
+
+            increase.addEventListener('click', () => {
+                input.value = Math.min(parseInt(input.max), parseInt(input.value) + 1);
+            });
+        });
+
+        // ALIGN BUTTONS
+        document.querySelectorAll('.align-slider').forEach(slider => {
+            const buttons = slider.querySelectorAll('.align-btn');
+            buttons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    buttons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

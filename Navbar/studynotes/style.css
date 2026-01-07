@@ -1,0 +1,371 @@
+:root {
+    --bone: #F9F8F0;
+    --eggshell: #F4F1EA;
+    --nimbus: #FFFFFF;
+    --ink: #1A1A1A;
+    --gold: #C5A059;
+    --nav-height: 180px;
+}
+
+body {
+    margin: 0;
+    background-color: #d1d1d1;
+    font-family: 'Inter', sans-serif;
+    height: 200vh;
+}
+
+/* --- THE NAVBAR CONTAINER --- */
+.navbar {
+    position: fixed;
+    top: calc(var(--nav-height) * -1.2);
+    left: 0;
+    width: 100%;
+    height: var(--nav-height);
+    background: var(--bone);
+    border-bottom: 2px solid #D1CDC4;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0;
+    box-sizing: border-box;
+    transition: top 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+    z-index: 1000;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    overflow: visible;
+}
+
+.navbar.visible {
+    top: 0;
+}
+
+.nav-side {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 10;
+    padding-left: 40px;
+}
+
+.btn-exec {
+    height: 45px;
+    width: fit-content;
+    background: white;
+    border: 1px solid #D1CDC4;
+    font-family: 'Crimson Pro', serif;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 10px 20px;
+    color: var(--ink);
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 13vh;
+}
+
+.btn-exec:hover {
+    border-color: var(--gold);
+    background: var(--eggshell);
+}
+
+.btn-dark {
+    background: var(--ink);
+    color: white;
+    border: none;
+}
+
+/* --- CENTER SECTION --- */
+.nav-center {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding-top: 30px;
+    position: relative;
+    overflow: visible;
+}
+
+.search-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 5vh; 
+    width: 100%;
+    padding: 0;
+    padding-left: 1vh;
+    padding-right: 1vh;
+    margin-right: 80vh;
+    z-index: 5;
+}
+
+/* SLIDER ON THE LEFT */
+.slider-bar {
+    width: fit-content;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    background: white;
+    border: 1px solid #D1CDC4;
+    padding: 8px 16px;
+    gap: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    position: absolute;
+    top: 30px;
+    left: 40px;
+    z-index: 10;
+    transition: margin-left 0.3s ease;
+}
+
+/* SEARCHBAR ON THE RIGHT */
+.search-wrap {
+    width: 800px;
+    position: relative;
+    flex-shrink: 0;
+    height: 61px;
+    display: flex;
+    align-items: center;
+    margin-right: 0;
+    margin-left: 25vh;
+}
+
+.search-wrap input {
+    width: 100%;
+    height: 100%;
+    background: var(--eggshell);
+    border: 1px solid #DED9CE;
+    padding: 8px 10px 8px 35px;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.search-wrap i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gold);
+}
+
+/* --- THE CAROUSEL (STICKING OUT) --- */
+.carousel-viewport {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 14vh;
+    width: 100%;
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    cursor: grab;
+    padding-bottom: 30px;
+    z-index: 1001;
+    
+    /* ✅ SLIDE IN FROM RIGHT */
+    opacity: 0;
+    transform: translateX(100px);
+    transition: opacity 0.5s ease 0.3s, transform 0.5s ease 0.3s;
+}
+
+.carousel-viewport.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.carousel-viewport::-webkit-scrollbar {
+    display: none;
+}
+
+.track {
+    display: flex;
+    gap: 20px;
+    padding: 0 40px;
+    padding-right: 300px;
+}
+
+.biz-card {
+    flex: 0 0 220px;
+    height: 120px;
+    background: var(--nimbus);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+    transition: transform 0.3s ease;
+}
+
+.biz-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-5px);
+}
+
+.biz-card .firm {
+    font-family: 'Crimson Pro', serif;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: #888;
+    text-transform: uppercase;
+}
+
+.biz-card .name {
+    font-family: 'Crimson Pro', serif;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 4px;
+}
+
+.scroll-msg {
+    text-align: center;
+    margin-top: 500px;
+    font-family: 'Crimson Pro';
+    letter-spacing: 4px;
+    color: #555;
+}
+
+/****************************** SLIDER ******************************/
+.slider-section {
+    display: flex;
+    gap: 4px;
+    position: relative;
+}
+
+.slider-btn {
+    padding: 8px 20px;
+    background: transparent;
+    border: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    color: #666;
+    transition: color 0.3s ease;
+    position: relative;
+    z-index: 2;
+}
+
+.slider-btn.active {
+    color: #1A1A1A;
+}
+
+.slider-btn:hover {
+    color: #1A1A1A;
+}
+
+.slider-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: #F4F1EA;
+    border-radius: 4px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1;
+}
+
+.divider {
+    width: 1px;
+    height: 30px;
+    background: #D1CDC4;
+}
+
+.action-section {
+    display: flex;
+    gap: 12px;
+}
+
+.action-btn {
+    padding: 8px 16px;
+    background: white;
+    border: 1px solid #D1CDC4;
+    font-family: 'Crimson Pro', serif;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    color: #1A1A1A;
+    transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+    border-color: #C5A059;
+    background: #F9F8F0;
+}
+
+.action-btn.primary {
+    background: #1A1A1A;
+    color: white;
+    border: none;
+}
+
+.action-btn.primary:hover {
+    background: #333;
+}
+
+/* TAB CONTENT TRANSITIONS */
+#tabContent {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+#tabContent.fade-out {
+    opacity: 0;
+    transform: translateY(-10px);
+}
+
+/* NAVBAR TRIGGER LINES */
+.navbar-trigger {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    padding: 8px 0;
+    background: var(--bone);
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1001;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.navbar-trigger:hover {
+    height: 25px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+.trigger-line {
+    width: 35px;
+    height: 2px;
+    background: var(--gold);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+.navbar-trigger:hover .trigger-line {
+    background: var(--ink);
+}
+
+/* Hide trigger when navbar is visible */
+.navbar.visible ~ .navbar-trigger {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Move trigger to the right when on notes tab */
+.navbar-trigger.notes-active {
+    transform: translateX(-50%) translateX(-80vh);
+}
