@@ -1,4 +1,10 @@
-#TextBox{
-    width:80vw;
-    height:80vh;
+body {
+    overflow: hidden;
+ 
+}
+
+#ContentContainer {
+    width: 100vw;
+    height: 100vh;
+    margin-left: 1vh;
 }
