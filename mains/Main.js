@@ -1,4 +1,5 @@
 import { setupDivInsertion } from "/Components/textBoxDesign.js";
+import { toolBarLogic } from "/Navbar/studynotes/script.js";
 
 async function loadComponent(targetId, file) {
     try {
@@ -15,39 +16,80 @@ async function loadComponent(targetId, file) {
 }
 
 async function init() {
-  // Load screenLogic.html's BODY content into ContentContainer
+  // Load navbar and content
+  await loadComponent("navBarContainer", "/Navbar/studynotes/index2.html");
   await loadComponent("ContentContainer", "/currentDesign/screenLogic.html");
   
-  // Wait for DOM to update
   await new Promise(resolve => requestAnimationFrame(resolve));
   
-  // NOW the elements from screenLogic.html exist
-  const editor = document.getElementById("TextBox"); // This is from screenLogic.html
+  // Initialize navbar
+  await initializeNavbar();
+  
+  // ✅ WATCH FOR NAVBAR VISIBILITY AND TAB CHANGES
+  const nav = document.getElementById('mainNav');
+  const textBox = document.getElementById("ContentContainer");
+  
+  // Function to check and update margin
+  function updateMargin() {
+      if (!textBox || !nav) return;
+      
+      const isVisible = nav.classList.contains('visible');
+      const isToolsTab = document.querySelector('.slider-btn[data-tab="tools"]')?.classList.contains('active');
+      
+      console.log("Navbar visible:", isVisible, "Tools active:", isToolsTab);
+      
+      // Only move down if BOTH navbar is visible AND tools tab is active
+      if (isVisible && isToolsTab) {
+          textBox.style.marginTop = "23vh";
+          console.log("✅ Moved down");
+      } else {
+          textBox.style.marginTop = "0vh";
+          console.log("✅ Moved up");
+      }
+  }
+  
+  // Watch navbar visibility changes
+  const navObserver = new MutationObserver(updateMargin);
+  navObserver.observe(nav, { attributes: true, attributeFilter: ['class'] });
+  
+  // Watch tab changes (watch the entire tabContent area)
+  const tabContent = document.getElementById('tabContent');
+  if (tabContent) {
+      const tabObserver = new MutationObserver(updateMargin);
+      tabObserver.observe(tabContent, { childList: true, subtree: true });
+  }
+  
+  // Also watch for clicks on slider buttons
+  document.addEventListener('click', (e) => {
+      if (e.target.closest('.slider-btn')) {
+          setTimeout(updateMargin, 100); // Small delay to let the active class update
+      }
+  });
+  
+  // Setup editor
+  const editor = document.getElementById("TextBox");
   const contextMenu = document.getElementById("customContextMenu");
   
-  console.log("Editor found:", editor);
-  console.log("Context menu found:", contextMenu);
-  
   if (editor && contextMenu) {
-    // Load the textbox content FIRST
     editor.innerHTML = `
         <div class="text-block" contenteditable="true">Press [Return] twice and type a letter to create a drop zone. Right-click to add sections!</div>
     `;
     
-    // Wait a tick
     await new Promise(resolve => setTimeout(resolve, 50));
     
-    // THEN setup the div insertion logic
     setupDivInsertion({ editor, contextMenu });
-    
-    // Setup the divider resize logic
     setupDividerResize();
   } else {
     console.error("❌ Could not find editor or context menu!");
   }
 }
 
-// Divider resize logic (moved from screenLogic.js)
+async function initializeNavbar() {
+    await new Promise(resolve => setTimeout(resolve, 100));
+    toolBarLogic();
+    console.log("✅ Navbar initialized!");
+}
+
 function setupDividerResize() {
     const divider = document.getElementById("AIdivider");
     const aiBox = document.getElementById("AIbox");

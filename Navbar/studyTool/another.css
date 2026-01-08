@@ -8,9 +8,6 @@
 }
 
 body {
-    margin: 0;
-    background-color: #d1d1d1;
-    font-family: 'Inter', sans-serif;
     height: 200vh;
 }
 
@@ -66,8 +63,8 @@ body {
     display: flex;
     gap: 12px;
     align-items: center;
-    margin-top: -5vh;
-    margin-left: 26.5vh;
+    margin-top: -7.5vh;
+    margin-left: 28vh;
     
 }
 
@@ -172,10 +169,12 @@ body {
     scrollbar-width: none;
     cursor: grab;
     
-    /* margin-top: 1vh;; */
+    margin-top: -1vh;;
     flex-direction: row;
     justify-content: flex-start;
     margin-left: 3vh;
+ 
+
 }
 
 .tools-container::-webkit-scrollbar {

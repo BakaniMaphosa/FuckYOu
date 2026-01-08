@@ -466,9 +466,7 @@ export function setupDivInsertion({ editor, contextMenu }) {
     console.error("❌ Editor not found!");
     return;
   }
-  
-  console.log("🚀 Setting up editor...");
-  
+
   // Attach listeners to all text blocks
   const textBlocks = editor.querySelectorAll('.text-block');
   console.log(`Found ${textBlocks.length} text blocks`);
@@ -539,6 +537,5 @@ document.addEventListener("mousedown", (e) => {
     deselectAll();
   }
 }, true);
-  console.log("✅ Setup complete!");
-  console.log("📋 Try: Type text → Press Enter TWICE → Type a letter");
+  
 }

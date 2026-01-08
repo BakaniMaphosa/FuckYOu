@@ -1,10 +1,18 @@
 body {
-    overflow: hidden;
- 
+      overflow: hidden;
 }
 
+/* ✅ NAVBAR CONTAINER - stays on top */
+#navBarContainer {
+    position: fixed;
+    left: 0;
+    width: 100%;
+    z-index: 10000;
+}
+
+/* MAIN CONTENT - fills screen */
 #ContentContainer {
     width: 100vw;
     height: 100vh;
-    margin-left: 1vh;
+    
 }
