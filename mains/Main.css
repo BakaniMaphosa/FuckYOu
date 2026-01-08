@@ -1,5 +1,5 @@
 body {
-      overflow: hidden;
+    overflow: hidden;
 }
 
 /* ✅ NAVBAR CONTAINER - stays on top */
@@ -10,9 +10,10 @@ body {
     z-index: 10000;
 }
 
-/* MAIN CONTENT - fills screen */
+/* MAIN CONTENT - fills screen with ANIMATION */
 #ContentContainer {
     width: 100vw;
     height: 100vh;
-    
+    /* ✅ ADD SMOOTH TRANSITION */
+    transition: margin-top 0.6s cubic-bezier(0.19, 1, 0.22, 1);
 }

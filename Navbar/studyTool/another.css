@@ -53,19 +53,34 @@ body {
     justify-content: flex-start;
     width: 100%;
     padding: 0 40px;
-    gap:5vh;
+    gap: 5vh;
+    margin-top: -2.5vh; /* ✅ Move the ENTIRE row up, not just upperToolBar */
 }
 
 #upperToolBar{
-    width:79vh;
-    height: 45px;
-  
+    width: 79vh;
+    height: 45px; /* ✅ This stays 45px now */
+    min-height: 45px; /* ✅ Force it to stay 45px */
     display: flex;
     gap: 12px;
     align-items: center;
-    margin-top: -7.5vh;
+    margin-top: -2.5vh; /* ✅ NO margin-top here */
     margin-left: 28vh;
-    
+}
+
+/* Make sure tools stay 45px */
+.tool {
+    flex: 0 0 auto;
+    background: white;
+    border: 1px solid #D1CDC4;
+    padding: 8px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    height: 45px; /* ✅ Force exact height */
+    box-sizing: border-box;
 }
 
 /* SLIDER */
@@ -169,7 +184,7 @@ body {
     scrollbar-width: none;
     cursor: grab;
     
-    margin-top: -1vh;;
+    height:fit-content;
     flex-direction: row;
     justify-content: flex-start;
     margin-left: 3vh;
@@ -185,7 +200,7 @@ body {
     cursor: grabbing;
 }
 
-.tool {
+/* .tool {
     flex: 0 0 auto;
     background: white;
     border: 1px solid #D1CDC4;
@@ -196,7 +211,7 @@ body {
     cursor: pointer;
     transition: all 0.2s ease;
     min-height: 38px;
-}
+} */
 
 .tool:hover {
     border-color: var(--gold);
