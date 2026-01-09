@@ -6,6 +6,28 @@ export function toolBarLogic(){
         document.getElementById(targetId).innerHTML = html;
     }
 
+    async function loadComponentByClass(targetClass, file) {
+    try {
+        const res = await fetch(file);
+        if (!res.ok) throw new Error(`Failed to load ${file}`);
+        
+        const html = await res.text();
+        
+        // Select all elements with the specific class
+        const targets = document.querySelectorAll(`.${targetClass}`);
+        
+        if (targets.length > 0) {
+            targets.forEach(target => {
+                target.innerHTML = html;
+            });
+        } else {
+            console.warn(`No elements found with class: ${targetClass}`);
+        }
+    } catch (err) {
+        console.error(err);
+    }
+}
+
     const nav = document.getElementById('mainNav');
     const navTrigger = document.querySelector('.navbar-trigger');
 
@@ -105,37 +127,32 @@ export function toolBarLogic(){
                         <div class="carousel-viewport" id="viewport">
                             <div class="track">
                                 <div class="biz-card">
-                                    <div class="firm">Pierce & Pierce</div>
-                                    <div class="name">Paul Allen</div>
+                                    
                                 </div>
                                 <div class="biz-card">
-                                    <div class="firm">Pierce & Pierce</div>
-                                    <div class="name">Patrick Bateman</div>
+                                    
                                 </div>
                                 <div class="biz-card">
-                                    <div class="firm">Pierce & Pierce</div>
-                                    <div class="name">Timothy Bryce</div>
+                                    
                                 </div>
                                 <div class="biz-card">
-                                    <div class="firm">Pierce & Pierce</div>
-                                    <div class="name">David Van Patten</div>
+                                    
                                 </div>
                                 <div class="biz-card">
-                                    <div class="firm">Mergers & Acq.</div>
-                                    <div class="name">M. Halberstram</div>
+                                   
                                 </div>
                                 <div class="biz-card">
-                                    <div class="firm">Mergers & Acq.</div>
-                                    <div class="name">M. Halberstram</div>
+                                    
                                 </div>
                                 <div class="biz-card">
-                                    <div class="firm">Mergers & Acq.</div>
-                                    <div class="name">M. Halberstram</div>
+                                    
                                 </div>
                             </div>
                         </div>
                     `;
                     
+                    loadComponentByClass("biz-card","/Navbar/NoteCards/NoteCard/NoteCard.html")
+
                     if (navSide) navSide.style.display = 'flex';
                     if (sliderBar) sliderBar.style.marginLeft = "0vh";
                     

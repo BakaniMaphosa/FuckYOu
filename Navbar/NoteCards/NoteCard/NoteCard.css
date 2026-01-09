@@ -1,0 +1,185 @@
+/* --- VARIABLES --- */
+:root {
+    --banana: #FFE01B;
+    --caviar: #241C15;
+    --nimbus: #FFFFFF;
+    --paper: #F6F6F4;
+}
+
+/* --- THE NOTECARD (Note Variant) --- */
+.notecard {
+    /* flex: 0 0 calc(220px + 6vh);
+    height: 140px; */
+    width: calc(220px + 6vh);
+    background: var(--nimbus);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    border: 2px solid var(--caviar);
+    box-shadow: none; 
+    position: relative;
+    box-sizing: border-box;
+    overflow: hidden;
+    transition: transform 0.2s ease;
+    font-family: 'Inter', sans-serif;
+}
+
+.notecard:hover {
+    transform: translateY(-2px);
+}
+
+/* --- HEADER & ICONS --- */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+    width: 100%;
+}
+
+.title-wrap {
+    display: flex;
+    align-items: flex-start;
+    flex-grow: 1;
+}
+
+.title {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin: 0;
+    color: var(--caviar);
+    line-height: 1.1;
+    /* Notes use standard title case (not forced uppercase) */
+}
+
+/* Paper Icon with 2 Floating Lines */
+.card-icon.icon-note {
+    width: 16px;
+    height: 20px;
+    border: 2px solid var(--caviar);
+    margin-right: 12px;
+    position: relative;
+    flex-shrink: 0;
+    top: 1px;
+    background-color: var(--nimbus);
+    /* The two lines */
+    background-image: 
+        linear-gradient(var(--caviar), var(--caviar)), 
+        linear-gradient(var(--caviar), var(--caviar));
+    background-repeat: no-repeat;
+    background-size: 60% 2px;
+    background-position: center 8px, center 13px;
+}
+
+/* Paper Icon Dog-ear (Folded Corner) */
+.icon-note::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 6px;
+    height: 6px;
+    background: var(--nimbus);
+    border-left: 2px solid var(--caviar);
+    border-bottom: 2px solid var(--caviar);
+}
+
+/* --- INFO BUTTON & POPUP --- */
+.info-btn {
+    width: 22px;
+    height: 22px;
+    border: 2px solid var(--caviar);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 900;
+    cursor: help;
+    background: var(--nimbus);
+    z-index: 60;
+    position: relative;
+    transition: 0.2s;
+}
+
+.info-btn:hover {
+    background: var(--caviar);
+    color: var(--banana);
+}
+
+.desc-popup {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--banana);
+    padding: 16px;
+    box-sizing: border-box;
+    font-size: 0.85rem;
+    font-weight: 700;
+    line-height: 1.5;
+    color: var(--caviar);
+    z-index: 50;
+    opacity: 0;
+    transform: translateY(100%);
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.info-btn:hover ~ .desc-popup {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* --- DIFFICULTY METER --- */
+.difficulty-meter {
+    display: flex;
+    gap: 3px;
+    margin-bottom: 12px;
+}
+
+.diff-bar {
+    width: 6px;
+    height: 12px;
+    background: var(--paper);
+    border: 1px solid var(--caviar);
+}
+
+.diff-bar.active {
+    background: var(--caviar);
+}
+
+/* --- STATS ROW --- */
+.stats-row {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    font-size: 0.75rem;
+    font-weight: 900;
+}
+
+.streak { color: #D93910; }
+.points { color: var(--caviar); }
+
+/* --- FOOTER --- */
+.footer {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding-top: 8px;
+    border-top: 2px solid var(--caviar);
+}
+
+.type-label {
+    font-size: 0.6rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}

@@ -69,7 +69,7 @@ body {
     display: flex;
     gap: 12px;
     align-items: center;
-    margin-top: -2.5vh;
+    margin-top: -2.0vh;
     margin-left: 28vh;
 }
 
@@ -231,6 +231,7 @@ body {
     flex-direction: row;
     justify-content: flex-start;
     margin-left: 3vh;
+    padding-top: 0.3vh;
 }
 
 .tools-container::-webkit-scrollbar {

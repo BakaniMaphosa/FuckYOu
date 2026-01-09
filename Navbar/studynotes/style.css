@@ -15,6 +15,7 @@
 
 body {
     height: 200vh;
+    font-family: 'Crimson Pro', serif;
 }
 
 /* --- THE NAVBAR CONTAINER --- */
@@ -174,6 +175,7 @@ body {
     scrollbar-width: none;
     cursor: grab;
     padding-bottom: 30px;
+    padding-top: 0.4vh;
     z-index: 1001;
     opacity: 0;
     transform: translateX(100px);
@@ -193,15 +195,15 @@ body {
     display: flex;
     gap: 20px;
     padding: 0 40px;
-    padding-right: 300px;
+    padding-right: 850px;
 }
 
 .biz-card {
     flex: 0 0 calc(220px + 6vh);
-    height: 140px;
+    /* height: 140px; */
     width: calc(220px + 6vh);
     background: var(--nimbus);
-    padding: 15px;
+    /* padding: 15px; */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -252,7 +254,7 @@ body {
     padding: 8px 20px;
     background: transparent;
     border: none;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', serif;
     font-size: 13px;
     font-weight: 500;
     cursor: pointer;
@@ -300,7 +302,7 @@ body {
     padding: 8px 16px;
     background: var(--nimbus);
     border: 2px solid var(--caviar);
-    font-family: 'Crimson Pro', serif;
+    font-family: 'Inter', serif;
     font-size: 12px;
     font-weight: 600;
     text-transform: uppercase;

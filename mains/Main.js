@@ -15,10 +15,33 @@ async function loadComponent(targetId, file) {
     }
 }
 
+async function loadComponentByClass(targetClass, file) {
+    try {
+        const res = await fetch(file);
+        if (!res.ok) throw new Error(`Failed to load ${file}`);
+        
+        const html = await res.text();
+        
+        // Select all elements with the specific class
+        const targets = document.querySelectorAll(`.${targetClass}`);
+        
+        if (targets.length > 0) {
+            targets.forEach(target => {
+                target.innerHTML = html;
+            });
+        } else {
+            console.warn(`No elements found with class: ${targetClass}`);
+        }
+    } catch (err) {
+        console.error(err);
+    }
+}
+
 async function init() {
   // Load navbar and content
   await loadComponent("navBarContainer", "/Navbar/studynotes/index2.html");
   await loadComponent("ContentContainer", "/currentDesign/screenLogic.html");
+  await loadComponentByClass("biz-card","/Navbar/NoteCards/NoteCard/NoteCard.html")
   
   await new Promise(resolve => requestAnimationFrame(resolve));
   

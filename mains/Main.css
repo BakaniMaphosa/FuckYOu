@@ -1,5 +1,11 @@
+:root{
+    --paper: #F6F6F4;
+}
+
+
 body {
     overflow: hidden;
+    background-color: var(--paper);
 }
 
 /* ✅ NAVBAR CONTAINER - stays on top */
