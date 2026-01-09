@@ -1,11 +1,17 @@
 // ============================================
 // FIXED FINAL VERSION: textBoxDesign.js
+// Preserves HTML/styles by manipulating DOM directly
 // ============================================
 
 import { getContentInfo } from "/Components/chooseContentType.js";
 
 let selectedNode = null;
 let isDraggingGlobal = false;
+
+// Track enter presses
+let enterCount = 0;
+let lastEnterBlock = null;
+let lastEnterTime = 0;
 
 export function getSelectedNode() {
   return selectedNode;
@@ -27,92 +33,179 @@ async function loadComponent(target, file) {
 }
 
 // ============================================
-// TEXT BLOCK INPUT HANDLER
+// REMOVE TRAILING EMPTY ELEMENTS (BR, empty DIV, nested empties)
+// This preserves all styled content but removes line breaks
 // ============================================
-function handleTextInput(e) {
-  const block = e.currentTarget;
-  if (!block) return;
+function removeTrailingEmpties(element, maxRemove = 30) {
+  let removed = 0;
+  let passes = 0;
+  const maxPasses = 50; // Safety limit
   
-  const text = block.innerText;
-  const trimmedText = text.replace(/\s+$/, '');
-  
-  console.log("📝 Input:", trimmedText.slice(-50).replace(/\n/g, '\\n'));
-  
-  // Check if we end with newlines followed by a character
-  if (/\n{2,}[^\s\n]$/.test(trimmedText)) {
-    // Count newlines from the end backwards
-    let newlineCount = 0;
-    let charFound = false;
+  while (removed < maxRemove && passes < maxPasses) {
+    passes++;
     
-    for (let i = trimmedText.length - 1; i >= 0; i--) {
-      if (!charFound && trimmedText[i] !== '\n') {
-        charFound = true; // Found the trigger char
-        continue;
-      }
-      if (charFound && trimmedText[i] === '\n') {
-        newlineCount++;
-      } else if (charFound) {
-        break; // Hit non-newline, stop counting
-      }
+    if (!element.lastChild) break;
+    
+    const node = element.lastChild;
+    
+    // Remove <br>
+    if (node.nodeName === 'BR') {
+      node.remove();
+      removed++;
+      continue;
     }
     
-    if (newlineCount >= 2) {
-      const triggerChar = trimmedText[trimmedText.length - 1];
-      const topContent = trimmedText.slice(0, -(newlineCount + 1));
+    // Remove whitespace-only text nodes
+    if (node.nodeType === Node.TEXT_NODE) {
+      if (node.textContent.trim() === '' || /^[\n\r\s]*$/.test(node.textContent)) {
+        node.remove();
+        continue;
+      }
+      // Has real text, stop
+      break;
+    }
+    
+    // For element nodes, check if they're effectively empty
+    if (node.nodeType === Node.ELEMENT_NODE) {
+      const inner = node.innerHTML;
+      const text = node.textContent.trim();
       
-      console.log("✅ Found", newlineCount, "newlines, char:", triggerChar);
+      // Empty or just contains <br>
+      if (inner === '' || inner === '<br>' || inner === '<br/>' || 
+          inner.match(/^(<br\s*\/?>|\s)*$/) || text === '') {
+        node.remove();
+        removed++;
+        continue;
+      }
       
+      // Check if it's a div/p/span that only contains empty children
+      if (node.nodeName === 'DIV' || node.nodeName === 'P' || node.nodeName === 'SPAN') {
+        // Recursively clean this node's trailing empties
+        const beforeChildren = node.childNodes.length;
+        removeTrailingEmpties(node, 10);
+        
+        // After cleaning, if it's now empty, remove it
+        if (node.innerHTML.trim() === '' || node.innerHTML === '<br>' || 
+            node.textContent.trim() === '') {
+          node.remove();
+          removed++;
+          continue;
+        }
+        
+        // If we removed children but element still has content, we're done with this level
+        if (node.childNodes.length < beforeChildren) {
+          continue; // Check again at parent level
+        }
+      }
+      
+      // Element has real content, stop
+      break;
+    }
+    
+    // Unknown node type, stop to be safe
+    break;
+  }
+  
+  console.log(`removeTrailingEmpties: removed ${removed} elements in ${passes} passes`);
+  return removed;
+}
+
+// ============================================
+// KEY DOWN HANDLER - Track enters
+// ============================================
+function handleKeyDown(e) {
+  const block = e.currentTarget;
+  const now = Date.now();
+  
+  if (e.key === 'Enter') {
+    // Reset if different block or too long since last enter
+    if (block !== lastEnterBlock || now - lastEnterTime > 2000) {
+      enterCount = 0;
+    }
+    
+    lastEnterBlock = block;
+    lastEnterTime = now;
+    enterCount++;
+    
+    console.log(`⏎ Enter #${enterCount}`);
+    
+    if (enterCount >= 2) {
+      block.dataset.readyToSplit = 'true';
+      block.dataset.enterCount = enterCount;
+    }
+  } 
+  else if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+    // Regular character
+    if (block.dataset.readyToSplit === 'true') {
+      e.preventDefault(); // Stop the character from being typed
+      
+      const storedEnterCount = parseInt(block.dataset.enterCount) || 2;
+      console.log(`✅ SPLIT! Char: "${e.key}", Enters: ${storedEnterCount}`);
+      
+      // Calculate height
       const lineHeight = parseFloat(window.getComputedStyle(block).lineHeight) || 28;
-      const height = Math.max(100, newlineCount * lineHeight) /2;
+      const height = Math.max(50, (storedEnterCount * lineHeight));
       
-      const newZone = document.createElement('div');
-      newZone.className = 'drop-zone';
-      newZone.style.height = height + 'px';
+      // Create drop zone
+      const dropZone = document.createElement('div');
+      dropZone.className = 'drop-zone';
+      dropZone.style.height = height + 'px';
       
-      const newTextBlock = document.createElement('div');
-      newTextBlock.className = 'text-block';
-      newTextBlock.contentEditable = 'true';
-      newTextBlock.innerText = triggerChar;
-      attachListeners(newTextBlock);
+      // Create new text block with the typed character
+      const newBlock = document.createElement('div');
+      newBlock.className = 'text-block';
+      newBlock.contentEditable = 'true';
+      newBlock.textContent = e.key;
+      attachListeners(newBlock);
       
-      block.innerText = topContent;
-      block.after(newZone);
-      newZone.after(newTextBlock);
+      // Clean up the ORIGINAL block - just remove trailing BRs/empty divs
+      // DO NOT touch innerHTML or innerText - this preserves formatting!
+      removeTrailingEmpties(block, storedEnterCount + 5);
       
-      console.log("✨ Created", height + "px drop zone");
+      // Clear the flags
+      delete block.dataset.readyToSplit;
+      delete block.dataset.enterCount;
       
+      // Insert the new elements
+      block.after(dropZone);
+      dropZone.after(newBlock);
+      
+      // Reset tracking
+      enterCount = 0;
+      lastEnterBlock = null;
+      
+      // Focus the new block
       setTimeout(() => {
-        newTextBlock.focus();
+        newBlock.focus();
+        // Put cursor after the character
         const range = document.createRange();
         const sel = window.getSelection();
-        if (newTextBlock.firstChild) {
-          range.setStart(newTextBlock.firstChild, 1);
+        if (newBlock.firstChild) {
+          range.setStart(newBlock.firstChild, 1);
           range.collapse(true);
           sel.removeAllRanges();
           sel.addRange(range);
         }
-      }, 50);
+      }, 0);
+    } else {
+      // Normal typing - reset enter count
+      enterCount = 0;
+      delete block.dataset.readyToSplit;
+      delete block.dataset.enterCount;
     }
+  }
+  else if (e.key === 'Backspace' || e.key === 'Delete') {
+    enterCount = 0;
+    delete block.dataset.readyToSplit;
+    delete block.dataset.enterCount;
   }
 }
 
 // ============================================
-// ATTACH LISTENERS (Clean and Simple)
+// ATTACH LISTENERS
 // ============================================
 function attachListeners(block) {
-  // Input event
-  block.addEventListener('input', handleTextInput);
-  
-  // Keyup for Enter detection
-  block.addEventListener('keyup', function(e) {
-    if (e.key === 'Enter') {
-      console.log("⏎ Enter pressed");
-      setTimeout(() => {
-        handleTextInput({ currentTarget: block });
-      }, 50);
-    }
-  });
-  
+  block.addEventListener('keydown', handleKeyDown);
   console.log("✅ Listeners attached");
 }
 
@@ -190,22 +283,18 @@ function makeDraggable(box) {
   let isDragging = false, startX, startY;
   
   box.addEventListener('mousedown', (e) => {
-    // ONLY block drag if clicking on contenteditable content INSIDE this specific box
     const clickedContent = e.target.closest('.interactive-box .content');
     if (clickedContent && clickedContent.parentElement === box) {
-      // Check if the content is actually editable
       if (e.target.isContentEditable || e.target.closest('[contenteditable="true"]')) {
-        return; // Allow text selection inside the box
+        return;
       }
     }
     
-    // DON'T drag if clicking on buttons
     if (e.target.closest('button')) {
       return;
     }
     
     const rect = box.getBoundingClientRect();
-    // DON'T drag if clicking resize handle
     if (e.clientX > rect.right - 20 && e.clientY > rect.bottom - 20) return;
     
     isDragging = true;
@@ -221,13 +310,9 @@ function makeDraggable(box) {
     selectedNode = box;
     box.classList.add('selected');
     
-    // ONLY prevent default/stop propagation when we're actually starting a drag
     e.preventDefault();
     e.stopPropagation();
-  }, true); // Use capture phase so we can intercept before other handlers
-  
-
-
+  }, true);
 
   document.addEventListener('mousemove', (e) => {
     if (!isDragging) return;
@@ -467,7 +552,6 @@ export function setupDivInsertion({ editor, contextMenu }) {
     return;
   }
 
-  // Attach listeners to all text blocks
   const textBlocks = editor.querySelectorAll('.text-block');
   console.log(`Found ${textBlocks.length} text blocks`);
   
@@ -475,7 +559,6 @@ export function setupDivInsertion({ editor, contextMenu }) {
     attachListeners(block);
   });
   
-  // Initialize drop zones
   const dropZones = editor.querySelectorAll('.drop-zone');
   const observer = getWallObserver();
   
@@ -503,7 +586,6 @@ export function setupDivInsertion({ editor, contextMenu }) {
   
   setupEditorContextMenu(editor, contextMenu);
   
-  // Delete handler
   const deleteHandler = (e) => {
     if ((e.key === "Delete" || e.key === "Backspace") && selectedNode) {
       if (e.target.tagName === "INPUT" || 
@@ -520,22 +602,17 @@ export function setupDivInsertion({ editor, contextMenu }) {
   window.removeEventListener("keydown", deleteHandler);
   window.addEventListener("keydown", deleteHandler);
   
-  // Better deselection - click anywhere outside selected box
-document.addEventListener("mousedown", (e) => {
-  // Don't deselect if clicking inside the floating menu
-  if (e.target.closest('.floating-node')) return;
+  document.addEventListener("mousedown", (e) => {
+    if (e.target.closest('.floating-node')) return;
+    if (e.target.closest('.context-menu')) return;
+    
+    if (!e.target.closest('.interactive-box')) {
+      deselectAll();
+    }
+    else if (selectedNode && e.target.closest('.interactive-box') !== selectedNode) {
+      deselectAll();
+    }
+  }, true);
   
-  // Don't deselect if clicking inside context menu
-  if (e.target.closest('.context-menu')) return;
-  
-  // If clicking outside any interactive box, deselect
-  if (!e.target.closest('.interactive-box')) {
-    deselectAll();
-  }
-  // If clicking a different box, deselect (the drag handler will select the new one)
-  else if (selectedNode && e.target.closest('.interactive-box') !== selectedNode) {
-    deselectAll();
-  }
-}, true);
-  
+  console.log("✅ Editor setup complete!");
 }
