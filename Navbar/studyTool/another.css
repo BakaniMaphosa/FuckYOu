@@ -1,10 +1,16 @@
 :root {
-    --bone: #F9F8F0;
-    --eggshell: #F4F1EA;
-    --nimbus: #FFFFFF;
-    --ink: #1A1A1A;
-    --gold: #C5A059;
+    --banana: #FFE01B;      /* Brand Yellow */
+    --caviar: #241C15;      /* Brand Ink/Black */
+    --nimbus: #FFFFFF;      /* Pure White */
+    --paper: #F6F6F4;       /* Background Off-white */
+    --mushroom: #E0DDD5;    /* Muted Border Gray */
     --nav-height: 180px;
+    
+    /* Aliases for compatibility */
+    --bone: var(--paper);
+    --eggshell: var(--paper);
+    --ink: var(--caviar);
+    --gold: var(--banana);
 }
 
 body {
@@ -18,8 +24,8 @@ body {
     left: 0;
     width: 100%;
     height: var(--nav-height);
-    background: var(--bone);
-    border-bottom: 2px solid #D1CDC4;
+    background: var(--paper);
+    border-bottom: 2px solid var(--caviar);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -44,7 +50,6 @@ body {
     position: relative;
     overflow: visible;
     gap: 15px;
-    
 }
 
 .search-row {
@@ -54,33 +59,68 @@ body {
     width: 100%;
     padding: 0 40px;
     gap: 5vh;
-    margin-top: -2.5vh; /* ✅ Move the ENTIRE row up, not just upperToolBar */
+    margin-top: -2.5vh;
 }
 
-#upperToolBar{
+#upperToolBar {
     width: 79vh;
-    height: 45px; /* ✅ This stays 45px now */
-    min-height: 45px; /* ✅ Force it to stay 45px */
+    height: 45px;
+    min-height: 45px;
     display: flex;
     gap: 12px;
     align-items: center;
-    margin-top: -2.5vh; /* ✅ NO margin-top here */
+    margin-top: -2.5vh;
     margin-left: 28vh;
 }
 
-/* Make sure tools stay 45px */
+/* TOOL CARDS - Mailchimp Style */
 .tool {
     flex: 0 0 auto;
-    background: white;
-    border: 1px solid #D1CDC4;
+    background: var(--nimbus);
+    border: 2px solid var(--caviar);
     padding: 8px 14px;
     display: flex;
     align-items: center;
     gap: 10px;
     cursor: pointer;
     transition: all 0.2s ease;
-    height: 45px; /* ✅ Force exact height */
+    height: 45px;
     box-sizing: border-box;
+}
+
+.tool:hover {
+    background: var(--banana);
+    transform: translateY(-2px);
+    box-shadow: 4px 4px 0px var(--caviar);
+}
+
+.tool:active {
+    transform: translateY(0);
+    box-shadow: 2px 2px 0px var(--caviar);
+}
+
+.tool-icon {
+    color: var(--caviar);
+    font-size: 15px;
+    width: 18px;
+    text-align: center;
+}
+
+.tool-name {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--caviar);
+    white-space: nowrap;
+}
+
+.tool-action {
+    margin-left: 8px;
+    padding-left: 12px;
+    border-left: 2px solid var(--mushroom);
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
 /* SLIDER */
@@ -89,11 +129,11 @@ body {
     height: 45px;
     display: flex;
     align-items: center;
-    background: white;
-    border: 1px solid #D1CDC4;
+    background: var(--nimbus);
+    border: 2px solid var(--caviar);
     padding: 8px 16px;
     gap: 20px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    box-shadow: 4px 4px 0px var(--caviar);
     margin-left: 7vh;
 }
 
@@ -111,18 +151,21 @@ body {
     font-size: 13px;
     font-weight: 500;
     cursor: pointer;
-    color: #666;
-    transition: color 0.3s ease;
+    color: var(--caviar);
+    opacity: 0.6;
+    transition: all 0.3s ease;
     position: relative;
     z-index: 2;
 }
 
 .slider-btn.active {
-    color: #1A1A1A;
+    color: var(--caviar);
+    opacity: 1;
 }
 
 .slider-btn:hover {
-    color: #1A1A1A;
+    color: var(--caviar);
+    opacity: 1;
 }
 
 .slider-bg {
@@ -130,16 +173,17 @@ body {
     top: 0;
     left: 0;
     height: 100%;
-    background: #F4F1EA;
+    background: var(--banana);
     border-radius: 4px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 1;
 }
 
 .divider {
-    width: 1px;
+    width: 2px;
     height: 30px;
-    background: #D1CDC4;
+    background: var(--caviar);
+    opacity: 0.3;
 }
 
 .action-section {
@@ -149,31 +193,31 @@ body {
 
 .action-btn {
     padding: 8px 16px;
-    background: white;
-    border: 1px solid #D1CDC4;
+    background: var(--nimbus);
+    border: 2px solid var(--caviar);
     font-family: 'Crimson Pro', serif;
     font-size: 12px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 1px;
     cursor: pointer;
-    color: #1A1A1A;
+    color: var(--caviar);
     transition: all 0.2s ease;
 }
 
 .action-btn:hover {
-    border-color: #C5A059;
-    background: #F9F8F0;
+    background: var(--banana);
 }
 
 .action-btn.primary {
-    background: #1A1A1A;
-    color: white;
-    border: none;
+    background: var(--caviar);
+    color: var(--nimbus);
+    border: 2px solid var(--caviar);
 }
 
 .action-btn.primary:hover {
-    background: #333;
+    background: var(--banana);
+    color: var(--caviar);
 }
 
 /* TOOLS - FLOATING AT BOTTOM */
@@ -183,13 +227,10 @@ body {
     gap: 12px;
     scrollbar-width: none;
     cursor: grab;
-    
-    height:fit-content;
+    height: fit-content;
     flex-direction: row;
     justify-content: flex-start;
     margin-left: 3vh;
- 
-
 }
 
 .tools-container::-webkit-scrollbar {
@@ -200,53 +241,11 @@ body {
     cursor: grabbing;
 }
 
-/* .tool {
-    flex: 0 0 auto;
-    background: white;
-    border: 1px solid #D1CDC4;
-    padding: 8px 14px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    min-height: 38px;
-} */
-
-.tool:hover {
-    border-color: var(--gold);
-    background: var(--eggshell);
-    transform: translateY(-2px);
-}
-
-.tool-icon {
-    color: var(--gold);
-    font-size: 15px;
-    width: 18px;
-    text-align: center;
-}
-
-.tool-name {
-    font-family: 'Inter', sans-serif;
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--ink);
-    white-space: nowrap;
-}
-
-.tool-action {
-    margin-left: 8px;
-    padding-left: 12px;
-    border-left: 1px solid #D1CDC4;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
+/* COLOR PICKER */
 .color-preview {
     width: 26px;
     height: 26px;
-    border: 2px solid #D1CDC4;
+    border: 2px solid var(--caviar);
     border-radius: 4px;
     cursor: pointer;
     position: relative;
@@ -263,6 +262,7 @@ body {
     cursor: pointer;
 }
 
+/* NUMBER CONTROLS */
 .num-control {
     display: flex;
     align-items: center;
@@ -272,12 +272,12 @@ body {
 .num-btn {
     width: 22px;
     height: 22px;
-    border: 1px solid #D1CDC4;
-    background: white;
+    border: 2px solid var(--caviar);
+    background: var(--nimbus);
     cursor: pointer;
     font-size: 13px;
     font-weight: 600;
-    color: var(--ink);
+    color: var(--caviar);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -285,14 +285,13 @@ body {
 }
 
 .num-btn:hover {
-    background: var(--eggshell);
-    border-color: var(--gold);
+    background: var(--banana);
 }
 
 .num-input {
     width: 42px;
     height: 26px;
-    border: 1px solid #D1CDC4;
+    border: 2px solid var(--caviar);
     text-align: center;
     font-size: 12px;
     font-family: 'Inter', sans-serif;
@@ -301,9 +300,10 @@ body {
 }
 
 .num-input:focus {
-    border-color: var(--gold);
+    box-shadow: 3px 3px 0px var(--banana);
 }
 
+/* ALIGNMENT BUTTONS */
 .align-slider {
     display: flex;
     align-items: center;
@@ -312,29 +312,29 @@ body {
 
 .align-btn {
     padding: 3px 8px;
-    background: white;
-    border: 1px solid #D1CDC4;
+    background: var(--nimbus);
+    border: 2px solid var(--caviar);
     cursor: pointer;
     font-size: 10px;
-    font-weight: 500;
-    color: #666;
+    font-weight: 600;
+    color: var(--caviar);
     transition: 0.2s;
 }
 
 .align-btn:hover {
-    background: var(--eggshell);
+    background: var(--paper);
 }
 
 .align-btn.active {
-    background: var(--ink);
-    color: white;
-    border-color: var(--ink);
+    background: var(--caviar);
+    color: var(--nimbus);
 }
 
+/* SECTION DIVIDER */
 .section-divider {
-    width: 2px;
+    width: 3px;
     height: 38px;
-    background: #D1CDC4;
+    background: var(--caviar);
     margin: 0 8px;
     flex-shrink: 0;
 }
@@ -344,5 +344,5 @@ body {
     margin-top: 500px;
     font-family: 'Crimson Pro';
     letter-spacing: 4px;
-    color: #555;
+    color: var(--caviar);
 }

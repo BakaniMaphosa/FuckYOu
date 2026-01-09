@@ -1,10 +1,16 @@
 :root {
-    --bone: #F9F8F0;
-    --eggshell: #F4F1EA;
-    --nimbus: #FFFFFF;
-    --ink: #1A1A1A;
-    --gold: #C5A059;
+    --banana: #FFE01B;      /* Brand Yellow */
+    --caviar: #241C15;      /* Brand Ink/Black */
+    --nimbus: #FFFFFF;      /* Pure White */
+    --paper: #F6F6F4;       /* Background Off-white */
+    --mushroom: #E0DDD5;    /* Muted Border Gray */
     --nav-height: 180px;
+    
+    /* Aliases for compatibility */
+    --bone: var(--paper);
+    --eggshell: var(--paper);
+    --ink: var(--caviar);
+    --gold: var(--banana);
 }
 
 body {
@@ -18,8 +24,8 @@ body {
     left: 0;
     width: 100%;
     height: var(--nav-height);
-    background: var(--bone);
-    border-bottom: 2px solid #D1CDC4;
+    background: var(--paper);
+    border-bottom: 2px solid var(--mushroom);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -48,7 +54,7 @@ body {
     height: 45px;
     width: fit-content;
     background: var(--nimbus);
-    border: 1px solid #D1CDC4;
+    border: 2px solid var(--caviar);
     font-family: 'Crimson Pro', serif;
     text-transform: uppercase;
     letter-spacing: 1.5px;
@@ -56,7 +62,7 @@ body {
     font-weight: 600;
     cursor: pointer;
     padding: 10px 20px;
-    color: var(--ink);
+    color: var(--caviar);
     transition: 0.2s;
     display: flex;
     align-items: center;
@@ -66,12 +72,13 @@ body {
 }
 
 .btn-exec:hover {
-    border-color: var(--gold);
-    background: var(--eggshell);
+    background: var(--banana);
+    border-color: var(--caviar);
+    color: var(--caviar);
 }
 
 .btn-dark {
-    background: var(--ink);
+    background: var(--caviar);
     color: var(--nimbus);
     border: none;
 }
@@ -107,10 +114,10 @@ body {
     display: flex;
     align-items: center;
     background: var(--nimbus);
-    border: 1px solid #D1CDC4;
+    border: 2px solid var(--caviar);
     padding: 8px 16px;
     gap: 20px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    box-shadow: 4px 4px 0px var(--caviar);
     position: absolute;
     top: 30px;
     left: 40px;
@@ -133,13 +140,17 @@ body {
 .search-wrap input {
     width: 100%;
     height: 100%;
-    background: var(--eggshell);
-    border: 1px solid #DED9CE;
+    background: var(--nimbus);
+    border: 2px solid var(--caviar);
     padding: 8px 10px 8px 35px;
     font-family: 'Inter', sans-serif;
     outline: none;
     box-sizing: border-box;
-    color: var(--ink);
+    color: var(--caviar);
+}
+
+.search-wrap input:focus {
+    box-shadow: 4px 4px 0px var(--banana);
 }
 
 .search-wrap i {
@@ -147,7 +158,7 @@ body {
     left: 12px;
     top: 50%;
     transform: translateY(-50%);
-    color: var(--gold);
+    color: var(--caviar);
 }
 
 /* --- THE CAROUSEL --- */
@@ -194,22 +205,24 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
-    transition: transform 0.3s ease;
-    border: 1px solid var(--ink);
+    box-shadow: 6px 6px 0px var(--caviar);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 2px solid var(--caviar);
 }
 
 .biz-card:hover {
-    border-color: var(--gold);
-    transform: translateY(-5px);
+    background: var(--banana);
+    transform: translate(-3px, -3px);
+    box-shadow: 9px 9px 0px var(--caviar);
 }
 
 .biz-card .firm {
     font-family: 'Crimson Pro', serif;
     font-size: 9px;
     letter-spacing: 2px;
-    color: var(--gold);
+    color: var(--caviar);
     text-transform: uppercase;
+    opacity: 0.7;
 }
 
 .biz-card .name {
@@ -217,7 +230,7 @@ body {
     font-size: 16px;
     font-weight: 600;
     margin-top: 4px;
-    color: var(--ink);
+    color: var(--caviar);
 }
 
 .scroll-msg {
@@ -225,7 +238,7 @@ body {
     margin-top: 500px;
     font-family: 'Crimson Pro';
     letter-spacing: 4px;
-    color: var(--ink);
+    color: var(--caviar);
 }
 
 /****************************** SLIDER ******************************/
@@ -243,18 +256,21 @@ body {
     font-size: 13px;
     font-weight: 500;
     cursor: pointer;
-    color: #666;
-    transition: color 0.3s ease;
+    color: var(--caviar);
+    opacity: 0.6;
+    transition: all 0.3s ease;
     position: relative;
     z-index: 2;
 }
 
 .slider-btn.active {
-    color: var(--ink);
+    color: var(--caviar);
+    opacity: 1;
 }
 
 .slider-btn:hover {
-    color: var(--ink);
+    color: var(--caviar);
+    opacity: 1;
 }
 
 .slider-bg {
@@ -262,16 +278,17 @@ body {
     top: 0;
     left: 0;
     height: 100%;
-    background: var(--eggshell);
+    background: var(--banana);
     border-radius: 4px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 1;
 }
 
 .divider {
-    width: 1px;
+    width: 2px;
     height: 30px;
-    background: #D1CDC4;
+    background: var(--caviar);
+    opacity: 0.3;
 }
 
 .action-section {
@@ -282,30 +299,30 @@ body {
 .action-btn {
     padding: 8px 16px;
     background: var(--nimbus);
-    border: 1px solid #D1CDC4;
+    border: 2px solid var(--caviar);
     font-family: 'Crimson Pro', serif;
     font-size: 12px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 1px;
     cursor: pointer;
-    color: var(--ink);
+    color: var(--caviar);
     transition: all 0.2s ease;
 }
 
 .action-btn:hover {
-    border-color: var(--gold);
-    background: var(--bone);
+    background: var(--banana);
 }
 
 .action-btn.primary {
-    background: var(--ink);
+    background: var(--caviar);
     color: var(--nimbus);
-    border: none;
+    border: 2px solid var(--caviar);
 }
 
 .action-btn.primary:hover {
-    background: #333;
+    background: var(--banana);
+    color: var(--caviar);
 }
 
 #tabContent {
@@ -330,29 +347,28 @@ body {
     justify-content: space-around;
     align-items: center;
     padding: 8px 0;
-    background: var(--bone);
+    background: var(--banana);
+    border: 2px solid var(--caviar);
+    border-top: none;
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 4px 4px 0px var(--caviar);
     z-index: 1001;
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
 .navbar-trigger:hover {
-    height: 25px;
+    height: 35px;
+    background: var(--nimbus);
 }
 
 .trigger-line {
     width: 35px;
-    height: 2px;
-    background: var(--gold);
+    height: 3px;
+    background: var(--caviar);
     border-radius: 2px;
     transition: all 0.3s ease;
-}
-
-.navbar-trigger:hover .trigger-line {
-    background: var(--ink);
 }
 
 .navbar.visible ~ .navbar-trigger {
