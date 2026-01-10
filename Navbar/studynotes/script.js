@@ -126,32 +126,19 @@ export function toolBarLogic(){
 
                         <div class="carousel-viewport" id="viewport">
                             <div class="track">
-                                <div class="biz-card">
-                                    
-                                </div>
-                                <div class="biz-card">
-                                    
-                                </div>
-                                <div class="biz-card">
-                                    
-                                </div>
-                                <div class="biz-card">
-                                    
-                                </div>
-                                <div class="biz-card">
-                                   
-                                </div>
-                                <div class="biz-card">
-                                    
-                                </div>
-                                <div class="biz-card">
-                                    
-                                </div>
+                                <div class="biz-card note"></div>
+                                <div class="biz-card project"></div>
+                                <div class="biz-card note"></div>
+                                <div class="biz-card project"></div>
+                                <div class="biz-card note"></div>
+                                <div class="biz-card project"></div>
+                                <div class="biz-card note"></div>
                             </div>
                         </div>
                     `;
                     
-                    loadComponentByClass("biz-card","/Navbar/NoteCards/NoteCard/NoteCard.html")
+                    loadComponentByClass("biz-card.note","/Navbar/NoteCards/NoteCard/NoteCard.html");
+                    loadComponentByClass("biz-card.project","/Navbar/NoteCards/projectCard/ProjectCard.html");
 
                     if (navSide) navSide.style.display = 'flex';
                     if (sliderBar) sliderBar.style.marginLeft = "0vh";

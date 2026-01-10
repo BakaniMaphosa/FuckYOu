@@ -8,14 +8,14 @@
 
 /* --- THE NOTECARD (Project Variant) --- */
 .notecard {
-    flex: 0 0 calc(220px + 6vh);
-    height: 140px;
-    width: calc(220px + 6vh);
+    /* flex: 0 0 calc(220px + 6vh);
+    height: 140px; */
+    width: 100%;
     background: var(--nimbus);
     padding: 16px;
     display: flex;
     flex-direction: column;
-    border: 2px solid var(--caviar);
+    border: none;
     /* Shadow removed for container nesting */
     box-shadow: none; 
     position: relative;
@@ -30,9 +30,7 @@
     border-left: 8px solid var(--caviar); 
 }
 
-.notecard:hover {
-    transform: translateY(-2px);
-}
+
 
 /* --- HEADER & ICONS --- */
 .header {

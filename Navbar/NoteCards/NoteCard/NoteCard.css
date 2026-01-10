@@ -7,26 +7,11 @@
 }
 
 /* --- THE NOTECARD (Note Variant) --- */
-.notecard {
-    /* flex: 0 0 calc(220px + 6vh);
-    height: 140px; */
-    width: calc(220px + 6vh);
-    background: var(--nimbus);
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
-    border: 2px solid var(--caviar);
-    box-shadow: none; 
-    position: relative;
-    box-sizing: border-box;
-    overflow: hidden;
-    transition: transform 0.2s ease;
-    font-family: 'Inter', sans-serif;
-}
 
-.notecard:hover {
+
+/* .notecard:hover {
     transform: translateY(-2px);
-}
+} */
 
 /* --- HEADER & ICONS --- */
 .header {

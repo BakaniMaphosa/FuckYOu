@@ -27,8 +27,6 @@ overlay.addEventListener("click", (e) => {
 });
 
 
-
-
 if (typeToggle) {
   typeToggle.addEventListener("change", () => {
     toggleType();

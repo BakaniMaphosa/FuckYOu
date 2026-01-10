@@ -43,7 +43,10 @@ async function init() {
   // Load navbar and content
   await loadComponent("navBarContainer", "/Navbar/studynotes/index2.html");
   await loadComponent("ContentContainer", "/currentDesign/screenLogic.html");
-  await loadComponentByClass("biz-card","/Navbar/NoteCards/NoteCard/NoteCard.html")
+
+  await loadComponentByClass("biz-card.note","/Navbar/NoteCards/NoteCard/NoteCard.html")
+  await loadComponentByClass("biz-card.project","/Navbar/NoteCards/projectCard/ProjectCard.html") 
+   //i only commented it out because its stretching the divs for some fucknig reason
   
   await new Promise(resolve => requestAnimationFrame(resolve));
   

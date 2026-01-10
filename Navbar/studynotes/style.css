@@ -397,3 +397,7 @@ body {
 .track {
     pointer-events: auto !important;
 }
+
+.biz-card * {
+    pointer-events: auto !important;
+}
