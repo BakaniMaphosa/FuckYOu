@@ -200,10 +200,10 @@ body {
 
 .biz-card {
     flex: 0 0 calc(220px + 6vh);
-    /* height: 140px; */
+
     width: calc(220px + 6vh);
     background: var(--nimbus);
-    /* padding: 15px; */
+    
     display: flex;
     flex-direction: column;
     justify-content: center;

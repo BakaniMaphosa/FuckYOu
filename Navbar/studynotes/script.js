@@ -189,6 +189,7 @@ export function toolBarLogic(){
         });
     });
 
+
     window.addEventListener('resize', () => {
         const active = document.querySelector('.slider-btn.active');
         if (active) updateSlider(active);

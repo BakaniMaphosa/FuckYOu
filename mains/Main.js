@@ -1,5 +1,7 @@
 import { setupDivInsertion } from "/Components/textBoxDesign.js";
 import { toolBarLogic } from "/Navbar/studynotes/script.js";
+import { addNoteLogic } from "/Navbar/CreateNote/addNote.js";
+
 
 async function loadComponent(targetId, file) {
     try {
@@ -51,11 +53,45 @@ async function init() {
   // ✅ WATCH FOR NAVBAR VISIBILITY AND TAB CHANGES
   const nav = document.getElementById('mainNav');
   const textBox = document.getElementById("ContentContainer");
+
+  const CreateNote = document.querySelector(".action-btn.primary")
+  
+
+  CreateNote.addEventListener("click", async () => {
+  console.log("✅ CreateNote clicked");
+  
+
+
+  let overlay = document.getElementById("WindowLevel");
+  if (overlay) overlay.remove(); // for testing: reset each click
+
+  overlay = document.createElement("div");
+  overlay.id = "WindowLevel";
+
+  // FORCE overlay behaviour
+  overlay.style.position = "fixed";
+  overlay.style.inset = "0";
+  overlay.style.zIndex = "999999";
+  overlay.style.background = "rgba(77, 77, 77, 0.35)"; // visible
+  overlay.style.display = "flex";
+  overlay.style.justifyContent = "center";
+  overlay.style.alignItems = "center";
+
+
+  document.body.appendChild(overlay);
+
+  console.log("✅ Overlay appended:", overlay);
+
+  await loadComponent("WindowLevel", "/Navbar/CreateNote/addNote.html");
+  addNoteLogic()
+});
+
   
   // Function to check and update margin
   function updateMargin() {
       if (!textBox || !nav) return;
       
+
       const isVisible = nav.classList.contains('visible');
       const isToolsTab = document.querySelector('.slider-btn[data-tab="tools"]')?.classList.contains('active');
       
@@ -154,5 +190,7 @@ function setupDividerResize() {
         document.body.style.cursor = "";
     });
 }
+
+
 
 init();
