@@ -209,17 +209,25 @@ export function initializeToolbarFunctionality() {
     }
 
     // Bullet List
-    const bulletTool = document.querySelector('.fa-list-ul')?.closest('.tool');
+    const bulletTool = document.querySelector('.fa-list-ul')?.closest('.tool') || 
+                       document.querySelector('.fa-list')?.closest('.tool');
+                       
     if (bulletTool) {
-        bulletTool.addEventListener('mousedown', (e) => e.preventDefault());
-        bulletTool.addEventListener('click', () => applyFormat('insertUnorderedList'));
+        // Execute on mousedown to ensure focus isn't lost
+        bulletTool.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            applyFormat('insertUnorderedList');
+        });
     }
 
     // Numbered List
     const numberedTool = document.querySelector('.fa-list-ol')?.closest('.tool');
     if (numberedTool) {
-        numberedTool.addEventListener('mousedown', (e) => e.preventDefault());
-        numberedTool.addEventListener('click', () => applyFormat('insertOrderedList'));
+        // Execute on mousedown to ensure focus isn't lost
+        numberedTool.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            applyFormat('insertOrderedList');
+        });
     }
 
     // Horizontal Line
