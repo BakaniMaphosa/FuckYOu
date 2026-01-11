@@ -99,6 +99,12 @@ body {
     box-shadow: 2px 2px 0px var(--caviar);
 }
 
+.tool.active {
+    background: var(--banana);
+    transform: translateY(0);
+    box-shadow: 2px 2px 0px var(--caviar);
+}
+
 .tool-icon {
     color: var(--caviar);
     font-size: 15px;
@@ -153,7 +159,7 @@ body {
     cursor: pointer;
     color: var(--caviar);
     opacity: 0.6;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     z-index: 2;
 }
@@ -177,6 +183,7 @@ body {
     border-radius: 4px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 1;
+    
 }
 
 .divider {
@@ -210,13 +217,13 @@ body {
 }
 
 .action-btn.primary {
-    background: var(--caviar);
-    color: var(--nimbus);
+    background: var(--banana);
+    color: var(--caviar);
     border: 2px solid var(--caviar);
 }
 
 .action-btn.primary:hover {
-    background: var(--banana);
+    background: #ffe95c;
     color: var(--caviar);
 }
 
@@ -327,8 +334,8 @@ body {
 }
 
 .align-btn.active {
-    background: var(--caviar);
-    color: var(--nimbus);
+    background: var(--banana);
+    color: var(--caviar);
 }
 
 /* SECTION DIVIDER */
@@ -346,4 +353,118 @@ body {
     font-family: 'Crimson Pro';
     letter-spacing: 4px;
     color: var(--caviar);
+}
+
+/* --- TOOLBAR HOVER MENUS --- */
+.submenu-popup {
+    position: fixed; /* Changed to fixed for body attachment */
+    width: 178px;
+    background: var(--nimbus);
+    border: 2px solid var(--caviar);
+    padding: 10px;
+    box-shadow: 4px 4px 0px var(--caviar);
+    z-index: 100;
+    display: none; /* Hidden by default */
+    flex-direction: column;
+    gap: 8px;
+    cursor: default;
+}
+
+/* Show menu when hovering the tool OR the menu itself */
+.submenu-popup.visible {
+    display: flex;
+}
+
+.submenu-search {
+    width: 100%;
+    padding: 6px;
+    border: 2px solid var(--caviar);
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    box-sizing: border-box;
+    outline: none;
+}
+
+.submenu-list {
+    max-height: 150px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.submenu-item {
+    padding: 4px 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-family: 'Inter', sans-serif;
+    color: var(--caviar);
+    transition: background 0.2s;
+}
+
+.submenu-item:hover {
+    background: var(--banana);
+}
+
+.submenu-label {
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--caviar);
+    margin-bottom: 4px;
+    display: block;
+}
+
+/* --- ISOLATED FONT FAMILY MENU (Rebuilt) --- */
+.ff-menu-container {
+    position: fixed;
+    width: 178px;
+    background: var(--nimbus);
+    border: 2px solid var(--caviar);
+    padding: 10px;
+    box-shadow: 4px 4px 0px var(--caviar);
+    z-index: 10000;
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    cursor: default;
+}
+
+.ff-menu-container.active {
+    display: flex;
+}
+
+.ff-search-input {
+    width: 100%;
+    padding: 6px;
+    border: 2px solid var(--caviar);
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    box-sizing: border-box;
+    outline: none;
+}
+
+.ff-list-scroll {
+    max-height: 150px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.ff-list-item {
+    padding: 4px 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-family: 'Inter', sans-serif;
+    color: var(--caviar);
+    transition: background 0.2s;
+}
+
+.ff-list-item:hover {
+    background: var(--banana);
+}
+
+.ff-list-item.active-font {
+    background: var(--banana);
 }

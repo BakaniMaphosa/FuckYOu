@@ -260,7 +260,7 @@ body {
     cursor: pointer;
     color: var(--caviar);
     opacity: 0.6;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     z-index: 2;
 }
@@ -317,13 +317,13 @@ body {
 }
 
 .action-btn.primary {
-    background: var(--caviar);
-    color: var(--nimbus);
+    background: var(--banana);
+    color: var(--caviar);
     border: 2px solid var(--caviar);
 }
 
 .action-btn.primary:hover {
-    background: var(--banana);
+    background: #ffe95c;
     color: var(--caviar);
 }
 

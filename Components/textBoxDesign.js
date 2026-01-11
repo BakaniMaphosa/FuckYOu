@@ -498,25 +498,81 @@ async function loadChooseMenu() {
 // ============================================
 // CONTEXT MENU SETUP
 // ============================================
+let contextMenuInitialized = false;
+
 export function setupEditorContextMenu(editor, contextMenu) {
   if (contextMenu) contextMenu.style.display = "none";
 
+  if (contextMenuInitialized) return;
+  contextMenuInitialized = true;
+
   let lastClickZone = null;
+  let clickedEditor = null;
 
   window.addEventListener("contextmenu", (e) => {
-    if (editor.contains(e.target)) {
+    const targetEditor = e.target.closest('#TextBox, #AIbox');
+    if (targetEditor) {
       e.preventDefault();
       
-      let target = e.target;
-      while (target && !target.classList.contains('drop-zone')) {
-        target = target.parentElement;
-        if (target === editor) {
-          target = null;
-          break;
+      // 1. Check for Text Selection
+      const selection = window.getSelection();
+      const hasSelection = selection.toString().length > 0 && targetEditor.contains(selection.anchorNode);
+
+      if (hasSelection) {
+        // Selection Menu: Copy, Cut, Paste
+        contextMenu.innerHTML = `
+            <div class="menu-item" data-action="copy">Copy</div>
+            <div class="menu-item" data-action="cut">Cut</div>
+            <div class="menu-item" data-action="paste">Paste</div>
+        `;
+      } else {
+        // Standard Menu Logic
+        let target = e.target;
+        clickedEditor = targetEditor;
+        while (target && !target.classList.contains('drop-zone')) {
+          target = target.parentElement;
+          if (target === targetEditor) {
+            target = null;
+            break;
+          }
         }
+        lastClickZone = target;
+
+        // Build Menu Items
+        let menuItems = ``;
+        
+        if (lastClickZone) {
+            menuItems += `
+            <div class="menu-item has-submenu">
+                Insert
+                <div class="submenu">
+                    <div class="submenu-section">Basic Tools</div>
+                    <div class="submenu-item" data-action="Make-Section">Section</div>
+                    <div class="submenu-item" data-action="insert-Image">Image</div>
+                    <div class="submenu-item" data-action="insert-Table">Table</div>
+                    <div class="submenu-item" data-action="insert-Graph">Graph</div>
+                </div>
+            </div>`;
+        }
+
+        menuItems += `<div class="menu-item" data-action="split">Split View</div>`;
+
+        if (!lastClickZone) {
+            menuItems += `
+            <div class="menu-item has-submenu">
+                View Type
+                <div class="submenu">
+                    <div class="submenu-item" data-action="view-TextBox">TextBox</div>
+                    <div class="submenu-item" data-action="view-AIPanel">AI Panel</div>
+                    <div class="submenu-item" data-action="view-Canvas">Canvas</div>
+                </div>
+            </div>`;
+        }
+
+        menuItems += `<div class="menu-item" data-action="delete">Delete</div>`;
+        
+        contextMenu.innerHTML = menuItems;
       }
-      
-      lastClickZone = target;
       
       contextMenu.style.display = "block";
       contextMenu.style.left = e.clientX + "px";
@@ -530,14 +586,94 @@ export function setupEditorContextMenu(editor, contextMenu) {
     }
   });
 
-  contextMenu.addEventListener("click", (e) => {
+  contextMenu.addEventListener("click", async (e) => {
     const target = e.target.closest("[data-action]");
     if (!target) return;
     
     const action = target.getAttribute("data-action");
+
+    // Clipboard Actions
+    if (action === "copy") {
+        document.execCommand("copy");
+        contextMenu.style.display = "none";
+        return;
+    }
+    if (action === "cut") {
+        document.execCommand("cut");
+        contextMenu.style.display = "none";
+        return;
+    }
+    if (action === "paste") {
+        try {
+            const text = await navigator.clipboard.readText();
+            document.execCommand("insertText", false, text);
+        } catch (err) {
+            console.error("Paste failed:", err);
+        }
+        contextMenu.style.display = "none";
+        return;
+    }
     
     if (action === "Make-Section" && lastClickZone) {
       insertInteractiveBox(lastClickZone, 'section');
+      contextMenu.style.display = "none";
+    }
+
+    if (action === "split") {
+      createSplitView();
+      contextMenu.style.display = "none";
+    }
+
+    if (action === "view-TextBox" && clickedEditor) {
+      clickedEditor.id = "TextBox";
+      clickedEditor.style.backgroundColor = "white";
+      clickedEditor.style.display = "";
+      clickedEditor.style.alignItems = "";
+      clickedEditor.style.justifyContent = "";
+      clickedEditor.innerHTML = `
+        <div class="text-block" contenteditable="true">Press [Return] twice and type a letter to create a drop zone. Right-click to add sections!</div>
+      `;
+      const newBlock = clickedEditor.querySelector('.text-block');
+      if (newBlock) attachListeners(newBlock);
+      contextMenu.style.display = "none";
+    }
+
+    if (action === "view-AIPanel" && clickedEditor) {
+      clickedEditor.id = "AIbox";
+      
+      // Clear inline styles so CSS #AIbox rules (width: 520px, etc.) can apply
+      clickedEditor.style.width = "";
+      clickedEditor.style.flex = "";
+
+      clickedEditor.style.backgroundColor = "#4CAF50";
+      clickedEditor.style.display = "flex";
+      clickedEditor.style.alignItems = "center";
+      clickedEditor.style.justifyContent = "center";
+      clickedEditor.innerHTML = `<h1 style="color: white; font-family: sans-serif; margin: 0;">AI Panel</h1>`;
+      contextMenu.style.display = "none";
+    }
+
+    if (action === "view-Canvas" && clickedEditor) {
+      clickedEditor.style.backgroundColor = "#9C27B0";
+      clickedEditor.style.display = "flex";
+      clickedEditor.style.alignItems = "center";
+      clickedEditor.style.justifyContent = "center";
+      clickedEditor.innerHTML = `<h1 style="color: white; font-family: sans-serif; margin: 0;">Canvas</h1>`;
+      contextMenu.style.display = "none";
+    }
+
+    if (action === "delete" && clickedEditor) {
+      // Find adjacent divider to remove (try next, then prev)
+      const next = clickedEditor.nextElementSibling;
+      const prev = clickedEditor.previousElementSibling;
+      
+      clickedEditor.remove();
+
+      if (next && (next.id === 'AIdivider' || next.style.cursor === 'col-resize')) {
+        next.remove();
+      } else if (prev && (prev.id === 'AIdivider' || prev.style.cursor === 'col-resize')) {
+        prev.remove();
+      }
       contextMenu.style.display = "none";
     }
   });
@@ -615,4 +751,78 @@ export function setupDivInsertion({ editor, contextMenu }) {
   }, true);
   
   console.log("✅ Editor setup complete!");
+}
+
+// ============================================
+// SPLIT VIEW LOGIC
+// ============================================
+function createSplitView() {
+  const textBox = document.getElementById("TextBox");
+  const aiBox = document.getElementById("AIbox");
+  const divider = document.getElementById("AIdivider");
+
+  if (!textBox || !aiBox || !divider) {
+    console.warn("Split view requires #TextBox, #AIbox, and #AIdivider to exist.");
+    return;
+  }
+
+  const parent = textBox.parentElement;
+
+  // Clone AI Box (remove ID to avoid duplicates)
+  const newAiBox = aiBox.cloneNode(true);
+  newAiBox.id = "TextBox";
+  newAiBox.style.width = "300px";
+  newAiBox.style.flex = "0 0 auto";
+  newAiBox.style.backgroundColor = "white";
+  newAiBox.style.position = "relative"; // Ensure button positions relative to this box
+  newAiBox.innerHTML = `
+        <div class="text-block" contenteditable="true">Press [Return] twice and type a letter to create a drop zone. Right-click to add sections!</div>
+    `;
+
+  // Clone Divider
+  const newDivider = divider.cloneNode(true);
+  newDivider.removeAttribute("id");
+  newDivider.classList.add("ai-divider");
+  newDivider.style.cursor = "col-resize";
+
+  // Insert before TextBox
+  parent.insertBefore(newAiBox, textBox);
+  parent.insertBefore(newDivider, textBox);
+
+  // Attach resize logic to the new pair
+  attachResizeLogic(newDivider, newAiBox);
+  
+  // Attach Editor Logic
+  const newBlock = newAiBox.querySelector('.text-block');
+  if (newBlock) attachListeners(newBlock);
+  getWallObserver().observe(newAiBox);
+}
+
+function attachResizeLogic(divider, box) {
+  let isDragging = false;
+  let startX = 0;
+  let startWidth = 0;
+
+  divider.addEventListener("mousedown", (e) => {
+    isDragging = true;
+    startX = e.clientX;
+    startWidth = box.offsetWidth;
+    e.preventDefault();
+    document.body.style.userSelect = "none";
+    document.body.style.cursor = "col-resize";
+  });
+
+  document.addEventListener("mousemove", (e) => {
+    if (!isDragging) return;
+    const delta = e.clientX - startX;
+    const newWidth = Math.max(150, Math.min(600, startWidth + delta));
+    
+    box.style.width = `${newWidth}px`;
+  });
+
+  document.addEventListener("mouseup", () => {
+    isDragging = false;
+    document.body.style.userSelect = "";
+    document.body.style.cursor = "";
+  });
 }

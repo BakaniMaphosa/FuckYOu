@@ -43,6 +43,9 @@ export function toolBarLogic(){
     });
 
     navTrigger.addEventListener('mouseleave', () => {
+        const btn = document.querySelector('.action-btn');
+        if (btn && btn.innerText.toUpperCase() === "PINNED") return;
+
         hideTimeout = setTimeout(() => {
             nav.classList.remove('visible');
         }, 500);
@@ -66,6 +69,17 @@ export function toolBarLogic(){
             return;
         }
         
+        // If moving to a submenu popup, don't hide
+        if (e.relatedTarget && e.relatedTarget.closest('.submenu-popup')) {
+            return;
+        }
+        if (e.relatedTarget && e.relatedTarget.closest('.ff-menu-container')) {
+            return;
+        }
+        
+        const btn = document.querySelector('.action-btn');
+        if (btn && btn.innerText.toUpperCase() === "PINNED") return;
+
         hideTimeout = setTimeout(() => {
             nav.classList.remove('visible');
         }, 500);
@@ -78,6 +92,7 @@ export function toolBarLogic(){
     const sliderBtns = document.querySelectorAll('.slider-btn');
     const sliderBg = document.getElementById('sliderBg');
     const sliderSection = document.getElementById('sliderSection');
+    const actionBtn = document.querySelector('.action-btn');
 
     function updateSlider(btn) {
         const rect = btn.getBoundingClientRect();
@@ -113,6 +128,12 @@ export function toolBarLogic(){
             
             setTimeout(() => {
                 if (tab === 'notes') {
+                    if (actionBtn) {
+                        actionBtn.innerText = "Organize";
+                        actionBtn.classList.remove('primary');
+                        actionBtn.onclick = null;
+                    }
+
                     navTrigger.classList.add('notes-active');
                     
                     tabContent.innerHTML = `
@@ -155,6 +176,20 @@ export function toolBarLogic(){
                     initializeCarouselDrag();
                     
                 } else if (tab === 'tools' ) {
+                    if (actionBtn) {
+                        actionBtn.innerText = "Pin";
+                        actionBtn.classList.remove('primary');
+                        actionBtn.onclick = () => {
+                            if (actionBtn.innerText.toUpperCase() === "PIN") {
+                                actionBtn.innerText = "Pinned";
+                                actionBtn.classList.add('primary');
+                            } else {
+                                actionBtn.innerText = "Pin";
+                                actionBtn.classList.remove('primary');
+                            }
+                        };
+                    }
+
                     navTrigger.classList.remove('notes-active');
                     
                     if (navSide) navSide.style.display = 'none';
@@ -223,4 +258,36 @@ export function toolBarLogic(){
     }
 
     initializeCarouselDrag();
+
+    // ============================================
+    // SUBMENU HOVER LOGIC (Treats submenus as part of navbar)
+    // ============================================
+    
+    // 1. Keep navbar open when hovering submenus
+    document.addEventListener('mouseover', (e) => {
+        if (e.target.closest('.submenu-popup') || e.target.closest('.ff-menu-container')) {
+            clearTimeout(hideTimeout);
+        }
+    });
+
+    // 2. Close navbar when leaving submenus
+    document.addEventListener('mouseout', (e) => {
+        const menu = e.target.closest('.submenu-popup') || e.target.closest('.ff-menu-container');
+        if (menu) {
+            // Ignore if moving inside the menu, back to navbar, or to another menu
+            if (menu.contains(e.relatedTarget) || 
+                (e.relatedTarget && e.relatedTarget.closest('#mainNav')) ||
+                (e.relatedTarget && e.relatedTarget.closest('.submenu-popup')) ||
+                (e.relatedTarget && e.relatedTarget.closest('.ff-menu-container'))) {
+                return;
+            }
+
+            const btn = document.querySelector('.action-btn');
+            if (btn && btn.innerText.toUpperCase() === "PINNED") return;
+
+            hideTimeout = setTimeout(() => {
+                nav.classList.remove('visible');
+            }, 500);
+        }
+    });
 }

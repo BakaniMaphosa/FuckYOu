@@ -14,11 +14,6 @@
     --border-color: #d1d1cf;
     --text-primary: #1a1a1a;
     --text-secondary: #666666;
-
-    font-weight: 500;
-    letter-spacing: 2px;
-    font-family: sans-serif;
-
 }
 
 /* Main Container */
@@ -35,6 +30,10 @@
     
     /* ADD THIS LINE */
     position: relative; 
+
+    font-weight: 500;
+    letter-spacing: 2px;
+    font-family: sans-serif;
 }
 
 /* Search Section */

@@ -65,21 +65,6 @@ export function toolbarLogic(){
         toolsContainer.scrollLeft = toolsScrollLeft - walk;
     });
 
-    // NUMBER CONTROLS
-    document.querySelectorAll('.num-control').forEach(control => {
-        const input = control.querySelector('.num-input');
-        const decrease = control.querySelectorAll('.num-btn')[0];
-        const increase = control.querySelectorAll('.num-btn')[1];
-
-        decrease.addEventListener('click', () => {
-            input.value = Math.max(parseInt(input.min), parseInt(input.value) - 1);
-        });
-
-        increase.addEventListener('click', () => {
-            input.value = Math.min(parseInt(input.max), parseInt(input.value) + 1);
-        });
-    });
-
     // ALIGN BUTTONS
     document.querySelectorAll('.align-slider').forEach(slider => {
         const buttons = slider.querySelectorAll('.align-btn');

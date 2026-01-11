@@ -44,7 +44,7 @@ body{
     margin-block-end: 1em;
 }
 
-#AIdivider {
+#AIdivider, .ai-divider {
     width: 5px;
     cursor: col-resize;
     background: #888;
