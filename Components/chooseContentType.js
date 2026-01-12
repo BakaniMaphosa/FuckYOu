@@ -3,7 +3,7 @@
  * Logic to handle the choice menu, info page overlay, and auto-close
  */
 
-import { getSelectedNode } from "/Components/textBoxDesign.js";
+import { getSelectedNode } from "/ViewTypes/TextBox/textBoxDesign.js";
 import { createGraph } from "/Components/Graphs/graphs.js";
 import { createImageContent } from "/Components/ImagesLogic/images.js";
 import { createTextContent } from "/Components/TextContent/TextContents.js";

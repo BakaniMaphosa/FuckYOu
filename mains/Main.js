@@ -1,4 +1,4 @@
-import { setupDivInsertion } from "/Components/textBoxDesign.js";
+import { setupDivInsertion } from "/ViewTypes/TextBox/textBoxDesign.js";
 import { toolBarLogic } from "/Navbar/studynotes/script.js";
 import { addNoteLogic } from "/Navbar/CreateNote/addNote.js";
 

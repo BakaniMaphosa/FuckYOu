@@ -1,4 +1,4 @@
-import { setupDivInsertion } from "/Components/textBoxDesign.js";
+import { setupDivInsertion } from "/ViewTypes/TextBox/textBoxDesign.js";
 
 // ============================================
 // DIVIDER RESIZE LOGIC

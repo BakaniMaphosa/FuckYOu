@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scrollable Note Assistant</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="AIchat.css">
+</head>
+<body>
+
+<div class="chat-container">
+    <header>
+        <div class="header-top">
+            <h1>Notes Assistant</h1>
+            <button class="roadmap-toggle-btn" id="roadmap-toggle">
+                <i class='bx bx-map-alt'></i> ROADMAP
+            </button>
+        </div>
+        <div class="pinned-bar" id="pinned-bar">
+            </div>
+    </header>
+
+    <div class="roadmap-panel" id="roadmap-panel">
+        <div class="roadmap-scroll-container">
+            <div class="roadmap-steps">
+                <div class="step completed"><div class="step-circle">1</div><div class="step-label">Introduction</div></div>
+                <div class="step active"><div class="step-circle">2</div><div class="step-label">Key Terms</div></div>
+                <div class="step"><div class="step-circle">3</div><div class="step-label">Deep Dive</div></div>
+                <div class="step"><div class="step-circle">4</div><div class="step-label">Examples</div></div>
+                <div class="step"><div class="step-circle">5</div><div class="step-label">Use Cases</div></div>
+                <div class="step"><div class="step-circle">6</div><div class="step-label">Summary</div></div>
+                <div class="step"><div class="step-circle">7</div><div class="step-label">Quiz</div></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="messages-area" id="chat-box">
+        <div class="message ai">
+            <img src="AITutorIcon.svg" alt="AI" class="avatar-img">
+            <div class="bubble">
+                I've added <b>Horizontal Scrolling</b>! Pin several messages and open the roadmap to see how you can scroll through them if there are too many items to fit.
+                <i class='bx bx-pin pin-btn-action' data-target="msg-scroll"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="input-footer">
+        <div class="input-box">
+            <input type="text" placeholder="Test the scrolling..." id="user-input">
+            <button class="send-btn" id="send-btn">Send</button>
+        </div>
+    </div>
+</div>
+
+
+<script src="AIchat.js"></script>
+</body>
+</html>

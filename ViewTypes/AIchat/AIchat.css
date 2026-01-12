@@ -1,0 +1,167 @@
+
+        :root {
+            --mc-yellow: #FFE01B;
+            --mc-dark: #241C15;
+            --mc-ivory: #F6F6F4;
+            --mc-border: #D9D9D9;
+            --mc-white: #FFFFFF;
+            --mc-green: #007c89;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Means Web', Georgia, Times, serif;
+            background-color: #d1d1d1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .chat-container {
+            width: 80%;
+            height: 90%;
+            min-width: 380px;
+            min-height: 500px;
+            max-width: 900px;
+            background: var(--mc-white);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            border: 2px solid var(--mc-dark);
+            resize: both;
+            overflow: hidden; 
+            position: relative;
+        }
+
+        header {
+            padding: 20px;
+            border-bottom: 1px solid var(--mc-border);
+            background: var(--mc-white);
+            z-index: 20;
+            flex-shrink: 0;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .header-top h1 { font-size: 1rem; margin: 0; text-transform: uppercase; font-weight: 900; }
+
+        /* --- HORIZONTAL SCROLL FOR PINNED BAR --- */
+        .pinned-bar {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto; /* Enable horizontal scroll */
+            white-space: nowrap;
+            padding-bottom: 5px;
+            scrollbar-width: none; /* Firefox */
+        }
+        .pinned-bar::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+
+        .pinned-tab {
+            background: var(--mc-ivory);
+            border: 1px solid var(--mc-border);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            flex-shrink: 0; /* Prevents tabs from squishing */
+        }
+
+        /* --- HORIZONTAL SCROLL FOR ROADMAP --- */
+        .roadmap-panel {
+            background: var(--mc-ivory);
+            padding: 0 20px; 
+            max-height: 0;
+            opacity: 0;
+            visibility: hidden;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .roadmap-panel.active {
+            max-height: 180px;
+            padding: 20px;
+            opacity: 1;
+            visibility: visible;
+            border-bottom: 2px solid var(--mc-dark);
+        }
+
+        .roadmap-scroll-container {
+            overflow-x: auto;
+            scrollbar-width: none;
+            padding-bottom: 10px;
+        }
+        .roadmap-scroll-container::-webkit-scrollbar { display: none; }
+
+        .roadmap-steps {
+            display: flex;
+            justify-content: flex-start; /* Changed from space-between to allow overflow */
+            position: relative;
+            min-width: max-content; /* Ensures it takes up full width of all steps */
+            gap: 40px;
+            padding: 10px 20px;
+        }
+
+        .roadmap-steps::before {
+            content: "";
+            position: absolute;
+            top: 25px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--mc-border);
+            z-index: 1;
+        }
+
+        .step { position: relative; z-index: 2; text-align: center; width: 80px; }
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            background: var(--mc-white);
+            border: 2px solid var(--mc-border);
+            border-radius: 50%;
+            margin: 0 auto 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .step.completed .step-circle { background: var(--mc-green); color: white; border-color: var(--mc-dark); }
+        .step.active .step-circle { background: var(--mc-yellow); border-color: var(--mc-dark); }
+        .step-label { font-size: 0.65rem; font-weight: bold; text-transform: uppercase; }
+
+        /* --- Chat area & Input (Unchanged) --- */
+        .messages-area { flex: 1; overflow-y: auto; padding: 20px; background: var(--mc-white); }
+        .message { margin-bottom: 25px; display: flex; gap: 12px; }
+        .message.ai { flex-direction: row; }
+        .message.user { flex-direction: row-reverse; }
+        .avatar-img { width: 35px; height: 35px; border-radius: 50%; border: 1px solid var(--mc-border); flex-shrink: 0; }
+        .bubble { max-width: 80%; line-height: 1.5; font-family: sans-serif; font-size: 0.95rem; }
+        .user .bubble { background-color: var(--mc-ivory); padding: 12px 18px; border-radius: 18px; }
+        .pin-btn-action { cursor: pointer; margin-left: 8px; opacity: 0.3; transition: 0.2s; }
+        .pin-btn-action.is-pinned { color: var(--mc-yellow); opacity: 1; }
+        .input-footer { padding: 20px; }
+        .input-box { display: flex; border: 2px solid var(--mc-dark); border-radius: 4px; overflow: hidden; }
+        input { flex: 1; border: none; padding: 12px; outline: none; }
+        .send-btn { background: var(--mc-yellow); border: none; border-left: 2px solid var(--mc-dark); padding: 0 20px; font-weight: bold; cursor: pointer; }
+        
+        .roadmap-toggle-btn {
+            background: var(--mc-ivory);
+            border: 1px solid var(--mc-dark);
+            padding: 5px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+   

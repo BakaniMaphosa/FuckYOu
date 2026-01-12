@@ -1,0 +1,160 @@
+
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none;
+        }
+
+        #canvas-container {
+            width: 600px;
+            height: 300px;
+            position: relative;
+            resize: both;
+            overflow: hidden;
+            border: 2px solid #333;
+            background-color: #f4f4f4;
+            background-image: radial-gradient(#ccc 1px, transparent 1px);
+            background-size: 20px 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        /* --- X-RAY MODE --- */
+        #canvas-container.mode-connect { background-color: #1e1e1e; transition: background-color 0.3s; }
+        #canvas-container.mode-connect .node { opacity: 0.9; box-shadow: 0 0 0 2px rgba(255,255,255,0.2); }
+
+        /* --- BOTTOM TOOLBAR --- */
+        #bottom-toolbar {
+            position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
+            z-index: 1000; background: white; padding: 10px; border-radius: 14px;
+            display: flex; gap: 10px; align-items: center;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.05);
+        }
+
+        button {
+            background: #222;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.1s, background 0.2s;
+        }
+
+        button:active { transform: scale(0.95); }
+        
+        /* --- DROPDOWN --- */
+        .tool-dropdown { position: relative; }
+        .dropdown-menu {
+            position: absolute; bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%);
+            background: white; padding: 5px; border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            display: none; flex-direction: column; gap: 2px; min-width: 120px;
+        }
+        /* Invisible bridge to prevent menu from closing when moving mouse across gap */
+        .dropdown-menu::after {
+            content: ""; position: absolute; top: 100%; left: 0;
+            width: 100%; height: 10px;
+        }
+        .tool-dropdown:hover .dropdown-menu { display: flex; }
+        .dropdown-menu button {
+            background: transparent; color: #333; width: 100%; text-align: left;
+            padding: 8px 12px;
+        }
+        .dropdown-menu button:hover { background: #eee; }
+
+        /* --- MODE SLIDER (TOP RIGHT) --- */
+        #mode-panel {
+            position: absolute; top: 20px; right: 20px;
+            background: white; padding: 4px; border-radius: 1rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: flex; width: 200px; height: 40px;
+            z-index: 1000; cursor: pointer;
+        }
+        
+        .toggle-track {
+            position: absolute; top: 4px; left: 4px;
+            width: calc(50% - 4px); height: calc(100% - 8px);
+            background: #222; border-radius: calc(1rem - 4px);
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            z-index: 0;
+        }
+
+        .toggle-option {
+            flex: 1; text-align: center; z-index: 1;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; font-size: 14px; color: #666; transition: color 0.3s;
+        }
+        .toggle-option.active { color: white; }
+        
+        /* --- WORLD LAYER --- */
+        #viewport {
+            width: 100%;
+            height: 100%;
+            cursor: grab;
+        }
+        #viewport:active { cursor: grabbing; }
+        
+        #world {
+            transform-origin: 0 0;
+            position: absolute;
+            top: 0; left: 0;
+        }
+
+        /* --- NODES --- */
+        .node {
+            position: absolute;
+            width: 150px;
+            height: 100px;
+            background: white;
+            border: 2px solid #333;
+            border-radius: 8px;
+            box-shadow: 5px 5px 0 rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 10;
+            word-break: break-word; /* prevent text from overflowing */
+            outline: none;
+        }
+        .node:hover { border-color: #007bff; }
+        .node:focus { border-color: #007bff; box-shadow: 0 0 0 2px rgba(0,123,255,0.3); }
+
+        /* --- SHAPES --- */
+        .node.circle { border-radius: 50%; }
+        .node.diamond { transform: rotate(45deg); }
+        /* Counter-rotate content so text stays straight */
+        .node.diamond .node-content { transform: rotate(-45deg); }
+
+        .node-content {
+            width: 100%; height: 100%;
+            display: flex; align-items: center; justify-content: center;
+            pointer-events: none; /* Allow clicks to pass to parent for dragging */
+            outline: none;
+        }
+        .node-content[contenteditable="true"] {
+            pointer-events: auto; /* Enable interaction when editing */
+            cursor: text;
+        }
+        
+        /* --- CONNECTIONS --- */
+        svg {
+            position: absolute;
+            top: 0; left: 0;
+            overflow: visible;
+            pointer-events: none;
+            z-index: 1;
+        }
+        path {
+            fill: none;
+            stroke: #333;
+            stroke-width: 3px;
+            stroke-linecap: round;
+        }
