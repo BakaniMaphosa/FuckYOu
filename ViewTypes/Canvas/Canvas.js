@@ -1,4 +1,5 @@
 
+export function initCanvas(container) {
     // --- STATE ---
     let scale = 1;
     let pan = { x: 0, y: 0 };
@@ -6,10 +7,10 @@
     let connections = []; // { from: element, to: element, path: svgElement }
     
     // --- DOM ELEMENTS ---
-    const world = document.getElementById('world');
-    const viewport = document.getElementById('viewport');
-    const svgLayer = document.getElementById('connections');
-    const container = document.getElementById('canvas-container');
+    const world = container.querySelector('#world') || document.getElementById('world');
+    const viewport = container.querySelector('#viewport') || document.getElementById('viewport');
+    const svgLayer = container.querySelector('#connections') || document.getElementById('connections');
+    const canvasContainer = container.querySelector('#canvas-container') || document.getElementById('canvas-container');
 
     // --- CORE FUNCTIONS ---
     function updateTransform() {
@@ -82,12 +83,12 @@
             track.style.transform = 'translateX(100%)';
             optMove.classList.remove('active');
             optConnect.classList.add('active');
-            container.classList.add('mode-connect');
+            canvasContainer.classList.add('mode-connect');
         } else {
             track.style.transform = 'translateX(0)';
             optMove.classList.add('active');
             optConnect.classList.remove('active');
-            container.classList.remove('mode-connect');
+            canvasContainer.classList.remove('mode-connect');
         }
     }
 
@@ -269,3 +270,11 @@
 
     // Initialize
     spawnShape('box'); // Start with one box
+
+    // --- EXPOSE FUNCTIONS TO WINDOW FOR HTML BUTTONS ---
+    window.spawnShape = spawnShape;
+    window.spawnSection = spawnSection;
+    window.spawnText = spawnText;
+    window.toggleMode = toggleMode;
+    window.resetView = resetView;
+}

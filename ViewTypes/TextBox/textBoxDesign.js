@@ -500,7 +500,7 @@ async function loadChooseMenu() {
 // ============================================
 let contextMenuInitialized = false;
 
-export function setupEditorContextMenu(editor, contextMenu) {
+export function setupEditorContextMenu(editor, contextMenu, viewRegistry = {}) {
   if (contextMenu) contextMenu.style.display = "none";
 
   if (contextMenuInitialized) return;
@@ -645,20 +645,32 @@ export function setupEditorContextMenu(editor, contextMenu) {
       clickedEditor.style.width = "";
       clickedEditor.style.flex = "";
 
-      clickedEditor.style.backgroundColor = "#4CAF50";
-      clickedEditor.style.display = "flex";
-      clickedEditor.style.alignItems = "center";
-      clickedEditor.style.justifyContent = "center";
-      clickedEditor.innerHTML = `<h1 style="color: white; font-family: sans-serif; margin: 0;">AI Panel</h1>`;
+      clickedEditor.style.backgroundColor = "";
+      clickedEditor.style.display = "";
+      clickedEditor.style.alignItems = "";
+      clickedEditor.style.justifyContent = "";
+      
+      await loadComponent(clickedEditor, "/ViewTypes/AIChat/aiChat.html");
+      
+      if (viewRegistry['view-AIPanel']) {
+          viewRegistry['view-AIPanel'](clickedEditor);
+      }
+      
       contextMenu.style.display = "none";
     }
 
     if (action === "view-Canvas" && clickedEditor) {
-      clickedEditor.style.backgroundColor = "#9C27B0";
-      clickedEditor.style.display = "flex";
-      clickedEditor.style.alignItems = "center";
-      clickedEditor.style.justifyContent = "center";
-      clickedEditor.innerHTML = `<h1 style="color: white; font-family: sans-serif; margin: 0;">Canvas</h1>`;
+      clickedEditor.style.backgroundColor = "";
+      clickedEditor.style.display = "";
+      clickedEditor.style.alignItems = "";
+      clickedEditor.style.justifyContent = "";
+      
+      await loadComponent(clickedEditor, "/ViewTypes/Canvas/canvas.html");
+      
+      if (viewRegistry['view-Canvas']) {
+          viewRegistry['view-Canvas'](clickedEditor);
+      }
+      
       contextMenu.style.display = "none";
     }
 
@@ -682,7 +694,7 @@ export function setupEditorContextMenu(editor, contextMenu) {
 // ============================================
 // MAIN SETUP FUNCTION
 // ============================================
-export function setupDivInsertion({ editor, contextMenu }) {
+export function setupDivInsertion({ editor, contextMenu, viewRegistry = {} }) {
   if (!editor) {
     console.error("❌ Editor not found!");
     return;
@@ -720,7 +732,7 @@ export function setupDivInsertion({ editor, contextMenu }) {
   
   observer.observe(editor);
   
-  setupEditorContextMenu(editor, contextMenu);
+  setupEditorContextMenu(editor, contextMenu, viewRegistry);
   
   const deleteHandler = (e) => {
     if ((e.key === "Delete" || e.key === "Backspace") && selectedNode) {

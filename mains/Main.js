@@ -1,6 +1,8 @@
 import { setupDivInsertion } from "/ViewTypes/TextBox/textBoxDesign.js";
 import { toolBarLogic } from "/Navbar/studynotes/script.js";
 import { addNoteLogic } from "/Navbar/CreateNote/addNote.js";
+import { initCanvas } from "/ViewTypes/Canvas/Canvas.js";
+import { initAIChat } from "/ViewTypes/AIchat/AIchat.js";
 
 
 async function loadComponent(targetId, file) {
@@ -139,7 +141,11 @@ async function init() {
     
     await new Promise(resolve => setTimeout(resolve, 50));
     
-    setupDivInsertion({ editor, contextMenu });
+    setupDivInsertion({ 
+        editor, 
+        contextMenu,
+        viewRegistry: { 'view-Canvas': initCanvas, 'view-AIPanel': initAIChat }
+    });
     setupDividerResize();
   } else {
     console.error("❌ Could not find editor or context menu!");
