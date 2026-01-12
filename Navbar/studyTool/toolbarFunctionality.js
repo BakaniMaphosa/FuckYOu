@@ -213,9 +213,14 @@ export function initializeToolbarFunctionality() {
                        document.querySelector('.fa-list')?.closest('.tool');
                        
     if (bulletTool) {
-        // Execute on mousedown to ensure focus isn't lost
-        bulletTool.addEventListener('mousedown', (e) => {
-            e.preventDefault();
+        // Prevent focus loss on mousedown, execute on click to match reference behavior
+        bulletTool.addEventListener('mousedown', (e) => e.preventDefault());
+        bulletTool.addEventListener('click', () => {
+            // Start on new line if content exists
+            const selection = window.getSelection();
+            if (selection.anchorNode && selection.anchorNode.textContent.trim().length > 0) {
+                document.execCommand('insertParagraph');
+            }
             applyFormat('insertUnorderedList');
         });
     }
@@ -223,9 +228,14 @@ export function initializeToolbarFunctionality() {
     // Numbered List
     const numberedTool = document.querySelector('.fa-list-ol')?.closest('.tool');
     if (numberedTool) {
-        // Execute on mousedown to ensure focus isn't lost
-        numberedTool.addEventListener('mousedown', (e) => {
-            e.preventDefault();
+        // Prevent focus loss on mousedown, execute on click to match reference behavior
+        numberedTool.addEventListener('mousedown', (e) => e.preventDefault());
+        numberedTool.addEventListener('click', () => {
+            // Start on new line if content exists
+            const selection = window.getSelection();
+            if (selection.anchorNode && selection.anchorNode.textContent.trim().length > 0) {
+                document.execCommand('insertParagraph');
+            }
             applyFormat('insertOrderedList');
         });
     }
@@ -233,18 +243,58 @@ export function initializeToolbarFunctionality() {
     // Horizontal Line
     const horizontalTool = document.querySelector('.fa-minus')?.closest('.tool');
     if (horizontalTool) {
+        horizontalTool.addEventListener('mousedown', (e) => e.preventDefault());
         horizontalTool.addEventListener('click', () => applyFormat('insertHorizontalRule'));
+    }
+
+    // Vertical Break (Insert Vertical Line)
+    const verticalBreakTool = document.querySelector('.fa-grip-lines-vertical')?.closest('.tool');
+    if (verticalBreakTool) {
+        verticalBreakTool.addEventListener('mousedown', (e) => e.preventDefault());
+        verticalBreakTool.addEventListener('click', () => {
+            const selection = window.getSelection();
+            if (selection.rangeCount > 0) {
+                const range = selection.getRangeAt(0);
+                
+                // Create the div element
+                const vLine = document.createElement('div');
+                vLine.className = 'v-line';
+                Object.assign(vLine.style, {
+                    display: 'inline-block',
+                    width: '2px',
+                    height: '1.2em',
+                    backgroundColor: '#cbd5e0',
+                    margin: '0 10px',
+                    verticalAlign: 'middle'
+                });
+                
+                // Allow the cursor to move past it easily by adding a space after
+                const space = document.createTextNode('\u00A0'); 
+
+                range.deleteContents();
+                range.insertNode(space);
+                range.insertNode(vLine);
+                
+                // Move cursor to after the inserted line
+                range.setStartAfter(space);
+                range.setEndAfter(space);
+                selection.removeAllRanges();
+                selection.addRange(range);
+            }
+        });
     }
 
     // Indent
     const indentTool = document.querySelector('.tool .fa-indent')?.closest('.tool');
     if (indentTool) {
+        indentTool.addEventListener('mousedown', (e) => e.preventDefault());
         indentTool.addEventListener('click', () => applyFormat('indent'));
     }
 
     // Outdent
     const outdentTool = document.querySelector('.tool .fa-outdent')?.closest('.tool');
     if (outdentTool) {
+        outdentTool.addEventListener('mousedown', (e) => e.preventDefault());
         outdentTool.addEventListener('click', () => applyFormat('outdent'));
     }
 
@@ -408,11 +458,13 @@ export function initializeToolbarFunctionality() {
 
         let savedRange = null; // To preserve text selection
 
-        // Hover Logic
-        let ffTimeout;
-        
-        function showFF() {
-            clearTimeout(ffTimeout);
+        // Click Logic (Toggle)
+        function toggleFF() {
+            if (ffMenu.classList.contains('active')) {
+                closeFF();
+                return;
+            }
+
             ffMenu.classList.add('active');
 
             // Save the current text selection when the menu opens
@@ -454,17 +506,27 @@ export function initializeToolbarFunctionality() {
             });
         }
 
-        function hideFF() {
-            ffTimeout = setTimeout(() => {
-                ffMenu.classList.remove('active');
-                savedRange = null; // Clear selection when menu closes
-            }, 200);
+        function closeFF() {
+            ffMenu.classList.remove('active');
+            savedRange = null;
         }
 
-        fontTool.addEventListener('mouseenter', showFF);
-        fontTool.addEventListener('mouseleave', hideFF);
-        ffMenu.addEventListener('mouseenter', () => clearTimeout(ffTimeout));
-        ffMenu.addEventListener('mouseleave', hideFF);
+        // Prevent focus loss on mousedown
+        fontTool.addEventListener('mousedown', (e) => e.preventDefault());
+
+        fontTool.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleFF();
+        });
+
+        // Close when clicking outside
+        document.addEventListener('click', (e) => {
+            if (ffMenu.classList.contains('active') && 
+                !ffMenu.contains(e.target) && 
+                !fontTool.contains(e.target)) {
+                closeFF();
+            }
+        });
     }
 
     // 2. LINE SETTINGS MENU (Line Height, Letter Spacing)
