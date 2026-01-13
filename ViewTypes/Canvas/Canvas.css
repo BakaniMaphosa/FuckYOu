@@ -17,31 +17,98 @@
         /* --- BOTTOM TOOLBAR --- */
         #bottom-toolbar-canvas {
             position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
-            z-index: 1000; background: white; padding: 10px; border-radius: 14px;
-            display: flex; gap: 10px; align-items: center;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.05);
+            z-index: 1000; background: white; padding: 8px 12px; border-radius: 16px;
+            display: flex; gap: 6px; align-items: center; justify-content: center;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.05);
+            max-width: calc(100% - 40px);
+            flex-wrap: wrap;
         }
 
         .canvas-button {
-            background: #222;
-            color: white;
+            background: #f5f5f5;
+            color: #333;
             border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-weight: bold;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 13px;
             cursor: pointer;
-            transition: transform 0.1s, background 0.2s;
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
         }
 
-        .canvas-button:active { transform: scale(0.95); }
+        .canvas-button:hover { 
+            background: #222; 
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .canvas-button:active { 
+            transform: translateY(0) scale(0.97); 
+        }
+
+        .canvas-button i {
+            font-size: 18px;
+        }
+
+        .canvas-button.icon-only-canvas {
+            padding: 10px 12px;
+        }
+
+        .canvas-button.icon-only-canvas i {
+            font-size: 20px;
+        }
+
+        .toolbar-divider-canvas {
+            width: 1px;
+            height: 28px;
+            background: #ddd;
+            margin: 0 6px;
+        }
+
+        .dropdown-arrow-canvas {
+            font-size: 14px !important;
+            opacity: 0.6;
+        }
+
+        /* --- RESPONSIVE TOOLBAR --- */
+        @media (max-width: 500px) {
+            #bottom-toolbar-canvas {
+                padding: 6px 8px;
+                gap: 4px;
+            }
+            
+            .canvas-button {
+                padding: 8px 10px;
+                font-size: 0;
+                gap: 0;
+            }
+            
+            .canvas-button i {
+                font-size: 18px;
+            }
+            
+            .dropdown-arrow-canvas {
+                display: none;
+            }
+            
+            .toolbar-divider-canvas {
+                height: 24px;
+                margin: 0 4px;
+            }
+        }
         
         /* --- DROPDOWN --- */
         .tool-dropdown-canvas { position: relative; }
         .dropdown-menu-canvas {
-            position: absolute; bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%);
-            background: white; padding: 5px; border-radius: 12px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-            display: none; flex-direction: column; gap: 2px; min-width: 120px;
+            position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+            background: white; padding: 6px; border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+            display: none; flex-direction: column; gap: 4px; min-width: 140px;
         }
         /* Invisible bridge to prevent menu from closing when moving mouse across gap */
         .dropdown-menu-canvas::after {
@@ -51,31 +118,40 @@
         .tool-dropdown-canvas:hover .dropdown-menu-canvas { display: flex; }
         .dropdown-menu-canvas .canvas-button {
             background: transparent; color: #333; width: 100%; text-align: left;
-            padding: 8px 12px;
+            padding: 10px 14px; justify-content: flex-start;
         }
-        .dropdown-menu-canvas .canvas-button:hover { background: #eee; }
+        .dropdown-menu-canvas .canvas-button:hover { 
+            background: #f0f0f0; 
+            color: #333;
+            transform: none;
+            box-shadow: none;
+        }
 
         /* --- MODE SLIDER (TOP RIGHT) --- */
         #mode-panel-canvas {
             position: absolute; top: 20px; right: 20px;
-            background: white; padding: 4px; border-radius: 1rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            display: flex; width: 200px; height: 40px;
+            background: white; padding: 4px; border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+            display: flex; width: 220px; height: 44px;
             z-index: 1000; cursor: pointer;
         }
         
         .toggle-track-canvas {
             position: absolute; top: 4px; left: 4px;
             width: calc(50% - 4px); height: calc(100% - 8px);
-            background: #222; border-radius: calc(1rem - 4px);
+            background: linear-gradient(135deg, #222 0%, #444 100%);
+            border-radius: 10px;
             transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             z-index: 0;
         }
 
         .toggle-option-canvas {
             flex: 1; text-align: center; z-index: 1;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: bold; font-size: 14px; color: #666; transition: color 0.3s;
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+            font-weight: 600; font-size: 13px; color: #888; transition: color 0.3s;
+        }
+        .toggle-option-canvas i {
+            font-size: 16px;
         }
         .toggle-option-canvas.active-canvas { color: white; }
         

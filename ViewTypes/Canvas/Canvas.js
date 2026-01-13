@@ -276,4 +276,16 @@ export function initCanvas(container) {
     window.spawnText = spawnText;
     window.toggleMode = toggleMode;
     window.resetView = resetView;
+    window.zoomIn = () => {
+        if (scale < 5) {
+            scale += 0.2;
+            updateTransform();
+        }
+    };
+    window.zoomOut = () => {
+        if (scale > 0.2) {
+            scale -= 0.2;
+            updateTransform();
+        }
+    };
 }

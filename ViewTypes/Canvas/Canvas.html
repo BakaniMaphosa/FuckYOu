@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/ViewTypes/Canvas/Canvas.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <title>Fresh Canvas</title>
     
 </head>
@@ -12,22 +13,26 @@
 <div id="canvas-container-canvas">
     <div id="mode-panel-canvas" onclick="toggleMode()">
         <div class="toggle-track-canvas" id="toggle-track-canvas"></div>
-        <div class="toggle-option-canvas active-canvas" id="opt-move-canvas">Move</div>
-        <div class="toggle-option-canvas" id="opt-connect-canvas">Connect</div>
+        <div class="toggle-option-canvas active-canvas" id="opt-move-canvas"><i class='bx bx-move'></i> Move</div>
+        <div class="toggle-option-canvas" id="opt-connect-canvas"><i class='bx bx-git-branch'></i> Connect</div>
     </div>
 
     <div id="bottom-toolbar-canvas">
         <div class="tool-dropdown-canvas">
-            <button class="canvas-button">+ Shapes</button>
+            <button class="canvas-button"><i class='bx bx-shape-square'></i> Shapes <i class='bx bx-chevron-up dropdown-arrow-canvas'></i></button>
             <div class="dropdown-menu-canvas">
-                <button class="canvas-button" onclick="spawnShape('box')">Box</button>
-                <button class="canvas-button" onclick="spawnShape('circle')">Circle</button>
-                <button class="canvas-button" onclick="spawnShape('diamond')">Diamond</button>
+                <button class="canvas-button" onclick="spawnShape('box')"><i class='bx bx-square-rounded'></i> Box</button>
+                <button class="canvas-button" onclick="spawnShape('circle')"><i class='bx bx-circle'></i> Circle</button>
+                <button class="canvas-button" onclick="spawnShape('diamond')"><i class='bx bx-diamond'></i> Diamond</button>
             </div>
         </div>
-        <button class="canvas-button" onclick="spawnSection()">+ Add Section</button>
-        <button class="canvas-button" onclick="spawnText()">+ Add Text</button>
-        <button class="canvas-button" onclick="resetView()">Reset View</button>
+        <div class="toolbar-divider-canvas"></div>
+        <button class="canvas-button" onclick="spawnSection()"><i class='bx bx-layout'></i> Section</button>
+        <button class="canvas-button" onclick="spawnText()"><i class='bx bx-text'></i> Text</button>
+        <div class="toolbar-divider-canvas"></div>
+        <button class="canvas-button icon-only-canvas" onclick="resetView()" title="Reset View"><i class='bx bx-reset'></i></button>
+        <button class="canvas-button icon-only-canvas" onclick="zoomIn()" title="Zoom In"><i class='bx bx-zoom-in'></i></button>
+        <button class="canvas-button icon-only-canvas" onclick="zoomOut()" title="Zoom Out"><i class='bx bx-zoom-out'></i></button>
     </div>
 
     <div id="viewport-canvas">
