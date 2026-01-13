@@ -1,4 +1,3 @@
-
 export function initCanvas(container) {
     // --- STATE ---
     let scale = 1;
@@ -7,10 +6,10 @@ export function initCanvas(container) {
     let connections = []; // { from: element, to: element, path: svgElement }
     
     // --- DOM ELEMENTS ---
-    const world = container.querySelector('#world') || document.getElementById('world');
-    const viewport = container.querySelector('#viewport') || document.getElementById('viewport');
-    const svgLayer = container.querySelector('#connections') || document.getElementById('connections');
-    const canvasContainer = container.querySelector('#canvas-container') || document.getElementById('canvas-container');
+    const world = container.querySelector('#world-canvas') || document.getElementById('world-canvas');
+    const viewport = container.querySelector('#viewport-canvas') || document.getElementById('viewport-canvas');
+    const svgLayer = container.querySelector('#connections-canvas') || document.getElementById('connections-canvas');
+    const canvasContainer = container.querySelector('#canvas-container-canvas') || document.getElementById('canvas-container-canvas');
 
     // --- CORE FUNCTIONS ---
     function updateTransform() {
@@ -19,8 +18,8 @@ export function initCanvas(container) {
 
     function spawnShape(type) {
         const box = document.createElement('div');
-        box.className = `node ${type}`;
-        box.innerHTML = `<div class="node-content">${type.charAt(0).toUpperCase() + type.slice(1)}</div>`;
+        box.className = `node-canvas ${type}-canvas`;
+        box.innerHTML = `<div class="node-content-canvas">${type.charAt(0).toUpperCase() + type.slice(1)}</div>`;
         
         // Calculate center of screen in world coordinates
         const centerX = (viewport.offsetWidth / 2 - pan.x) / scale;
@@ -35,8 +34,8 @@ export function initCanvas(container) {
 
     function spawnSection() {
         const section = document.createElement('div');
-        section.className = 'node';
-        section.innerHTML = `<div class="node-content">Section</div>`;
+        section.className = 'node-canvas';
+        section.innerHTML = `<div class="node-content-canvas">Section</div>`;
         
         // Calculate center of screen in world coordinates
         const centerX = (viewport.offsetWidth / 2 - pan.x) / scale;
@@ -53,8 +52,8 @@ export function initCanvas(container) {
 
     function spawnText() {
         const text = document.createElement('div');
-        text.className = 'node';
-        text.innerHTML = `<div class="node-content" style="white-space: nowrap;">Double click to edit</div>`;
+        text.className = 'node-canvas';
+        text.innerHTML = `<div class="node-content-canvas" style="white-space: nowrap;">Double click to edit</div>`;
         text.style.background = 'transparent';
         text.style.border = 'none';
         text.style.boxShadow = 'none';
@@ -75,20 +74,20 @@ export function initCanvas(container) {
     function toggleMode() {
         mode = mode === 'move' ? 'connect' : 'move';
         
-        const track = document.getElementById('toggle-track');
-        const optMove = document.getElementById('opt-move');
-        const optConnect = document.getElementById('opt-connect');
+        const track = document.getElementById('toggle-track-canvas');
+        const optMove = document.getElementById('opt-move-canvas');
+        const optConnect = document.getElementById('opt-connect-canvas');
         
         if (mode === 'connect') {
             track.style.transform = 'translateX(100%)';
-            optMove.classList.remove('active');
-            optConnect.classList.add('active');
-            canvasContainer.classList.add('mode-connect');
+            optMove.classList.remove('active-canvas');
+            optConnect.classList.add('active-canvas');
+            canvasContainer.classList.add('mode-connect-canvas');
         } else {
             track.style.transform = 'translateX(0)';
-            optMove.classList.add('active');
-            optConnect.classList.remove('active');
-            canvasContainer.classList.remove('mode-connect');
+            optMove.classList.add('active-canvas');
+            optConnect.classList.remove('active-canvas');
+            canvasContainer.classList.remove('mode-connect-canvas');
         }
     }
 
@@ -112,7 +111,7 @@ export function initCanvas(container) {
     viewport.addEventListener('mousedown', e => {
         if (e.target.tagName === 'BUTTON') return; // Ignore UI clicks
 
-        const node = e.target.closest('.node');
+        const node = e.target.closest('.node-canvas');
         
         // Allow text editing without dragging
         if (node && e.target.isContentEditable) return;
@@ -178,7 +177,7 @@ export function initCanvas(container) {
 
     window.addEventListener('mouseup', e => {
         if (mode === 'connect' && isDragging) {
-            const targetNode = e.target.closest('.node');
+            const targetNode = e.target.closest('.node-canvas');
             if (targetNode && targetNode !== connectStartNode) {
                 // Finalize connection
                 const newPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
@@ -225,7 +224,7 @@ export function initCanvas(container) {
     document.addEventListener('keydown', e => {
         if (e.key === 'Delete' || e.key === 'Backspace') {
             const selectedNode = document.activeElement;
-            if (selectedNode && selectedNode.classList.contains('node')) {
+            if (selectedNode && selectedNode.classList.contains('node-canvas')) {
                 e.preventDefault(); // Stop text deletion in node
 
                 // Remove connections
@@ -245,16 +244,16 @@ export function initCanvas(container) {
 
     // --- Prevent dragging text selections ---
     viewport.addEventListener('mousedown', e => {
-        if (e.target.closest('.node') && !e.target.isContentEditable) {
+        if (e.target.closest('.node-canvas') && !e.target.isContentEditable) {
             document.getSelection().removeAllRanges();
         }
     });
 
     // --- Double click to edit ---
     viewport.addEventListener('dblclick', e => {
-        const node = e.target.closest('.node');
+        const node = e.target.closest('.node-canvas');
         if (node) {
-            const content = node.querySelector('.node-content');
+            const content = node.querySelector('.node-content-canvas');
             if (content) {
                 content.setAttribute('contenteditable', 'true');
                 content.focus();
@@ -263,7 +262,7 @@ export function initCanvas(container) {
     });
 
     viewport.addEventListener('focusout', e => {
-        if (e.target.classList.contains('node-content')) {
+        if (e.target.classList.contains('node-content-canvas')) {
             e.target.removeAttribute('contenteditable');
         }
     });

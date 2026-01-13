@@ -9,30 +9,30 @@
 </head>
 <body>
 
-<div id="canvas-container">
-    <div id="mode-panel" onclick="toggleMode()">
-        <div class="toggle-track" id="toggle-track"></div>
-        <div class="toggle-option active" id="opt-move">Move</div>
-        <div class="toggle-option" id="opt-connect">Connect</div>
+<div id="canvas-container-canvas">
+    <div id="mode-panel-canvas" onclick="toggleMode()">
+        <div class="toggle-track-canvas" id="toggle-track-canvas"></div>
+        <div class="toggle-option-canvas active-canvas" id="opt-move-canvas">Move</div>
+        <div class="toggle-option-canvas" id="opt-connect-canvas">Connect</div>
     </div>
 
-    <div id="bottom-toolbar">
-        <div class="tool-dropdown">
-            <button>+ Shapes</button>
-            <div class="dropdown-menu">
-                <button onclick="spawnShape('box')">Box</button>
-                <button onclick="spawnShape('circle')">Circle</button>
-                <button onclick="spawnShape('diamond')">Diamond</button>
+    <div id="bottom-toolbar-canvas">
+        <div class="tool-dropdown-canvas">
+            <button class="canvas-button">+ Shapes</button>
+            <div class="dropdown-menu-canvas">
+                <button class="canvas-button" onclick="spawnShape('box')">Box</button>
+                <button class="canvas-button" onclick="spawnShape('circle')">Circle</button>
+                <button class="canvas-button" onclick="spawnShape('diamond')">Diamond</button>
             </div>
         </div>
-        <button onclick="spawnSection()">+ Add Section</button>
-        <button onclick="spawnText()">+ Add Text</button>
-        <button onclick="resetView()">Reset View</button>
+        <button class="canvas-button" onclick="spawnSection()">+ Add Section</button>
+        <button class="canvas-button" onclick="spawnText()">+ Add Text</button>
+        <button class="canvas-button" onclick="resetView()">Reset View</button>
     </div>
 
-    <div id="viewport">
-        <div id="world">
-            <svg id="connections"></svg>
+    <div id="viewport-canvas">
+        <div id="world-canvas">
+            <svg id="connections-canvas"></svg>
             <!-- Nodes will be added here -->
         </div>
     </div>
