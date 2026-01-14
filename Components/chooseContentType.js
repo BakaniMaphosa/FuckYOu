@@ -1,12 +1,23 @@
 /**
  * chooseContentType.js
  * Logic to handle the choice menu, info page overlay, and auto-close
+ * Updated to support both TextBox and Canvas sections
  */
 
-import { getSelectedNode } from "/ViewTypes/TextBox/textBoxDesign.js";
+import { getSelectedNode as getTextBoxSelectedNode } from "/ViewTypes/TextBox/textBoxDesign.js";
 import { createGraph } from "/Components/Graphs/graphs.js";
 import { createImageContent } from "/Components/ImagesLogic/images.js";
 import { createTextContent } from "/Components/TextContent/TextContents.js";
+
+// Function to get selected node - checks both TextBox and Canvas
+function getSelectedNode() {
+    // First check if there's a canvas selected node (set by Canvas.js)
+    if (window._canvasSelectedNode) {
+        return window._canvasSelectedNode;
+    }
+    // Fall back to TextBox selected node
+    return getTextBoxSelectedNode();
+}
 
 async function loadComponent(targetElement, file) {
     try {
@@ -60,6 +71,8 @@ export function getContentInfo() {
         if (contentBox) {
             contentBox.remove();
             document.removeEventListener('mousedown', closeMenu);
+            // Clear the canvas selected node when menu closes
+            window._canvasSelectedNode = null;
         }
     }
 
@@ -117,6 +130,14 @@ export function getContentInfo() {
         // --- CONTENT CREATION LOGIC ---
         console.log(`User selected: ${specificTitle}`);
         let selectedNode = getSelectedNode();
+        
+        if (!selectedNode) {
+            console.error("No selected node found!");
+            removeChooseContentBox();
+            return;
+        }
+
+        console.log("Selected node:", selectedNode);
 
         switch (specificTitle) {
             case "Title Header":

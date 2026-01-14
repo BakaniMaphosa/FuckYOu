@@ -514,51 +514,14 @@ export function setupEditorContextMenu(editor, contextMenu, viewRegistry = {}) {
     if (targetEditor) {
       e.preventDefault();
       
-      // 1. Check for Text Selection
-      const selection = window.getSelection();
-      const hasSelection = selection.toString().length > 0 && targetEditor.contains(selection.anchorNode);
+      const isCanvasView = targetEditor.querySelector('#world-canvas');
+      clickedEditor = targetEditor; // Set this for all actions
 
-      if (hasSelection) {
-        // Selection Menu: Copy, Cut, Paste
+      if (isCanvasView) {
+        // --- CANVAS CONTEXT MENU ---
         contextMenu.innerHTML = `
-            <div class="menu-item" data-action="copy">Copy</div>
-            <div class="menu-item" data-action="cut">Cut</div>
-            <div class="menu-item" data-action="paste">Paste</div>
-        `;
-      } else {
-        // Standard Menu Logic
-        let target = e.target;
-        clickedEditor = targetEditor;
-        while (target && !target.classList.contains('drop-zone')) {
-          target = target.parentElement;
-          if (target === targetEditor) {
-            target = null;
-            break;
-          }
-        }
-        lastClickZone = target;
-
-        // Build Menu Items
-        let menuItems = ``;
-        
-        if (lastClickZone) {
-            menuItems += `
-            <div class="menu-item has-submenu">
-                Insert
-                <div class="submenu">
-                    <div class="submenu-section">Basic Tools</div>
-                    <div class="submenu-item" data-action="Make-Section">Section</div>
-                    <div class="submenu-item" data-action="insert-Image">Image</div>
-                    <div class="submenu-item" data-action="insert-Table">Table</div>
-                    <div class="submenu-item" data-action="insert-Graph">Graph</div>
-                </div>
-            </div>`;
-        }
-
-        menuItems += `<div class="menu-item" data-action="split">Split View</div>`;
-
-        if (!lastClickZone) {
-            menuItems += `
+            <div class="menu-item" data-action="canvas-add-block">Block</div>
+            <div class="menu-item" data-action="split">Split View</div>
             <div class="menu-item has-submenu">
                 View Type
                 <div class="submenu">
@@ -566,12 +529,68 @@ export function setupEditorContextMenu(editor, contextMenu, viewRegistry = {}) {
                     <div class="submenu-item" data-action="view-AIPanel">AI Panel</div>
                     <div class="submenu-item" data-action="view-Canvas">Canvas</div>
                 </div>
-            </div>`;
-        }
+            </div>
+            <div class="menu-item" data-action="delete">Delete</div>
+        `;
+      } else {
+        // --- TEXTBOX CONTEXT MENU ---
+        const selection = window.getSelection();
+        const hasSelection = selection.toString().length > 0 && targetEditor.contains(selection.anchorNode);
 
-        menuItems += `<div class="menu-item" data-action="delete">Delete</div>`;
-        
-        contextMenu.innerHTML = menuItems;
+        if (hasSelection) {
+          // Selection Menu: Copy, Cut, Paste
+          contextMenu.innerHTML = `
+              <div class="menu-item" data-action="copy">Copy</div>
+              <div class="menu-item" data-action="cut">Cut</div>
+              <div class="menu-item" data-action="paste">Paste</div>
+          `;
+        } else {
+          // Standard Menu Logic
+          let target = e.target;
+          while (target && !target.classList.contains('drop-zone')) {
+            target = target.parentElement;
+            if (target === targetEditor) {
+              target = null;
+              break;
+            }
+          }
+          lastClickZone = target;
+
+          // Build Menu Items
+          let menuItems = ``;
+          
+          if (lastClickZone) {
+              menuItems += `
+              <div class="menu-item has-submenu">
+                  Insert
+                  <div class="submenu">
+                      <div class="submenu-section">Basic Tools</div>
+                      <div class="submenu-item" data-action="Make-Section">Section</div>
+                      <div class="submenu-item" data-action="insert-Image">Image</div>
+                      <div class="submenu-item" data-action="insert-Table">Table</div>
+                      <div class="submenu-item" data-action="insert-Graph">Graph</div>
+                  </div>
+              </div>`;
+          }
+
+          menuItems += `<div class="menu-item" data-action="split">Split View</div>`;
+
+          if (!lastClickZone) {
+              menuItems += `
+              <div class="menu-item has-submenu">
+                  View Type
+                  <div class="submenu">
+                      <div class="submenu-item" data-action="view-TextBox">TextBox</div>
+                      <div class="submenu-item" data-action="view-AIPanel">AI Panel</div>
+                      <div class="submenu-item" data-action="view-Canvas">Canvas</div>
+                  </div>
+              </div>`;
+          }
+
+          menuItems += `<div class="menu-item" data-action="delete">Delete</div>`;
+          
+          contextMenu.innerHTML = menuItems;
+        }
       }
       
       contextMenu.style.display = "block";
@@ -591,6 +610,15 @@ export function setupEditorContextMenu(editor, contextMenu, viewRegistry = {}) {
     if (!target) return;
     
     const action = target.getAttribute("data-action");
+
+    // Canvas Action
+    if (action === "canvas-add-block") {
+        if (window.spawnShape) {
+            window.spawnShape('box');
+        }
+        contextMenu.style.display = "none";
+        return;
+    }
 
     // Clipboard Actions
     if (action === "copy") {
