@@ -520,7 +520,7 @@ export function setupEditorContextMenu(editor, contextMenu, viewRegistry = {}) {
       if (isCanvasView) {
         // --- CANVAS CONTEXT MENU ---
         contextMenu.innerHTML = `
-            <div class="menu-item" data-action="canvas-add-block">Block</div>
+            <div class="menu-item" data-action="canvas-add-block" style="background: var(--banana)">Block</div>
             <div class="menu-item" data-action="split">Split View</div>
             <div class="menu-item has-submenu">
                 View Type
