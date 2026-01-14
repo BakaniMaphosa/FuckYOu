@@ -1,4 +1,6 @@
 import { toolbarLogic } from "/Navbar/studyTool/script2.js";
+import { aiToolbarLogic } from "/Navbar/AiTools/aiTools.js";
+
 
 export function toolBarLogic(){
     async function loadComponent(targetId, file) {
@@ -204,7 +206,28 @@ export function toolBarLogic(){
                             toolbarLogic();
                         }, 100);
                     });
-                } else if( tab === 'ai' || tab === 'other'){
+                } else if( tab === 'ai'){
+                    if (actionBtn) {
+                        actionBtn.innerText = "Organize";
+                        actionBtn.classList.remove('primary');
+                        actionBtn.onclick = null;
+                    }
+
+                    navTrigger.classList.remove('notes-active');
+                    
+                    if (navSide) navSide.style.display = 'none';
+                    if (sliderBar) sliderBar.style.marginLeft = "13.8vh";
+
+                    loadComponent("tabContent", "/Navbar/AiTools/aiTools.html").then(() => {
+                        requestAnimationFrame(() => {
+                            tabContent.classList.remove('fade-out');
+                        });
+                        
+                        setTimeout(() => {
+                            aiToolbarLogic();
+                        }, 100);
+                    });
+                } else if( tab === 'other'){
                        console.log("Nothing here yet")
                 }
             }, 300);
