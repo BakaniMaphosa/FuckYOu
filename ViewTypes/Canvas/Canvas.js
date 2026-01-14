@@ -210,7 +210,24 @@ export function initCanvas(container) {
         });
     }
 
+    // --- FIX: Only handle wheel events when mouse is over the canvas ---
+    let isMouseOverCanvas = false;
+    
+    canvasContainer.addEventListener('mouseenter', () => {
+        isMouseOverCanvas = true;
+    });
+    
+    canvasContainer.addEventListener('mouseleave', () => {
+        isMouseOverCanvas = false;
+    });
+    
     window.addEventListener('wheel', e => {
+        // Only zoom if mouse is actually over the canvas
+        if (!isMouseOverCanvas) return;
+        
+        // Double-check: ensure the event target is inside the canvas container
+        if (!canvasContainer.contains(e.target)) return;
+        
         e.preventDefault();
         const zoomSpeed = 0.1;
         const newScale = scale + (e.deltaY > 0 ? -zoomSpeed : zoomSpeed);
@@ -285,7 +302,7 @@ export function initCanvas(container) {
     window.zoomOut = () => {
         if (scale > 0.2) {
             scale -= 0.2;
-            updateTransform();
+            updateTransform();git 
         }
     };
 }
