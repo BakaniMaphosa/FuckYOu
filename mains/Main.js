@@ -99,11 +99,12 @@ async function init() {
 
       const isVisible = nav.classList.contains('visible');
       const isToolsTab = document.querySelector('.slider-btn[data-tab="tools"]')?.classList.contains('active');
+      const isAiTab = document.querySelector('.slider-btn[data-tab="ai"]')?.classList.contains('active');
       
-      console.log("Navbar visible:", isVisible, "Tools active:", isToolsTab);
+      console.log("Navbar visible:", isVisible, "Tools active:", isToolsTab, "AI active:", isAiTab);
       
-      // Only move down if BOTH navbar is visible AND tools tab is active
-      if (isVisible && isToolsTab) {
+      // Only move down if BOTH navbar is visible AND (tools OR ai) tab is active
+      if (isVisible && (isToolsTab || isAiTab)) {
           textBox.style.marginTop = "23vh";
           console.log("✅ Moved down");
       } else {
