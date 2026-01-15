@@ -1,4 +1,4 @@
-export function initGraphSettings() {
+
     const indyTrack = document.getElementById('IndependentVarsInput');
     const depTrack = document.getElementById('DependentVarsInput');
     const graphSettings = document.getElementById('GraphSettings');
@@ -125,4 +125,3 @@ export function initGraphSettings() {
 
     // --- INITIALIZE COMPONENT ---
     addBoxes(3);
-}

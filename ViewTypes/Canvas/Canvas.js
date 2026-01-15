@@ -119,6 +119,47 @@ export function initCanvas(container) {
         });
         contentDiv.innerHTML = '<span style="color: #999;">Click [+] to add content...</span>';
         
+        // ============================================
+        // NEW: Settings Button (Top Right)
+        // ============================================
+        const settingsBtn = document.createElement('button');
+        settingsBtn.className = 'SectionSettings';
+        settingsBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>`;
+        Object.assign(settingsBtn.style, {
+            position: 'absolute',
+            top: '32px',  // Below the drag handle
+            right: '8px',
+            width: '28px',
+            height: '28px',
+            background: 'transparent',
+            border: 'none',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: '4px',
+            opacity: '0',
+            transition: 'all 0.2s',
+            zIndex: '101',
+            color: '#666'
+        });
+        
+        settingsBtn.addEventListener('mouseenter', () => {
+            settingsBtn.style.background = '#f0f0f0';
+            settingsBtn.style.color = '#333';
+        });
+        
+        settingsBtn.addEventListener('mouseleave', () => {
+            settingsBtn.style.background = 'transparent';
+            settingsBtn.style.color = '#666';
+        });
+        
+        settingsBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            console.log('Settings clicked for canvas section:', section);
+            // TODO: Add settings panel logic here
+        });
+        
         // Create section tools (like .SectionTools)
         const sectionTools = document.createElement('div');
         sectionTools.className = 'SectionTools';
@@ -168,17 +209,20 @@ export function initCanvas(container) {
         
         sectionTools.appendChild(addBtn);
         
-        // Show/hide tools on hover
+        // Show/hide tools AND settings on hover
         section.addEventListener('mouseenter', () => {
             sectionTools.style.opacity = '1';
+            settingsBtn.style.opacity = '1';
         });
         section.addEventListener('mouseleave', () => {
             sectionTools.style.opacity = '0';
+            settingsBtn.style.opacity = '0';
         });
         
         // Assemble section
         section.appendChild(dragHandle);
         section.appendChild(contentDiv);
+        section.appendChild(settingsBtn);  // Add settings button
         section.appendChild(sectionTools);
         
         // Calculate center of screen in world coordinates
@@ -340,6 +384,7 @@ export function initCanvas(container) {
         // Ignore UI clicks
         if (e.target.tagName === 'BUTTON') return;
         if (e.target.closest('.SectionTools')) return;
+        if (e.target.closest('.SectionSettings')) return;  // Ignore settings button clicks
         
         const node = e.target.closest('.node-canvas');
         

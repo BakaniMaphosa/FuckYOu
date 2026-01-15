@@ -398,19 +398,65 @@ function insertInteractiveBox(targetZone, contentType = 'section') {
     box-sizing: border-box;
   `;
   
+  // ============================================
+  // NEW: Settings Button (Top Right)
+  // ============================================
+  const settingsBtn = document.createElement('button');
+  settingsBtn.className = 'SectionSettings';
+  settingsBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>`;
+  settingsBtn.style.cssText = `
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 28px;
+    height: 28px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    opacity: 0;
+    transition: all 0.2s;
+    z-index: 101;
+    color: #666;
+  `;
+  
+  settingsBtn.addEventListener('mouseenter', () => {
+    settingsBtn.style.background = '#f0f0f0';
+    settingsBtn.style.color = '#333';
+  });
+  
+  settingsBtn.addEventListener('mouseleave', () => {
+    settingsBtn.style.background = 'transparent';
+    settingsBtn.style.color = '#666';
+  });
+  
+  settingsBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    console.log('Settings clicked for section:', box);
+    // TODO: Add settings panel logic here
+  });
+  
+  // ============================================
+  // Section Tools (Bottom Right) - Existing
+  // ============================================
   const sectionTools = document.createElement('div');
   sectionTools.className = 'SectionTools';
   sectionTools.style.cssText = `
     position: absolute;
-    bottom: 5px;
-    right: 5px;
+    bottom: 8px;
+    right: 8px;
     display: flex;
-    gap: 5px;
+    gap: 8px;
     z-index: 100;
+    opacity: 0;
+    transition: opacity 0.2s;
   `;
   
   sectionTools.innerHTML = `
-    <button class="ContentType" style="background: #ff007a; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">
+    <button class="ContentType" style="background: #ff007a; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 11px; text-transform: uppercase; transition: all 0.2s;">
       [+] Add Content
     </button>
   `;
@@ -421,7 +467,19 @@ function insertInteractiveBox(targetZone, contentType = 'section') {
     loadChooseMenu();
   };
   
+  // Show/hide both settings and tools on hover
+  box.addEventListener('mouseenter', () => {
+    sectionTools.style.opacity = '1';
+    settingsBtn.style.opacity = '1';
+  });
+  
+  box.addEventListener('mouseleave', () => {
+    sectionTools.style.opacity = '0';
+    settingsBtn.style.opacity = '0';
+  });
+  
   box.appendChild(contentDiv);
+  box.appendChild(settingsBtn);  // Add settings button
   box.appendChild(sectionTools);
   targetZone.appendChild(box);
   
