@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/Settings/CodeSnippet/CodeSnippet.css">
+</head>
+<body>
+    <div class="code-window">
+        <!-- HEADER -->
+        <div class="code-header">
+            <div class="traffic-lights">
+                <span class="light red"></span>
+                <span class="light yellow"></span>
+                <span class="light green"></span>
+            </div>
+            <div class="file-name" id="fileName" contenteditable="true">script.js</div>
+            <div class="header-actions">
+                <div class="custom-select" id="customSelect">
+    <div class="select-selected">JAVASCRIPT</div>
+    <div class="select-items select-hide">
+        <div data-value="javascript">JAVASCRIPT</div>
+        <div data-value="python">PYTHON</div>
+        <div data-value="html">HTML</div>
+        <div data-value="css">CSS</div>
+        <div data-value="java">JAVA</div>
+        <div data-value="c_cpp">C++</div>
+        <div data-value="csharp">C#</div>
+        <div data-value="golang">GO</div>
+        <div data-value="rust">RUST</div>
+    </div>
+</div>
+                
+                <button class="action-btn" id="copyBtn">
+                    <i class="fa-solid fa-copy"></i>
+                    Copy
+                </button>
+            </div>
+        </div>
+
+        <!-- ACE EDITOR -->
+        <div id="editor">function hello() {
+  console.log("test");
+  const x = 42;
+  return x * 2;
+}</div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/ace.js"></script>
+    <script src="/Settings/CodeSnippet/CodeSnippet.js"></script>
+</body>
+</html>
