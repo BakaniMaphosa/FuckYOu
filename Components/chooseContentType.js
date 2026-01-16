@@ -5,9 +5,10 @@
  */
 
 import { getSelectedNode as getTextBoxSelectedNode } from "/ViewTypes/TextBox/textBoxDesign.js";
-import { createGraph } from "/Components/Graphs/graphs.js";
-import { createImageContent } from "/Components/ImagesLogic/images.js";
-import { createTextContent } from "/Components/TextContent/TextContents.js";
+import { createGraph } from "/Components/ContentTypes/Graphs/graphs.js";
+import { createImageContent } from "/Components/ContentTypes/ImagesLogic/images.js";
+import { createTextContent } from "/Components/ContentTypes/TextContent/TextContents.js";
+import { createTable } from "/Components/ContentTypes/tableSettings/Table.js";
 
 // Function to get selected node - checks both TextBox and Canvas
 function getSelectedNode() {
@@ -157,6 +158,11 @@ export function getContentInfo() {
 
             case 'Image':
                 createImageContent(selectedNode, '/Components/imgs/OIP.jpeg');
+                removeChooseContentBox();
+                break;
+
+            case "Table":
+                createTable(selectedNode);
                 removeChooseContentBox();
                 break;
         }

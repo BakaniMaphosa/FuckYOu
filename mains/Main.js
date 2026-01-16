@@ -134,6 +134,13 @@ async function init() {
   // Setup editor
   const editor = document.getElementById("TextBox");
   const contextMenu = document.getElementById("customContextMenu");
+  const aiBox = document.getElementById("AIbox");
+
+  // Initialize AI Panel on load
+  if (aiBox) {
+      await loadComponent("AIbox", "/ViewTypes/AIchat/AIchat.html");
+      initAIChat(aiBox);
+  }
   
   if (editor && contextMenu) {
     editor.innerHTML = `

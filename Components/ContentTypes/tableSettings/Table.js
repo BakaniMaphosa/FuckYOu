@@ -1,77 +1,68 @@
-const editableTable = document.getElementById('editableTable');
-const addRowBtn = document.getElementById('addRowBtn');
-const addColBtn = document.getElementById('addColBtn');
-const deleteRowBtn = document.getElementById('deleteRowBtn');
-const deleteColBtn = document.getElementById('deleteColBtn');
+export function createTable(box) {
+    const contentArea = box.querySelector('.content');
+    contentArea.innerHTML = "";
 
-// Initialize with 3x3 table by default
-export function initTable(rows = 3, cols = 3) {
-    editableTable.innerHTML = '';
-    
-    for (let r = 0; r < rows; r++) {
-        const row = document.createElement('tr');
-        
-        for (let c = 0; c < cols; c++) {
-            const cell = document.createElement('td');
-            cell.contentEditable = true;
-            cell.textContent = '';
-            row.appendChild(cell);
+    // --- 1. Create Structure ---
+    const container = document.createElement('div');
+    container.style.display = 'flex';
+    container.style.flexDirection = 'column';
+    container.style.height = '100%';
+    container.style.width = '100%';
+    container.style.overflow = 'hidden';
+
+    // Title
+    const title = document.createElement('div');
+    title.innerText = "Table Title";
+    title.contentEditable = "true";
+    title.style.textAlign = "center";
+    title.style.fontWeight = "bold";
+    title.style.padding = "5px";
+    title.style.outline = "none";
+    title.style.flex = "0 1 auto";
+    title.style.minHeight = "0";
+
+    // Table Wrapper
+    const tableWrapper = document.createElement('div');
+    tableWrapper.style.flex = '1';
+    tableWrapper.style.overflow = 'hidden';
+    tableWrapper.style.position = 'relative';
+    tableWrapper.style.minHeight = '0';
+
+    const table = document.createElement('table');
+    table.style.width = '100%';
+    table.style.height = 'calc(100% - 5px)';
+    table.style.borderCollapse = 'collapse';
+    table.style.tableLayout = 'fixed';
+    table.style.marginBottom = '5px';
+
+    tableWrapper.appendChild(table);
+    container.appendChild(title);
+    container.appendChild(tableWrapper);
+    contentArea.appendChild(container);
+
+    // --- 2. Helper Functions ---
+    const createCell = () => {
+        const td = document.createElement('td');
+        td.contentEditable = 'true';
+        td.style.border = '1px solid #ccc';
+        td.style.padding = '4px';
+        td.style.wordBreak = 'break-word';
+        td.style.overflow = 'hidden';
+        td.style.height = '1px';
+        return td;
+    };
+
+    function initTable(rows, cols) {
+        table.innerHTML = '';
+        for (let i = 0; i < rows; i++) {
+            const tr = document.createElement('tr');
+            for (let j = 0; j < cols; j++) {
+                tr.appendChild(createCell());
+            }
+            table.appendChild(tr);
         }
-        
-        editableTable.appendChild(row);
     }
-    
-    console.log(`✅ Initialized ${rows}×${cols} table`);
+
+    // Initialize
+    initTable(3, 3);
 }
-
-// Add row
-addRowBtn.addEventListener('click', () => {
-    const cols = editableTable.rows[0]?.cells.length || 1;
-    const row = document.createElement('tr');
-    
-    for (let c = 0; c < cols; c++) {
-        const cell = document.createElement('td');
-        cell.contentEditable = true;
-        cell.textContent = '';
-        row.appendChild(cell);
-    }
-    
-    editableTable.appendChild(row);
-});
-
-// Add column
-addColBtn.addEventListener('click', () => {
-    const rows = editableTable.rows;
-    
-    for (let r = 0; r < rows.length; r++) {
-        const cell = document.createElement('td');
-        cell.contentEditable = true;
-        cell.textContent = '';
-        rows[r].appendChild(cell);
-    }
-});
-
-// Delete row
-deleteRowBtn.addEventListener('click', () => {
-    if (editableTable.rows.length > 1) {
-        editableTable.deleteRow(-1);
-    } else {
-        alert('❌ Cannot delete the last row!');
-    }
-});
-
-// Delete column
-deleteColBtn.addEventListener('click', () => {
-    const rows = editableTable.rows;
-    
-    if (rows[0]?.cells.length > 1) {
-        for (let r = 0; r < rows.length; r++) {
-            rows[r].deleteCell(-1);
-        }
-    } else {
-        alert('❌ Cannot delete the last column!');
-    }
-});
-
-// Initialize on load
-initTable(3, 3);

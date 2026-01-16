@@ -258,6 +258,7 @@
   transform-origin: left center;
   pointer-events: none;
   transition: opacity 120ms ease, transform 120ms ease;
+  font-family: system-ui, sans-serif;
 }
 
 /* FIXED: Override white color for submenu */

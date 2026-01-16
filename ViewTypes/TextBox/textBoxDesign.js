@@ -4,6 +4,9 @@
 // ============================================
 
 import { getContentInfo } from "/Components/chooseContentType.js";
+import { createGraph } from "/Components/ContentTypes/Graphs/graphs.js";
+import { createImageContent } from "/Components/ContentTypes/ImagesLogic/images.js";
+import { createTable } from "/Components/ContentTypes/tableSettings/Table.js";
 
 let selectedNode = null;
 let isDraggingGlobal = false;
@@ -703,6 +706,27 @@ export function setupEditorContextMenu(editor, contextMenu, viewRegistry = {}) {
     if (action === "Make-Section" && lastClickZone) {
       insertInteractiveBox(lastClickZone, 'section');
       contextMenu.style.display = "none";
+      return;
+    }
+
+    if (action === "insert-Image" && lastClickZone) {
+      const box = insertInteractiveBox(lastClickZone, 'section');
+      createImageContent(box, '/Components/imgs/OIP.jpeg');
+      contextMenu.style.display = "none";
+      return;
+    }
+
+    if (action === "insert-Table" && lastClickZone) {
+      const box = insertInteractiveBox(lastClickZone, 'section');
+      createTable(box);
+      contextMenu.style.display = "none";
+      return;
+    }
+
+    if (action === "insert-Graph" && lastClickZone) {
+      const box = insertInteractiveBox(lastClickZone, 'section');
+      createGraph(box, 'bar');
+      contextMenu.style.display = "none";
     }
 
     if (action === "split") {
@@ -736,7 +760,7 @@ export function setupEditorContextMenu(editor, contextMenu, viewRegistry = {}) {
       clickedEditor.style.alignItems = "";
       clickedEditor.style.justifyContent = "";
       
-      await loadComponent(clickedEditor, "/ViewTypes/AIChat/aiChat.html");
+      await loadComponent(clickedEditor, "/ViewTypes/AIchat/AIchat.html");
       
       if (viewRegistry['view-AIPanel']) {
           viewRegistry['view-AIPanel'](clickedEditor);
@@ -751,7 +775,7 @@ export function setupEditorContextMenu(editor, contextMenu, viewRegistry = {}) {
       clickedEditor.style.alignItems = "";
       clickedEditor.style.justifyContent = "";
       
-      await loadComponent(clickedEditor, "/ViewTypes/Canvas/canvas.html");
+      await loadComponent(clickedEditor, "/ViewTypes/Canvas/Canvas.html");
       
       if (viewRegistry['view-Canvas']) {
           viewRegistry['view-Canvas'](clickedEditor);
@@ -760,7 +784,25 @@ export function setupEditorContextMenu(editor, contextMenu, viewRegistry = {}) {
       contextMenu.style.display = "none";
     }
 
-    if (action === "delete" && clickedEditor) {
+    if (action === "delete") {
+      // 1. Delete Selected Section Block (if one is selected)
+      if (selectedNode) {
+        selectedNode.remove();
+        selectedNode = null;
+        contextMenu.style.display = "none";
+        return;
+      }
+
+      // 2. Delete Drop Zone (if clicked on one)
+      if (lastClickZone) {
+        lastClickZone.remove();
+        lastClickZone = null;
+        contextMenu.style.display = "none";
+        return;
+      }
+
+      // 3. Delete Whole Editor Panel (Split View)
+      if (clickedEditor) {
       // Find adjacent divider to remove (try next, then prev)
       const next = clickedEditor.nextElementSibling;
       const prev = clickedEditor.previousElementSibling;
@@ -771,6 +813,7 @@ export function setupEditorContextMenu(editor, contextMenu, viewRegistry = {}) {
         next.remove();
       } else if (prev && (prev.id === 'AIdivider' || prev.style.cursor === 'col-resize')) {
         prev.remove();
+      }
       }
       contextMenu.style.display = "none";
     }
