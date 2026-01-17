@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * { box-sizing: border-box; }
+
+        #GraphSettings {
+            font-family: "IBM Plex Serif", serif;
+            border: 4px solid black;
+            padding: 12px;
+            background: white;
+            width: 100%;
+            height: 100%; /* Fill the resizable box */
+            margin: 0;
+            overflow-y: auto; /* THE VERTICAL SCROLL FIX */
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-width: 150px;
+            min-height: 100px;
+        }
+
+        /* Custom Scrollbar for the Brutalist Look */
+        #GraphSettings::-webkit-scrollbar { width: 8px; }
+        #GraphSettings::-webkit-scrollbar-track { background: #f0f0f0; border-left: 2px solid black; }
+        #GraphSettings::-webkit-scrollbar-thumb { background: black; }
+
+        #graphHeader header {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            border-bottom: 4px solid black;
+            padding-bottom: 8px;
+            flex-shrink: 0;
+        }
+
+        .dropdown { position: relative; width: 100%; margin-bottom: 15px; flex-shrink: 0; }
+        .dropbtn {
+            width: 100%; background: white; padding: 10px;
+            font-size: 12px; font-weight: 700; border: 3px solid black;
+            cursor: pointer; text-align: left; display: flex; justify-content: space-between;
+        }
+
+        .dropdown-content {
+            display: none; position: absolute; background: white; width: 100%;
+            border: 3px solid black; border-top: none; z-index: 100;
+        }
+        .dropdown:hover .dropdown-content { display: block; }
+        .dropdown-content a { padding: 10px; text-decoration: none; display: block; color: black; font-size: 12px; border-bottom: 1px solid #eee; }
+        .dropdown-content a:hover { background: black; color: white; }
+
+        .var-section { margin-top: 15px; flex-shrink: 0; }
+        .header-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 5px; }
+        .VarHeader { font-weight: bold; font-size: 12px; text-transform: uppercase; }
+
+        .toggle-container { display: flex; align-items: center; gap: 5px; cursor: pointer; font-size: 9px; }
+        .toggle-container input { display: none; }
+        .toggle-slider { width: 30px; height: 16px; background: white; border: 2px solid black; position: relative; }
+        .toggle-slider:before { content: ""; position: absolute; height: 8px; width: 8px; left: 2px; top: 2px; background: black; }
+        input:checked + .toggle-slider { background: black; }
+        input:checked + .toggle-slider:before { background: white; transform: translateX(14px); }
+
+        .scroll-track {
+            display: flex; gap: 8px; overflow-x: auto; padding: 5px 0;
+            min-height: 60px; align-items: center; border-bottom: 1px solid #eee;
+        }
+
+        .var-box { flex: 0 0 60px; height: 35px; border: 2px solid black; text-align: center; font-size: 12px; }
+        .load-more-btn { flex: 0 0 35px; height: 35px; background: #f0f0f0; border: 2px dashed black; cursor: pointer; }
+
+        .range-inputs { display: flex; gap: 5px; align-items: center; flex-wrap: wrap; }
+        .brutalist-num-input { display: flex; border: 2px solid black; }
+        .brutalist-num-input button { width: 25px; height: 30px; background: black; color: white; border: none; cursor: pointer; }
+        .brutalist-num-input input { width: 40px !important; border: none !important; text-align: center; }
+    </style>
+</head>
+<body>
+  <div id="GraphSettings">
+    <div id="graphHeader">
+        <header>Graph Configuration</header>
+    </div>
+
+    <div id="chooseGraph" class="dropdown">
+        <button class="dropbtn">Select Graph Type ↓</button>
+        <div class="dropdown-content">
+            <a href="#" onclick="setGraphType('Bar')">Bar Chart</a>
+            <a href="#" onclick="setGraphType('Line')">Line Graph</a>
+            <a href="#" onclick="setGraphType('Pie')">Pie Chart</a>
+            <a href="#" onclick="setGraphType('Radar')">Radar Graph</a>
+        </div>
+    </div>
+
+    <div id="independentVars" class="var-section">
+        <div class="header-row">
+            <div class="VarHeader">Independent (X)</div>
+            <label class="toggle-container">
+                <span class="toggle-label">Manual</span>
+                <input type="checkbox" id="indyToggle" onchange="toggleIndyMode(this.checked)">
+                <span class="toggle-slider"></span>
+                <span class="toggle-label">Range</span>
+            </label>
+        </div>   
+        <div id="IndependentVarsInput" class="scroll-track"></div>
+    </div>
+
+    <div id="dependentVars" class="var-section">
+        <div class="header-row">
+            <div class="VarHeader">Dependent (Y)</div>
+            <label class="toggle-container">
+                <span class="toggle-label">Manual</span>
+                <input type="checkbox" id="depToggle" onchange="toggleDepMode(this.checked)">
+                <span class="toggle-slider"></span>
+                <span class="toggle-label">Range</span>
+            </label>
+        </div>   
+        <div id="DependentVarsInput" class="scroll-track"></div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="/Components/Graphs/GraphSettings.js"></script>
+</body>
+</html>

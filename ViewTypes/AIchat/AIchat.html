@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scrollable Note Assistant</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="/ViewTypes/AIchat/AIchat.css">
+</head>
+<body>
+
+<div class="chat-container-AIchat">
+    <header class="header-AIchat">
+        <div class="header-top-AIchat">
+            <h1 class="h1-AIchat">Notes Assistant</h1>
+            <button class="roadmap-toggle-btn-AIchat" id="roadmap-toggle-AIchat">
+                <i class='bx bx-map-alt'></i> ROADMAP
+            </button>
+        </div>
+        <div class="pinned-bar-AIchat" id="pinned-bar-AIchat">
+            </div>
+    </header>
+
+    <div class="roadmap-panel-AIchat" id="roadmap-panel-AIchat">
+        <div class="roadmap-scroll-container-AIchat">
+            <div class="roadmap-steps-AIchat">
+                <div class="step-AIchat completed-AIchat"><div class="step-circle-AIchat">1</div><div class="step-label-AIchat">Introduction</div></div>
+                <div class="step-AIchat active-AIchat"><div class="step-circle-AIchat">2</div><div class="step-label-AIchat">Key Terms</div></div>
+                <div class="step-AIchat"><div class="step-circle-AIchat">3</div><div class="step-label-AIchat">Deep Dive</div></div>
+                <div class="step-AIchat"><div class="step-circle-AIchat">4</div><div class="step-label-AIchat">Examples</div></div>
+                <div class="step-AIchat"><div class="step-circle-AIchat">5</div><div class="step-label-AIchat">Use Cases</div></div>
+                <div class="step-AIchat"><div class="step-circle-AIchat">6</div><div class="step-label-AIchat">Summary</div></div>
+                <div class="step-AIchat"><div class="step-circle-AIchat">7</div><div class="step-label-AIchat">Quiz</div></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="messages-area-AIchat" id="chat-box-AIchat">
+        <div class="message-AIchat ai-AIchat">
+            <img src="/ViewTypes/AIchat/AITutorIcon.svg" alt="AI" class="avatar-img-AIchat">
+            <div class="bubble-AIchat">
+                I've added <b>Horizontal Scrolling</b>! Pin several messages and open the roadmap to see how you can scroll through them if there are too many items to fit.
+                <i class='bx bx-pin pin-btn-action-AIchat' data-target="msg-scroll"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="input-footer-AIchat">
+        <div class="input-box-AIchat">
+            <input type="text" placeholder="Test the scrolling..." id="user-input-AIchat" class="input-AIchat">
+            <button class="send-btn-AIchat" id="send-btn-AIchat">Send</button>
+        </div>
+    </div>
+</div>
+
+
+<script src="AIchat.js"></script>
+</body>
+</html>

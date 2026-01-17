@@ -1,0 +1,108 @@
+/* Color Palette & Variables */
+:root {
+    --main-bg: #f5f5f3;
+    --accent-pink: #ff007a;
+    --accent-black: #000000;
+    --text-primary: #1a1a1a;
+    --border-color: #d1d1cf;
+    
+    font-weight: 500;
+    letter-spacing: 2px;
+    font-family: sans-serif;
+}
+
+/* Main Container - UPDATED SIZE */
+#Content {
+    background-color: var(--main-bg);
+    height: 35vh; /* Reduced from 45vh */
+    width: 70vh;  /* Reduced from 90vh */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 1rem;
+    border: 2px solid var(--accent-black);
+    overflow: hidden; 
+    position: relative; 
+}
+
+/* Header Section */
+#contentName {
+    height: 8vh; /* Shrunk slightly to match 35vh total */
+    width: 100%;
+    background-color: var(--border-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 28px; /* Shrunk font so it fits the smaller height */
+    border-bottom: 2px solid black;
+}
+
+/* Description Section - UPDATED HEIGHT */
+#contentDescription {
+    width: 100%;
+    /* Math: 35vh (total) - 8vh (header) = 27vh max */
+    height: 27vh; 
+    background-color: var(--main-bg);
+    font-size: 18px; /* Shrunk font for smaller container */
+    padding: 15px;
+    box-sizing: border-box;
+    
+    overflow-y: auto;
+    display: block;
+    text-align: center;
+    padding-bottom: 60px; /* Room for the absolute button */
+}
+
+/* THE ADD BUTTON - REPOSITIONED */
+#AddContent {
+    width: 25vh; /* Shrunk width slightly */
+    height: 5vh; /* Shrunk height slightly */
+    position: absolute;
+    
+    background-color: var(--accent-pink);
+    color: white;
+    border: 2px solid var(--accent-black);
+    border-radius: 0.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 4px 4px 0px var(--accent-black);
+    z-index: 2;
+
+    /* Placement: Anchored to the bottom instead of margin-top */
+    bottom: 2vh; 
+    transition: all 0.1s ease;
+}
+
+/* THE RETURN BUTTON - REPOSITIONED */
+#ReturnButton {
+    width: 8vh;
+    height: 4vh;
+    position: absolute;
+    
+    background-color: var(--accent-pink);
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    z-index: 3;
+
+    /* Fixed placement relative to the top-left */
+    top: 1.5vh;
+    left: 2vh;
+    transition: all 0.1s ease;
+}
+
+/* Hover States kept exactly the same */
+#AddContent:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px var(--accent-black);
+}
+#AddContent:active {
+    transform: translate(2px, 2px);
+    box-shadow: 0px 0px 0px var(--accent-black);
+}
+#ReturnButton:hover { filter: brightness(0.8); }
+#ReturnButton:active { filter: brightness(0.7); }

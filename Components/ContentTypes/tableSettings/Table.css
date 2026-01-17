@@ -1,0 +1,125 @@
+:root {
+    --banana: #FFE01B;
+    --caviar: #241C15;
+    --nimbus: #FFFFFF;
+    --paper: #F6F6F4;
+    --mushroom: #E0DDD5;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--paper);
+    padding: 40px;
+    font-family: 'Inter', sans-serif;
+}
+
+/* TABLE CONTAINER */
+.table-container {
+    width: 100%;
+    max-width: 1000px;
+    background: var(--nimbus);
+    border: 3px solid var(--caviar);
+    box-shadow: 6px 6px 0px var(--caviar);
+}
+
+.table-header {
+    background: var(--mushroom);
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 3px solid var(--caviar);
+}
+
+.table-title {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--caviar);
+    letter-spacing: 1px;
+    outline: none;
+}
+
+.table-title:hover {
+    
+    padding: 2px 6px;
+    margin: -2px -6px;
+    border-radius: 2px;
+}
+
+.table-title:focus {
+    
+    padding: 2px 6px;
+    margin: -2px -6px;
+    border-radius: 2px;
+}
+
+.table-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.table-btn {
+    padding: 6px 12px;
+    background: var(--nimbus);
+    border: 2px solid var(--caviar);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--caviar);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 2px 2px 0px var(--caviar);
+    transition: all 0.2s;
+}
+
+.table-btn:hover {
+    background: var(--banana);
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0px var(--caviar);
+}
+
+.table-btn:active {
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0px var(--caviar);
+}
+
+/* TABLE ITSELF */
+.table-wrapper {
+    padding: 20px;
+    overflow: auto;
+}
+
+.editable-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid var(--caviar);
+}
+
+.editable-table td {
+    border: 2px solid var(--caviar);
+    padding: 12px;
+    min-width: 100px;
+    position: relative;
+    background: var(--nimbus);
+    transition: background 0.2s;
+}
+
+.editable-table td:hover {
+    background: var(--paper);
+}
+
+.editable-table td[contenteditable="true"]:focus {
+    background: var(--banana);
+    outline: 2px solid var(--caviar);
+    outline-offset: -2px;
+}
+
+.editable-table td[contenteditable="true"] {
+    cursor: text;
+}

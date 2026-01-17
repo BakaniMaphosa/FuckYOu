@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Executive Suite</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600&family=Inter:wght@300;400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/Navbar/studynotes/style.css">
+</head>
+
+<body>
+
+<nav class="navbar" id="mainNav">
+    <div class="nav-side">
+        <button class="btn-exec"><i class="fa-solid fa-arrow-left"></i> Return</button>
+    </div>
+
+    <div class="nav-center">
+        <!-- SLIDER FLOATS ABOVE EVERYTHING -->
+        <div class="slider-bar" style="position: absolute; top: 30px; left: 40px; z-index: 10;">
+            <div class="slider-section" id="sliderSection">
+                <div class="slider-bg" id="sliderBg"></div>
+                <button class="slider-btn active" data-tab="notes">Notes</button>
+                <button class="slider-btn" data-tab="tools">Tools</button>
+                <button class="slider-btn" data-tab="ai">AI Tools</button>
+                <button class="slider-btn" data-tab="other">Other</button>
+            </div>
+            <div class="divider"></div>
+            <div class="action-section">
+                <button class="action-btn">Organize</button>
+                <button class="action-btn primary">Add</button>
+            </div>
+        </div>
+
+        <!-- CONTENT THAT CHANGES -->
+        <div id="tabContent">
+            <!-- NOTES VIEW (default) -->
+            <div class="search-row">
+                <!-- WHITE PLACEHOLDER WHERE SLIDER WAS -->
+                <div style="width: 450px; height: 45px; background: transparent;"></div>
+                
+                <div class="search-wrap">
+                    <i class="fa-solid fa-search"></i>
+                    <input type="text" placeholder="SEARCH PORTFOLIO..." >
+                </div>
+            </div>
+
+            <div class="carousel-viewport" id="viewport">
+                <div class="track">
+                    <div class="biz-card note"></div>
+                    <div class="biz-card note"></div>
+                    <div class="biz-card project"></div>
+                    <div class="biz-card note"></div>
+                    <div class="biz-card project"></div>
+                    <div class="biz-card note"></div>
+                    <div class="biz-card note"></div> 
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="navbar-trigger">
+    <div class="trigger-line"></div>
+    <div class="trigger-line"></div>
+    <div class="trigger-line"></div>
+</div>
+
+
+<script type="module" src="script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,403 @@
+:root {
+    --banana: #FFE01B;      /* Brand Yellow */
+    --caviar: #241C15;      /* Brand Ink/Black */
+    --nimbus: #FFFFFF;      /* Pure White */
+    --paper: #F6F6F4;       /* Background Off-white */
+    --mushroom: #E0DDD5;    /* Muted Border Gray */
+    --nav-height: 180px;
+    
+    /* Aliases for compatibility */
+    --bone: var(--paper);
+    --eggshell: var(--paper);
+    --ink: var(--caviar);
+    --gold: var(--banana);
+}
+
+body {
+    height: 200vh;
+    font-family: 'Crimson Pro', serif;
+}
+
+/* --- THE NAVBAR CONTAINER --- */
+.navbar {
+    position: fixed;
+    top: calc(var(--nav-height) * -1.2);
+    left: 0;
+    width: 100%;
+    height: var(--nav-height);
+    background: var(--paper);
+    border-bottom: 2px solid var(--mushroom);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0;
+    box-sizing: border-box;
+    transition: top 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+    z-index: 1000;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    overflow: visible;
+}
+
+.navbar.visible {
+    top: 0;
+}
+
+.nav-side {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 10;
+    padding-left: 40px;
+}
+
+.btn-exec {
+    height: 45px;
+    width: fit-content;
+    background: var(--nimbus);
+    border: 2px solid var(--caviar);
+    font-family: 'Crimson Pro', serif;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 10px 20px;
+    color: var(--caviar);
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 13vh;
+}
+
+.btn-exec:hover {
+    background: var(--banana);
+    border-color: var(--caviar);
+    color: var(--caviar);
+}
+
+.btn-dark {
+    background: var(--caviar);
+    color: var(--nimbus);
+    border: none;
+}
+
+/* --- CENTER SECTION --- */
+.nav-center {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding-top: 30px;
+    position: relative;
+    overflow: visible;
+}
+
+.search-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 5vh; 
+    width: 100%;
+    padding: 0;
+    padding-left: 1vh;
+    padding-right: 1vh;
+    margin-right: 80vh;
+    z-index: 5;
+}
+
+/* SLIDER ON THE LEFT */
+.slider-bar {
+    width: fit-content;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    background: var(--nimbus);
+    border: 2px solid var(--caviar);
+    padding: 8px 16px;
+    gap: 20px;
+    box-shadow: 4px 4px 0px var(--caviar);
+    position: absolute;
+    top: 30px;
+    left: 40px;
+    z-index: 10;
+    transition: margin-left 0.3s ease;
+}
+
+/* SEARCHBAR ON THE RIGHT */
+.search-wrap {
+    width: 800px;
+    position: relative;
+    flex-shrink: 0;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    margin-right: 0;
+    margin-left: 25vh;
+}
+
+.search-wrap input {
+    width: 100%;
+    height: 100%;
+    background: var(--nimbus);
+    border: 2px solid var(--caviar);
+    padding: 8px 10px 8px 35px;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    box-sizing: border-box;
+    color: var(--caviar);
+}
+
+.search-wrap input:focus {
+    box-shadow: 4px 4px 0px var(--banana);
+}
+
+.search-wrap i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--caviar);
+}
+
+/* --- THE CAROUSEL --- */
+.carousel-viewport {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 14vh;
+    width: 100%;
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    cursor: grab;
+    padding-bottom: 30px;
+    padding-top: 0.4vh;
+    z-index: 1001;
+    opacity: 0;
+    transform: translateX(100px);
+    transition: opacity 0.5s ease 0.3s, transform 0.5s ease 0.3s;
+}
+
+.carousel-viewport.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.carousel-viewport::-webkit-scrollbar {
+    display: none;
+}
+
+.track {
+    display: flex;
+    gap: 20px;
+    padding: 0 40px;
+    padding-right: 850px;
+}
+
+.biz-card {
+    flex: 0 0 calc(220px + 6vh);
+
+    width: calc(220px + 6vh);
+    background: var(--nimbus);
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: 6px 6px 0px var(--caviar);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 2px solid var(--caviar);
+}
+
+.biz-card:hover {
+    background: var(--banana);
+    transform: translate(-3px, -3px);
+    box-shadow: 9px 9px 0px var(--caviar);
+}
+
+.biz-card .firm {
+    font-family: 'Crimson Pro', serif;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--caviar);
+    text-transform: uppercase;
+    opacity: 0.7;
+}
+
+.biz-card .name {
+    font-family: 'Crimson Pro', serif;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 4px;
+    color: var(--caviar);
+}
+
+.scroll-msg {
+    text-align: center;
+    margin-top: 500px;
+    font-family: 'Crimson Pro';
+    letter-spacing: 4px;
+    color: var(--caviar);
+}
+
+/****************************** SLIDER ******************************/
+.slider-section {
+    display: flex;
+    gap: 4px;
+    position: relative;
+}
+
+.slider-btn {
+    padding: 8px 20px;
+    background: transparent;
+    border: none;
+    font-family: 'Inter', serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    color: var(--caviar);
+    opacity: 0.6;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    z-index: 2;
+}
+
+.slider-btn.active {
+    color: var(--caviar);
+    opacity: 1;
+}
+
+.slider-btn:hover {
+    color: var(--caviar);
+    opacity: 1;
+}
+
+.slider-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: var(--banana);
+    border-radius: 4px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1;
+}
+
+.divider {
+    width: 2px;
+    height: 30px;
+    background: var(--caviar);
+    opacity: 0.3;
+}
+
+.action-section {
+    display: flex;
+    gap: 12px;
+}
+
+.action-btn {
+    padding: 8px 16px;
+    background: var(--nimbus);
+    border: 2px solid var(--caviar);
+    font-family: 'Inter', serif;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    color: var(--caviar);
+    transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+    background: var(--banana);
+}
+
+.action-btn.primary {
+    background: var(--banana);
+    color: var(--caviar);
+    border: 2px solid var(--caviar);
+}
+
+.action-btn.primary:hover {
+    background: #ffe95c;
+    color: var(--caviar);
+}
+
+#tabContent {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+#tabContent.fade-out {
+    opacity: 0;
+    transform: translateY(-10px);
+}
+
+/* NAVBAR TRIGGER LINES */
+.navbar-trigger {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    padding: 8px 0;
+    background: var(--banana);
+    border: 2px solid var(--caviar);
+    border-top: none;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    box-shadow: 4px 4px 0px var(--caviar);
+    z-index: 1001;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.navbar-trigger:hover {
+    height: 35px;
+    background: var(--nimbus);
+}
+
+.trigger-line {
+    width: 35px;
+    height: 3px;
+    background: var(--caviar);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+.navbar.visible ~ .navbar-trigger {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.navbar-trigger.notes-active {
+    transform: translateX(-50%) translateX(-80vh);
+}
+
+.carousel-viewport {
+    pointer-events: none !important;
+}
+
+.carousel-viewport * {
+    pointer-events: none !important;
+}
+
+.biz-card {
+    pointer-events: auto !important;
+}
+
+.track {
+    pointer-events: auto !important;
+}
+
+.biz-card * {
+    pointer-events: auto !important;
+}

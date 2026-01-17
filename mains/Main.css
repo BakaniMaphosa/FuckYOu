@@ -1,0 +1,36 @@
+:root{
+    --paper: #F6F6F4;
+}
+
+
+body {
+    overflow: hidden;
+    background-color: var(--paper);
+}
+
+/* ✅ NAVBAR CONTAINER - stays on top */
+#navBarContainer {
+    position: fixed;
+    left: 0;
+    width: 100%;
+    z-index: 10000;
+}
+
+/* MAIN CONTENT - fills screen with ANIMATION */
+#ContentContainer {
+    width: 100vw;
+    height: 100vh;
+    /* ✅ ADD SMOOTH TRANSITION */
+    transition: margin-top 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+}
+/* 
+#WindowLevel{
+            font-family: 'Inter', sans-serif;
+            background-color: var(--paper);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: var(--caviar);
+} */

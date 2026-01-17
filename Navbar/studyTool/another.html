@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Executive Suite</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600&family=Inter:wght@300;400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/Navbar/studyTool/another.css">
+</head>
+
+<body>
+
+    <div class="nav-center">
+        <!-- SLIDER PLACEHOLDER ROW -->
+        <div class="search-row">
+            <!-- WHITE PLACEHOLDER WHERE SLIDER FLOATS -->
+            <div style="width: 450px; height: 45px; background: transparent;"></div>
+            
+            <div id="upperToolBar">
+                <div class="tool">
+                    <i class="fa-solid fa-list-ul tool-icon"></i>
+                    <span class="tool-name">Bullet List</span>
+                </div>
+
+                <div class="tool">
+                    <i class="fa-solid fa-list-ol tool-icon"></i>
+                    <span class="tool-name">Number list</span>
+                 
+                </div>
+
+                <div class="tool">
+                    <i class="fa-solid fa-minus tool-icon"></i>
+                    <span class="tool-name">Horizontal Break</span>
+                </div>
+
+                <div class="tool">
+                    <i class="fa-solid fa-grip-lines-vertical tool-icon"></i>
+                    <span class="tool-name">Vertical Break</span>
+                </div>
+
+                <div class="tool">
+                    <i class="fa-solid fa-grip-lines tool-icon"></i>
+                    <span class="tool-name">Line</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- TOOLS -->
+        <div class="tools-container" id="toolsContainer">
+            <div class="tool">
+                <i class="fa-solid fa-bold tool-icon"></i>
+                <span class="tool-name">Bold</span>
+            </div>
+            <div class="tool">
+                <i class="fa-solid fa-italic tool-icon"></i>
+                <span class="tool-name">Italic</span>
+            </div>
+            <div class="tool">
+                <i class="fa-solid fa-underline tool-icon"></i>
+                <span class="tool-name">Underline</span>
+            </div>
+            <div class="tool">
+                <i class="fa-solid fa-highlighter tool-icon"></i>
+                <span class="tool-name">Highlight</span>
+                <div class="tool-action">
+                    <div class="color-preview">
+                        <input type="color" value="#ffff00">
+                    </div>
+                </div>
+            </div>
+            <div class="tool">
+                <i class="fa-solid fa-text-height tool-icon"></i>
+                <span class="tool-name">Font Size</span>
+                <div class="tool-action">
+                    <div class="num-control">
+                        <button class="num-btn">−</button>
+                        <input type="number" class="num-input" value="17" min="1" max="200">
+                        <button class="num-btn">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="tool">
+                <i class="fa-solid fa-font tool-icon"></i>
+                <span class="tool-name">Font Family</span>
+            </div>
+            <div class="section-divider"></div>
+            <div class="tool">
+                <i class="fa-solid fa-palette tool-icon"></i>
+                <span class="tool-name">Foreground</span>
+                <div class="tool-action">
+                    <div class="color-preview">
+                        <input type="color" value="#000000">
+                    </div>
+                </div>
+            </div>
+
+            <div class="tool">
+                <i class="fa-solid fa-align-left tool-icon"></i>
+                <span class="tool-name">Align Text</span>
+                <div class="tool-action">
+                    <div class="align-slider">
+                        <button class="align-btn active">L</button>
+                        <button class="align-btn">C</button>
+                        <button class="align-btn">R</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

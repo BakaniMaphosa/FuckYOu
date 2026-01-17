@@ -1,0 +1,561 @@
+    
+        :root {
+            --banana: #FFE01B;
+            --caviar: #241C15;
+            --nimbus: #FFFFFF;
+            --paper: #F6F6F4;
+            --mushroom: #E0DDD5;
+            --bone: var(--paper);
+            --ink: var(--caviar);
+            --gold: var(--banana);
+        }
+
+        * { box-sizing: border-box; }
+
+        #GraphSettings {
+            font-family: "Inter", sans-serif;
+            border: 3px solid var(--caviar);
+            padding: 16px;
+            background: var(--paper);
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-width: 320px;
+            min-height: 100px;
+            box-shadow: 8px 8px 0px var(--caviar);
+        }
+
+        /* Custom Scrollbar - Mailchimp Style */
+        #GraphSettings::-webkit-scrollbar { width: 10px; }
+        #GraphSettings::-webkit-scrollbar-track { background: var(--mushroom); }
+        #GraphSettings::-webkit-scrollbar-thumb { background: var(--caviar); }
+        #GraphSettings::-webkit-scrollbar-thumb:hover { background: var(--banana); }
+
+        /* ============================================
+           HEADER
+           ============================================ */
+        #graphHeader header {
+            font-family: "IBM Plex Serif", serif;
+            font-weight: 800;
+            font-size: 18px;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 3px solid var(--caviar);
+            padding-bottom: 10px;
+            color: var(--caviar);
+        }
+
+        /* ============================================
+           DROPDOWN STYLES
+           ============================================ */
+        .dropdown { 
+            position: relative; 
+            width: 100%; 
+            margin-bottom: 16px; 
+        }
+
+        .dropbtn {
+            width: 100%; 
+            background: var(--nimbus); 
+            padding: 12px 16px;
+            font-size: 13px; 
+            font-weight: 700; 
+            border: 3px solid var(--caviar);
+            cursor: pointer; 
+            text-align: left; 
+            display: flex; 
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s;
+            color: var(--caviar);
+            box-shadow: 4px 4px 0px var(--caviar);
+        }
+
+        .dropbtn:hover { 
+            background: var(--banana); 
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px var(--caviar);
+        }
+
+        .dropdown-content {
+            display: none; 
+            position: absolute; 
+            background: var(--nimbus); 
+            width: 100%;
+            border: 3px solid var(--caviar); 
+            border-top: none; 
+            z-index: 100;
+            box-shadow: 4px 4px 0px var(--caviar);
+        }
+
+        .dropdown:hover .dropdown-content { display: block; }
+
+        .dropdown-content a { 
+            padding: 12px 16px; 
+            text-decoration: none; 
+            display: block; 
+            color: var(--caviar); 
+            font-size: 13px; 
+            font-weight: 600;
+            border-bottom: 1px solid var(--mushroom);
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .dropdown-content a:hover { 
+            background: var(--caviar); 
+            color: var(--banana); 
+        }
+
+        .dropdown-content a:last-child { border-bottom: none; }
+
+        /* ============================================
+           SECTION STYLES
+           ============================================ */
+        .settings-section {
+            margin-top: 16px;
+            border: 3px solid var(--caviar);
+            background: var(--nimbus);
+            box-shadow: 4px 4px 0px var(--caviar);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 14px;
+            background: var(--caviar);
+            color: var(--nimbus);
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: background 0.2s;
+        }
+
+        .section-header:hover { background: #333; }
+
+        .section-header .toggle-icon {
+            transition: transform 0.2s;
+            font-size: 10px;
+        }
+
+        .section-header.collapsed .toggle-icon {
+            transform: rotate(-90deg);
+        }
+
+        .section-content {
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .section-content.hidden { display: none; }
+
+        /* ============================================
+           FORM CONTROL STYLES
+           ============================================ */
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .control-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .control-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--caviar);
+            letter-spacing: 0.3px;
+        }
+
+        .control-input {
+            flex: 1;
+            max-width: 110px;
+            height: 32px;
+            border: 2px solid var(--caviar);
+            padding: 0 8px;
+            font-size: 12px;
+            font-family: inherit;
+            background: var(--nimbus);
+            color: var(--caviar);
+        }
+
+        .control-input:focus {
+            outline: none;
+            box-shadow: 3px 3px 0 var(--banana);
+        }
+
+        .control-select {
+            flex: 1;
+            max-width: 110px;
+            height: 32px;
+            border: 2px solid var(--caviar);
+            padding: 0 8px;
+            font-size: 11px;
+            font-family: inherit;
+            font-weight: 600;
+            background: var(--nimbus);
+            cursor: pointer;
+            color: var(--caviar);
+        }
+
+        .control-select:focus {
+            outline: none;
+            box-shadow: 3px 3px 0 var(--banana);
+        }
+
+        .control-color {
+            width: 36px;
+            height: 32px;
+            border: 2px solid var(--caviar);
+            padding: 2px;
+            cursor: pointer;
+            background: var(--nimbus);
+        }
+
+        /* Toggle Switch - Mailchimp Style */
+        .toggle-switch {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .toggle-switch input { display: none; }
+
+        .toggle-track {
+            width: 40px;
+            height: 22px;
+            background: var(--mushroom);
+            border: 2px solid var(--caviar);
+            position: relative;
+            transition: background 0.2s;
+        }
+
+        .toggle-track::before {
+            content: "";
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            background: var(--caviar);
+            top: 2px;
+            left: 2px;
+            transition: transform 0.2s;
+        }
+
+        .toggle-switch input:checked + .toggle-track {
+            background: var(--banana);
+        }
+
+        .toggle-switch input:checked + .toggle-track::before {
+            transform: translateX(18px);
+        }
+
+        /* Number Stepper - Mailchimp Style */
+        .number-stepper {
+            display: flex;
+            border: 2px solid var(--caviar);
+            max-width: 90px;
+        }
+
+        .number-stepper button {
+            width: 26px;
+            height: 28px;
+            background: var(--caviar);
+            color: var(--nimbus);
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            transition: background 0.15s;
+        }
+
+        .number-stepper button:hover { background: var(--banana); color: var(--caviar); }
+
+        .number-stepper input {
+            width: 38px;
+            height: 28px;
+            border: none;
+            text-align: center;
+            font-size: 12px;
+            font-family: inherit;
+            font-weight: 600;
+            background: var(--nimbus);
+            color: var(--caviar);
+        }
+
+        /* Slider - Mailchimp Style */
+        .control-slider {
+            width: 100%;
+            max-width: 100px;
+            height: 8px;
+            -webkit-appearance: none;
+            background: var(--mushroom);
+            border: 2px solid var(--caviar);
+            outline: none;
+        }
+
+        .control-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: var(--caviar);
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .control-slider::-webkit-slider-thumb:hover {
+            background: var(--banana);
+        }
+
+        /* ============================================
+           VAR SECTION (X/Y Inputs)
+           ============================================ */
+        .var-section { 
+            margin-top: 16px; 
+            background: var(--nimbus);
+            border: 3px solid var(--caviar);
+            padding: 12px;
+            box-shadow: 4px 4px 0px var(--caviar);
+        }
+
+        .header-row { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            flex-wrap: wrap; 
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .VarHeader { 
+            font-weight: 800; 
+            font-size: 12px; 
+            text-transform: uppercase; 
+            color: var(--caviar);
+            letter-spacing: 0.5px;
+        }
+
+        .toggle-container { 
+            display: flex; 
+            align-items: center; 
+            gap: 6px; 
+            cursor: pointer; 
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--caviar);
+        }
+
+        .toggle-container input { display: none; }
+
+        .toggle-slider { 
+            width: 32px; 
+            height: 18px; 
+            background: var(--mushroom); 
+            border: 2px solid var(--caviar); 
+            position: relative; 
+        }
+
+        .toggle-slider:before { 
+            content: ""; 
+            position: absolute; 
+            height: 10px; 
+            width: 10px; 
+            left: 2px; 
+            top: 2px; 
+            background: var(--caviar); 
+            transition: transform 0.2s;
+        }
+
+        input:checked + .toggle-slider { background: var(--banana); }
+        input:checked + .toggle-slider:before { transform: translateX(14px); }
+
+        .scroll-track {
+            display: flex; 
+            gap: 8px; 
+            overflow-x: auto; 
+            padding: 8px 0;
+            min-height: 50px; 
+            align-items: center; 
+            border-top: 2px solid var(--mushroom);
+        }
+
+        .scroll-track::-webkit-scrollbar { height: 6px; }
+        .scroll-track::-webkit-scrollbar-track { background: var(--mushroom); }
+        .scroll-track::-webkit-scrollbar-thumb { background: var(--caviar); }
+
+        .var-box { 
+            flex: 0 0 55px; 
+            height: 34px; 
+            border: 2px solid var(--caviar); 
+            text-align: center; 
+            font-size: 12px;
+            font-weight: 600;
+            background: var(--nimbus);
+        }
+
+        .var-box:focus {
+            outline: none;
+            box-shadow: 2px 2px 0 var(--banana);
+        }
+
+        .load-more-btn { 
+            flex: 0 0 34px; 
+            height: 34px; 
+            background: var(--paper); 
+            border: 2px dashed var(--caviar); 
+            cursor: pointer;
+            font-weight: 800;
+            color: var(--caviar);
+            transition: all 0.15s;
+        }
+
+        .load-more-btn:hover {
+            background: var(--banana);
+            border-style: solid;
+        }
+
+        .range-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+        .range-inputs span { font-weight: 800; font-size: 11px; color: var(--caviar); }
+
+        .brutalist-num-input { display: flex; border: 2px solid var(--caviar); }
+        .brutalist-num-input button { 
+            width: 28px; 
+            height: 32px; 
+            background: var(--caviar); 
+            color: var(--nimbus); 
+            border: none; 
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.15s;
+        }
+        .brutalist-num-input button:hover { background: var(--banana); color: var(--caviar); }
+        .brutalist-num-input input { 
+            width: 45px !important; 
+            border: none !important; 
+            text-align: center;
+            font-weight: 600;
+            background: var(--nimbus);
+        }
+
+        /* ============================================
+           TYPE-SPECIFIC SECTIONS - 2x2 GRID
+           ============================================ */
+        .type-specific-section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .type-specific-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 2x2 Grid Layout */
+        .grid-2x2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        @media (max-width: 500px) {
+            .grid-2x2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Subsection - Mailchimp Card Style */
+        .subsection {
+            background: var(--paper);
+            border: 2px solid var(--caviar);
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .subsection-title {
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--nimbus);
+            background: var(--caviar);
+            padding: 6px 10px;
+            margin: -12px -12px 8px -12px;
+            letter-spacing: 0.5px;
+        }
+
+        /* Section Divider */
+        .section-divider {
+            height: 3px;
+            background: var(--caviar);
+            margin: 20px 0;
+        }
+
+        /* Color Palette */
+        .color-palette {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .palette-color {
+            width: 28px;
+            height: 28px;
+            border: 3px solid var(--caviar);
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .palette-color:hover {
+            transform: scale(1.1);
+            box-shadow: 2px 2px 0 var(--caviar);
+        }
+
+        .palette-color.selected {
+            box-shadow: 0 0 0 3px var(--banana);
+        }
+
+        /* Type Badge */
+        .type-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            background: var(--banana);
+            color: var(--caviar);
+            font-size: 9px;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-left: 8px;
+        }
+
+        /* Global Section Grid for consistency */
+        .global-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        @media (max-width: 500px) {
+            .global-grid {
+                grid-template-columns: 1fr;
+            }
+        }

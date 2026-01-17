@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/Settings/graphSettings/graphSettings.css">
+
+    <title>Graph Settings</title>
+</head>
+<body style="background: #f0f0f0; padding: 20px; margin: 0;">
+    <div id="GraphSettings">
+        <div id="graphHeader">
+            <header>Graph Configuration</header>
+        </div>
+
+        <!-- GRAPH TYPE SELECTOR -->
+        <div id="chooseGraph" class="dropdown">
+            <button class="dropbtn" id="graphTypeBtn">Select Graph Type <span>↓</span></button>
+            <div class="dropdown-content">
+                <a onclick="setGraphType('bar')">📊 Bar Chart</a>
+                <a onclick="setGraphType('line')">📈 Line Graph</a>
+                <a onclick="setGraphType('pie')">🥧 Pie Chart</a>
+                <a onclick="setGraphType('radar')">🕸️ Radar Chart</a>
+            </div>
+        </div>
+
+        <!-- DATA INPUT SECTION (X/Y Variables) -->
+        <div id="independentVars" class="var-section">
+            <div class="header-row">
+                <div class="VarHeader">Independent (X)</div>
+                <label class="toggle-container">
+                    <span>Manual</span>
+                    <input type="checkbox" id="indyToggle" onchange="toggleIndyMode(this.checked)">
+                    <span class="toggle-slider"></span>
+                    <span>Range</span>
+                </label>
+            </div>
+            <div id="IndependentVarsInput" class="scroll-track"></div>
+        </div>
+
+        <div id="dependentVars" class="var-section">
+            <div class="header-row">
+                <div class="VarHeader">Dependent (Y)</div>
+                <label class="toggle-container">
+                    <span>Manual</span>
+                    <input type="checkbox" id="depToggle" onchange="toggleDepMode(this.checked)">
+                    <span class="toggle-slider"></span>
+                    <span>Range</span>
+                </label>
+            </div>
+            <div id="DependentVarsInput" class="scroll-track"></div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- ============================================
+             GLOBAL SETTINGS (All Chart Types) - 2x2
+             ============================================ -->
+        <div class="settings-section" id="globalSettings">
+            <div class="section-header collapsed" onclick="toggleSection('globalContent')">
+                <span>⚙️ Global Settings</span>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="section-content hidden" id="globalContent">
+                <div class="global-grid">
+                    <!-- Data & Labels -->
+                    <div class="subsection">
+                        <div class="subsection-title">Data & Labels</div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Dataset</span>
+                                <input type="text" class="control-input" id="datasetName" placeholder="My Data">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Source</span>
+                                <select class="control-select" id="valueSource">
+                                    <option value="manual">Manual</option>
+                                    <option value="linked">Linked</option>
+                                    <option value="ai">AI Gen</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Sort</span>
+                                <select class="control-select" id="sortOrder">
+                                    <option value="original">Original</option>
+                                    <option value="asc">Ascending</option>
+                                    <option value="desc">Descending</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Appearance -->
+                    <div class="subsection">
+                        <div class="subsection-title">Appearance</div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Palette</span>
+                            </div>
+                            <div class="color-palette" id="colorPalette">
+                                <div class="palette-color selected" style="background: #ff007a;" data-color="#ff007a"></div>
+                                <div class="palette-color" style="background: #00c853;" data-color="#00c853"></div>
+                                <div class="palette-color" style="background: #2196f3;" data-color="#2196f3"></div>
+                                <div class="palette-color" style="background: #ff9800;" data-color="#ff9800"></div>
+                                <div class="palette-color" style="background: #9c27b0;" data-color="#9c27b0"></div>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">BG Color</span>
+                                <input type="color" class="control-color" id="bgColor" value="#ffffff">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Font</span>
+                                <select class="control-select" id="fontFamily">
+                                    <option value="Inter">Inter</option>
+                                    <option value="IBM Plex Serif">IBM Plex</option>
+                                    <option value="Arial">Arial</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Layout -->
+                    <div class="subsection">
+                        <div class="subsection-title">Layout</div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Legend</span>
+                                <select class="control-select" id="legendPosition">
+                                    <option value="top">Top</option>
+                                    <option value="bottom">Bottom</option>
+                                    <option value="left">Left</option>
+                                    <option value="right">Right</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Show Legend</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="showLegend" checked>
+                                    <span class="toggle-track"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Show Title</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="showTitle" checked>
+                                    <span class="toggle-track"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Interactions -->
+                    <div class="subsection">
+                        <div class="subsection-title">Interactions</div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Tooltips</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="showTooltips" checked>
+                                    <span class="toggle-track"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Hover FX</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="hoverHighlight" checked>
+                                    <span class="toggle-track"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Responsive</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="responsive" checked>
+                                    <span class="toggle-track"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================
+             BAR CHART SPECIFIC - 2x2 GRID
+             ============================================ -->
+        <div class="settings-section type-specific-section" id="barSettings" data-type="bar">
+            <div class="section-header" onclick="toggleSection('barContent')">
+                <span>📊 Bar Chart <span class="type-badge">BAR</span></span>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="section-content" id="barContent">
+                <div class="grid-2x2">
+                    <!-- Geometry -->
+                    <div class="subsection">
+                        <div class="subsection-title">Geometry</div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Thickness</span>
+                                <div class="number-stepper">
+                                    <button onclick="stepNumber('barThickness', -5)">-</button>
+                                    <input type="number" id="barThickness" value="30" min="5" max="100">
+                                    <button onclick="stepNumber('barThickness', 5)">+</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Spacing</span>
+                                <div class="number-stepper">
+                                    <button onclick="stepNumber('barSpacing', -1)">-</button>
+                                    <input type="number" id="barSpacing" value="10" min="0" max="50">
+                                    <button onclick="stepNumber('barSpacing', 1)">+</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Stacked</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="barStacked">
+                                    <span class="toggle-track"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Direction</span>
+                                <select class="control-select" id="barOrientation">
+                                    <option value="vertical">Vertical</option>
+                                    <option value="horizontal">Horizontal</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Axes -->
+                    <div class="subsection">
+                        <div class="subsection-title">Axes</div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">X-Axis</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="barShowXAxis" checked>
+                                    <span class="toggle-track"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Y-Axis</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="barShowYAxis" checked>
+                                    <span class="toggle-track"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Gridlines</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="barGridlines" checked>
+                                    <span class="toggle-track"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Tick °</span>
+                                <select class="control-select" id="barTickRotation">
+                                    <option value="0">0°</option>
+                                    <option value="45">45°</option>
+                                    <option value="90">90°</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Style -->
+                    <div class="subsection">
+                        <div class="subsection-title">Style</div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Radius</span>
+                                <div class="number-stepper">
+                                    <button onclick="stepNumber('barBorderRadius', -1)">-</button>
+                                    <input type="number" id="barBorderRadius" value="0" min="0" max="20">
+                                    <button onclick="stepNumber('barBorderRadius', 1)">+</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Border</span>
+                                <div class="number-stepper">
+                                    <button onclick="stepNumber('barBorderWidth', -1)">-</button>
+                                    <input type="number" id="barBorderWidth" value="1" min="0" max="10">
+                                    <button onclick="stepNumber('barBorderWidth', 1)">+</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Opacity</span>
+                                <input type="range" class="control-slider" id="barFillOpacity" min="0" max="100" value="80">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Scale -->
+                    <div class="subsection">
+                        <div class="subsection-title">Scale</div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Min</span>
+                                <input type="number" class="control-input" id="barMinValue" placeholder="Auto" style="max-width:70px;">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Max</span>
+                                <input type="number" class="control-input" id="barMaxValue" placeholder="Auto" style="max-width:70px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================
+             LINE CHART SPECIFIC - 2x2 GRID
+             ============================================ -->
+        <div class="settings-section type-specific-section" id="lineSettings" data-type="line">
+            <div class="section-header" onclick="toggleSection('lineContent')">
+                <span>📈 Line Chart <span class="type-badge">LINE</span></span>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="section-content" id="lineContent">
+                <div class="grid-2x2">
+                    <!-- Line Style -->
+                    <div class="subsection">
+                        <div class="subsection-title">Line Style</div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Thickness</span>
+                                <div class="number-stepper">
+                                    <button onclick="stepNumber('lineThickness', -1)">-</button>
+                                    <input type="number" id="lineThickness" value="2" min="1" max="10">
+                                    <button onclick="stepNumber('lineThickness', 1)">+</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Smooth</span>
+                                <input type="range" class="control-slider" id="lineTension" min="0" max="100" value="40">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Stepped</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="lineStepped">
+                                    <span class="toggle-track"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Dashed</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="lineDashed">
+                                    <span class="toggle-track"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Points -->
+                    <div class="subsection">
+                        <div class="subsection-title">Points</div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Show</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="lineShowPoints" checked>
+                                    <span class="toggle-track"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Size</span>
+                                <div class="number-stepper">
+                                    <button onclick="stepNumber('linePointSize', -1)">-</button>
+                                    <input type="number" id="linePointSize" value="4" min="1" max="20">
+                                    <button onclick="stepNumber('linePointSize', 1)">+</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Shape</span>
+                                <select class="control-select" id="linePointShape">
+                                    <option value="circle">Circle</option>
+                                    <option value="rect">Square</option>
+                                    <option value="triangle">Triangle</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Fill -->
+                    <div class="subsection">
+                        <div class="subsection-title">Fill</div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Fill Area</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="lineFill">
+                                    <span class="toggle-track"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Opacity</span>
+                                <input type="range" class="control-slider" id="lineFillOpacity" min="0" max="100" value="30">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Gradient</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="lineGradient">
+                                    <span class="toggle-track"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Axes -->
+                    <div class="subsection">
+                        <div class="subsection-title">Axes</div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Gridlines</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="lineGridlines" checked>
+                                    <span class="toggle-track"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Min</span>
+                                <input type="number" class="control-input" id="lineMinValue" placeholder="Auto" style="max-width:70px;">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Max</span>
+                                <input type="number" class="control-input" id="lineMaxValue" placeholder="Auto" style="max-width:70px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================
+             PIE CHART SPECIFIC - 2x2 GRID
+             ============================================ -->
+        <div class="settings-section type-specific-section" id="pieSettings" data-type="pie">
+            <div class="section-header" onclick="toggleSection('pieContent')">
+                <span>🥧 Pie Chart <span class="type-badge">PIE</span></span>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="section-content" id="pieContent">
+                <div class="grid-2x2">
+                    <!-- Structure -->
+                    <div class="subsection">
+                        <div class="subsection-title">Structure</div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Doughnut</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="pieDoughnut">
+                                    <span class="toggle-track"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Inner R</span>
+                                <input type="range" class="control-slider" id="pieInnerRadius" min="0" max="80" value="0">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Spacing</span>
+                                <div class="number-stepper">
+                                    <button onclick="stepNumber('pieSpacing', -1)">-</button>
+                                    <input type="number" id="pieSpacing" value="0" min="0" max="20">
+                                    <button onclick="stepNumber('pieSpacing', 1)">+</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Rotation</span>
+                                <input type="range" class="control-slider" id="pieRotation" min="0" max="360" value="0">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Labels -->
+                    <div class="subsection">
+                        <div class="subsection-title">Labels</div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Show %</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="pieShowPercent" checked>
+                                    <span class="toggle-track"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Show Val</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="pieShowValue">
+                                    <span class="toggle-track"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Show Label</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="pieShowLabel" checked>
+                                    <span class="toggle-track"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Position</span>
+                                <select class="control-select" id="pieLabelPosition">
+                                    <option value="inside">Inside</option>
+                                    <option value="outside">Outside</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Style -->
+                    <div class="subsection">
+                        <div class="subsection-title">Style</div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Border</span>
+                                <div class="number-stepper">
+                                    <button onclick="stepNumber('pieBorderWidth', -1)">-</button>
+                                    <input type="number" id="pieBorderWidth" value="2" min="0" max="10">
+                                    <button onclick="stepNumber('pieBorderWidth', 1)">+</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Border Color</span>
+                                <input type="color" class="control-color" id="pieBorderColor" value="#ffffff">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Hover Offset</span>
+                                <div class="number-stepper">
+                                    <button onclick="stepNumber('pieHoverOffset', -2)">-</button>
+                                    <input type="number" id="pieHoverOffset" value="10" min="0" max="50">
+                                    <button onclick="stepNumber('pieHoverOffset', 2)">+</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Behavior -->
+                    <div class="subsection">
+                        <div class="subsection-title">Behavior</div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Explode</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="pieExplode" checked>
+                                    <span class="toggle-track"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Sort</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="pieSortByValue">
+                                    <span class="toggle-track"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================
+             RADAR CHART SPECIFIC - 2x2 GRID
+             ============================================ -->
+        <div class="settings-section type-specific-section" id="radarSettings" data-type="radar">
+            <div class="section-header" onclick="toggleSection('radarContent')">
+                <span>🕸️ Radar Chart <span class="type-badge">RADAR</span></span>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="section-content" id="radarContent">
+                <div class="grid-2x2">
+                    <!-- Scale -->
+                    <div class="subsection">
+                        <div class="subsection-title">Scale</div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Min</span>
+                                <input type="number" class="control-input" id="radarMinValue" value="0" style="max-width:70px;">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Max</span>
+                                <input type="number" class="control-input" id="radarMaxValue" value="100" style="max-width:70px;">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Levels</span>
+                                <div class="number-stepper">
+                                    <button onclick="stepNumber('radarGridLevels', -1)">-</button>
+                                    <input type="number" id="radarGridLevels" value="5" min="2" max="10">
+                                    <button onclick="stepNumber('radarGridLevels', 1)">+</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Shape</span>
+                                <select class="control-select" id="radarGridShape">
+                                    <option value="circle">Circle</option>
+                                    <option value="polygon">Polygon</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Axes -->
+                    <div class="subsection">
+                        <div class="subsection-title">Axes</div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Labels</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="radarShowLabels" checked>
+                                    <span class="toggle-track"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Font Size</span>
+                                <div class="number-stepper">
+                                    <button onclick="stepNumber('radarLabelSize', -1)">-</button>
+                                    <input type="number" id="radarLabelSize" value="12" min="8" max="24">
+                                    <button onclick="stepNumber('radarLabelSize', 1)">+</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Fill -->
+                    <div class="subsection">
+                        <div class="subsection-title">Fill</div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Fill Area</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="radarFill" checked>
+                                    <span class="toggle-track"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Opacity</span>
+                                <input type="range" class="control-slider" id="radarFillOpacity" min="0" max="100" value="30">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Style -->
+                    <div class="subsection">
+                        <div class="subsection-title">Style</div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Border</span>
+                                <div class="number-stepper">
+                                    <button onclick="stepNumber('radarBorderWidth', -1)">-</button>
+                                    <input type="number" id="radarBorderWidth" value="2" min="1" max="10">
+                                    <button onclick="stepNumber('radarBorderWidth', 1)">+</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="control-row">
+                                <span class="control-label">Point Size</span>
+                                <div class="number-stepper">
+                                    <button onclick="stepNumber('radarPointSize', -1)">-</button>
+                                    <input type="number" id="radarPointSize" value="4" min="1" max="15">
+                                    <button onclick="stepNumber('radarPointSize', 1)">+</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    
+</body>
+</html>

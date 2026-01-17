@@ -1,0 +1,97 @@
+:root {
+    --banana: #FFE01B;
+    --caviar: #241C15;
+    --nimbus: #FFFFFF;
+    --paper: #F6F6F4;
+    --mushroom: #E0DDD5;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--paper);
+    padding: 40px;
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.table-settings {
+    width: 100%;
+    max-width: 500px;
+    background: var(--nimbus);
+    border: 3px solid var(--caviar);
+    box-shadow: 6px 6px 0px var(--caviar);
+}
+
+.settings-header {
+    background: var(--mushroom);
+    padding: 14px 20px;
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--caviar);
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 3px solid var(--caviar);
+}
+
+.settings-body {
+    padding: 24px;
+}
+
+.dimension-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--caviar);
+    margin-bottom: 12px;
+}
+
+/* GRID SELECTOR (Google Docs style) */
+.grid-selector {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 4px;
+    margin-bottom: 16px;
+    width: fit-content;
+}
+
+.grid-cell {
+    width: 32px;
+    height: 32px;
+    border: 2px solid var(--mushroom);
+    cursor: pointer;
+    transition: all 0.1s;
+}
+
+.grid-cell:hover,
+.grid-cell.active {
+    background: var(--banana);
+    border-color: var(--caviar);
+}
+
+.dimension-display {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--caviar);
+    text-align: center;
+    padding: 12px;
+    background: var(--paper);
+    border: 2px solid var(--caviar);
+    margin-bottom: 16px;
+}
+
+.grid-selector {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 4px;
+    margin: 0 auto 16px auto;  /* ← Centers it */
+    width: fit-content;
+}
